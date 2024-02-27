@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 
+use Illuminate\Validation\Rule;
+
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
@@ -20,6 +22,12 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): User
     {
         Validator::make($input, [
+            'tipo_usuario' => ['required', 'string', Rule::in(['Medico general', 
+                                                                'Medico especialista', 
+                                                                'Enfermeria consultorios', 
+                                                                'Enfermeria hospitalizacion', 
+                                                                'Contador',
+                                                                'Administrador'])],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
@@ -27,6 +35,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return User::create([
+            'tipo_usuario' => $input['tipo_usuario'],
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
