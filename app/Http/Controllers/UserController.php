@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+use function Laravel\Prompts\alert;
 
 class UserController extends Controller
 {
@@ -22,9 +25,10 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Lógica para actualizar los datos del usuario
-        $user = User::find($id);
-        $user->update($request->tipo_usuario);
+
+        $user = User::findOrFail($id);
+        $user->tipo_usuario = $request->input('tipo_usuario');
+        $user->save();
         return redirect()->route('gestion-usuarios')->with('success', 'Usuario actualizado exitosamente');
     }
 
@@ -32,6 +36,8 @@ class UserController extends Controller
     {
         // Lógica para eliminar al usuario
         $user = User::find($id);
+        $user->deleteProfilePhoto();
+        $user->tokens->each->delete();
         $user->delete();
         return redirect()->route('gestion-usuarios')->with('success', 'Usuario eliminado exitosamente');
     }

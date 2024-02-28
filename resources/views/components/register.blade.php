@@ -10,7 +10,8 @@
 
         <div class="mt-4">
             <x-label for="tipo_usuario" value="{{ __('Tipo de usuario') }}" />
-            <select id="tipo_usuario" name="tipo_usuario" class="block mt-1 w-full" required>
+            <select id="tipo_usuario" name="tipo_usuario"  class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600" required>
+                <option disabled selected class="text-gray-400 italic">Selecciona un tipo de usuario</option>
                 <option value="Medico general">Médico General</option>
                 <option value="Medico especialista">Médico Especialista</option>
                 <option value="Efermeria consultorios">Emfermeria Consultorios</option>
