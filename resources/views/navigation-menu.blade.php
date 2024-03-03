@@ -21,6 +21,11 @@
                             {{ __('Gestion de usuarios') }}
                         </x-nav-link>
                     @endif
+                    @if (auth()->user()->tipo_usuario == 'Administrador' or  auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                        <x-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
+                            {{ __('Pacientes') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -162,6 +167,11 @@
             @if (auth()->user()->tipo_usuario == 'Administrador')
                 <x-responsive-nav-link href="{{ route('gestion-usuarios') }}" :active="request()->routeIs('gestion-usuarios')">
                     {{ __('Gestion de usuarios') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->tipo_usuario == 'Administrador' or  auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                <x-responsive-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
+                    {{ __('Pacientes') }}
                 </x-responsive-nav-link>
             @endif
         </div>

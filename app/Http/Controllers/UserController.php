@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function show()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         return view('gestion-usuarios', compact('users'));
     }
 
@@ -29,7 +29,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->tipo_usuario = $request->input('tipo_usuario');
         $user->save();
-        return redirect()->route('gestion-usuarios')->with('success', 'Usuario actualizado exitosamente');
+        return redirect()->route('gestion-usuarios');
     }
 
     public function destroy($id)

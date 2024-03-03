@@ -7,19 +7,31 @@
 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        @if (DB::table('users')->count() === 0)
+            <div class="mt-4">
+                <select id="tipo_usuario" name="tipo_usuario"
+                    class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600"
+                    required style="display: none;" >
+                    <option value="Administrador" selected>Administrador</option>
+                </select>
+            </div>
+        @else
+            <div class="mt-4">
+                <x-label for="tipo_usuario" value="{{ __('Tipo de usuario') }}" />
+                <select id="tipo_usuario" name="tipo_usuario"
+                    class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600"
+                    required>
+                    <option disabled selected class="text-gray-400 italic">Selecciona un tipo de usuario</option>
+                    <option value="Medico general">Médico General</option>
+                    <option value="Medico especialista">Médico Especialista</option>
+                    <option value="Enfermeria consultorios">Enfermeria Consultorios</option>
+                    <option value="Enfermeria hospitalizacion">Enfermeria Hospitalizacion</option>
+                    <option value="Contador">Contador</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+            </div>
+        @endif
 
-        <div class="mt-4">
-            <x-label for="tipo_usuario" value="{{ __('Tipo de usuario') }}" />
-            <select id="tipo_usuario" name="tipo_usuario"  class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600" required>
-                <option disabled selected class="text-gray-400 italic">Selecciona un tipo de usuario</option>
-                <option value="Medico general">Médico General</option>
-                <option value="Medico especialista">Médico Especialista</option>
-                <option value="Efermeria consultorios">Emfermeria Consultorios</option>
-                <option value="Efermeria hospitalizacion">Emfermeria Hospitalizacion</option>
-                <option value="Contador">Contador</option>                
-                <option value="Administrador">Administrador</option>
-            </select>
-        </div>
 
         <div class="mt-4">
             <x-label for="name" value="{{ __('Name') }}" />
@@ -82,9 +94,16 @@
                             {{ __('Cancelar') }}
                         </a>
                     </x-button> --}}
-                    <x-boton-mas id="cancelar" class="ms-4">
-                        {{ __('Cancelar') }}
-                    </x-boton-mas>
+            @if (DB::table('users')->count() === 0)
+                <x-boton-cancelar id="cancelar" class="ms-4">
+                    <a href="{{ route('login') }}">{{ __('Cancelar') }}</a>
+                </x-boton-cancelar>
+            @else
+                <x-boton-cancelar id="cancelar" class="ms-4">
+                    {{ __('Cancelar') }}
+                </x-boton-cancelar>
+            @endif
+
             <x-button class="ms-4">
                 {{ __('Register') }}
             </x-button>
