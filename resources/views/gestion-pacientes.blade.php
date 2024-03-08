@@ -62,7 +62,7 @@
             // Verificar si los elementos existen antes de agregar el event listener
             if (fechaNacimientoInput && edadInput) {
                 // Agregar un event listener al campo de fecha de nacimiento
-                fechaNacimientoInput.addEventListener('input', function() {
+                fechaNacimientoInput.addEventListener('change', function() {
                     // Obtener la fecha de nacimiento del input
                     const fechaNacimiento = new Date(fechaNacimientoInput.value);
 
@@ -70,7 +70,7 @@
                     const fechaHace100Anios = new Date();
                     fechaHace100Anios.setFullYear(fechaHace100Anios.getFullYear() - 100);
                     if (fechaNacimiento < fechaHace100Anios) {
-                        alert("Por favor, seleccione una fecha de nacimiento más reciente.");
+                        alert("Por favor, seleccione una fecha de nacimiento más reciente."), 3000;
                         fechaNacimientoInput.value = ''; // Puedes restablecer el valor si lo deseas
                         return;
                     }

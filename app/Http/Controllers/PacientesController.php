@@ -8,9 +8,9 @@ use App\Models\Paciente;
 class PacientesController extends Controller
 {
     public function index()
-    {
+    {   
         $user = auth()->user();
-        $pacientes = Paciente::all();
+        $pacientes = Paciente::orderBy('created_at', 'desc')->get();
         return view('gestion-pacientes', compact('user'), compact('pacientes'));
     }
 
