@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consulta;
 use Illuminate\Http\Request;
 use App\Models\Paciente;
 
@@ -48,6 +49,8 @@ class PacientesController extends Controller
     {
         // Obtener el paciente por su ID
         $paciente = Paciente::find($id);
+        // Obtener las consultas del paciente por su ID
+        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
 
         // Verificar si el paciente fue encontrado
         if (!$paciente) {
@@ -56,7 +59,7 @@ class PacientesController extends Controller
         }
 
         // Si el paciente fue encontrado, mostrar la vista de detalles
-        return view('pacientes-show', compact('paciente'));
+        return view('pacientes-show', compact('paciente', 'consultas'));
     }
 
 
@@ -83,9 +86,15 @@ class PacientesController extends Controller
 
         // Guardar el paciente en la base de datos
         $paciente->save();
-
+        
+        $paciente = Paciente::find($id);
+        
+        // Obtener las consultas del paciente por su ID
+        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
         // Redireccionar a la vista de detalles del paciente recién creado
-        return redirect()->route('pacientes');
+        
+        // Si el paciente fue encontrado, mostrar la vista de detalles
+        return view('pacientes-show', compact('paciente', 'consultas'));
     }
 
     public function destroy($id)

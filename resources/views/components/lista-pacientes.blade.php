@@ -22,11 +22,7 @@
                         <span class="w-1/4 text-sm lg:text-base">Opciones</span>
                     </li>
                     @foreach ($pacientes as $paciente)
-                        @if ($i % 2 == 0)
-                            <li class="flex items-center border-b py-2" style="padding: 1%">
-                            @else
-                            <li class="flex items-center border-b py-2 bg-pink-100" style="padding: 1%">
-                        @endif
+                    <li class="flex items-center border-b py-2 bg-pink-{{$i % 2 != 0 ? '200' : '100'}}" style="padding: 1%">
                         <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $paciente->id }}</span>
                         <span class="w-1/4 text-sm lg:text-base">{{ $paciente->nombre }}</span>
                         <span class="w-1/4 text-sm lg:text-base">{{ $paciente->telefono }}</span>

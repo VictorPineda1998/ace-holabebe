@@ -5,7 +5,7 @@
 
     <x-validation-errors class="mb-4" />
 
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" id="formRegistrar">
         @csrf
         @if (DB::table('users')->count() === 0)
             <div class="mt-4">
@@ -85,15 +85,7 @@
         @endif
 
         <div class="flex items-center justify-end mt-4">
-            {{-- <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        href="{{ route('login') }}">
-                        {{ __('Already registered?') }}
-                    </a> --}}
-            {{-- <x-button class="ms-4">
-                        <a href="{{ route('dashboard') }}">
-                            {{ __('Cancelar') }}
-                        </a>
-                    </x-button> --}}
+            
             @if (DB::table('users')->count() === 0)
                 <x-boton-cancelar id="cancelar" class="ms-4">
                     <a href="{{ route('login') }}">{{ __('Cancelar') }}</a>

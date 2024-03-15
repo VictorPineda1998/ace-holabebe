@@ -1,7 +1,6 @@
 <x-app-layout>
 
     <x-header></x-header>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="padding: 1%">
@@ -10,7 +9,9 @@
                     {{ __('Registrar paciente') }}
                 </x-boton-mas>
 
-                <p id="cambio" class="border-b-2 pb-2 mb-4"></p>
+                <div id="formRegistrar" style="display: none">
+                    <x-registrar-paciente :user="$user"/>
+                </div>
                 @if (isset($pacientes))
                     <x-lista-pacientes :pacientes="$pacientes" />
                 @endif
@@ -24,32 +25,22 @@
         let creando = false;
         document.getElementById('mostrarRegistro').addEventListener('click', function() {
             if (!creando) {
-                document.getElementById("cambio").innerHTML = `
-                <div id="cambio2">
-                    <x-registrar-paciente :user="$user"/>
-                </div>
-            `
+                
+                document.getElementById('formRegistrar').style.display = 'inline';
                 deslizar('mostrarRegistro');
                 creando = true;
             } else {
                 deslizar('inicio');
 
                 setTimeout(function() {
-                    document.getElementById("cambio2").innerHTML = `
-                        <p id="cambio"></p>
-                    `;
+                    document.getElementById('formRegistrar').style.display = 'none';
                 }, 300);
                 creando = false;
             }
-
             document.getElementById('cancelar').addEventListener('click', function() {
-
                 deslizar('inicio');
-
                 setTimeout(function() {
-                    document.getElementById("cambio2").innerHTML = `
-                        <p id="cambio"></p>
-                    `;
+                    document.getElementById('formRegistrar').style.display = 'none';
                 }, 300);
                 creando = false;
                 // window.location.hash = '';
@@ -66,14 +57,7 @@
                     // Obtener la fecha de nacimiento del input
                     const fechaNacimiento = new Date(fechaNacimientoInput.value);
 
-                    // Validar que la fecha de nacimiento no sea hace más de 100 años
-                    const fechaHace100Anios = new Date();
-                    fechaHace100Anios.setFullYear(fechaHace100Anios.getFullYear() - 100);
-                    if (fechaNacimiento < fechaHace100Anios) {
-                        alert("Por favor, seleccione una fecha de nacimiento más reciente."), 3000;
-                        fechaNacimientoInput.value = ''; // Puedes restablecer el valor si lo deseas
-                        return;
-                    }
+                    
 
                     // Validar que la fecha de nacimiento no sea en el futuro
                     const hoy = new Date();

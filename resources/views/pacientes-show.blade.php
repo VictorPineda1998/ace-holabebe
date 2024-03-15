@@ -1,123 +1,159 @@
 <x-app-layout>
 
-    <x-header></x-header>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="padding: 1%">
-
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <a href="{{ route('pacientes') }}">
                     <x-boton-mas class="ms-4">
                         {{ __('Regresar') }}
                     </x-boton-mas>
                 </a>
-
-                <p id="cambio" class="border-b-2 pb-2 mb-4"></p>
                 @if (isset($paciente))
                     <div class="titulo-listado flex flex-col items-center">
                         <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Detalles del paciente</h1>
                     </div>
-                    <x-authentication-card>
-                        <x-slot name="logo">
-                            {{-- <x-authentication-card-logo /> --}}
-                        </x-slot>
-                    
-                        <form id="paciente-form" method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
+
+                    <div class="titulo-listado flex flex-col items-left">
+                        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Datos generales:</h1>
+                    </div>
+
+                    <x-paciente.datos-generales :paciente="$paciente" />
+                    <div class="flex items-center justify-end mt-4">
+                        <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
+                            onsubmit="return confirm('¿Estás seguro que deseas eliminar este paciente?');"
+                            style="display: inline;" id="boton-eliminar">
                             @csrf
-                            @method('PUT')
-                    
-                            <div class="mt-4">
-                                <x-label for="nombre" value="{{ __('Nombre') }}" />
-                                <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')" required
-                                    value="{{ $paciente->nombre }}" autofocus autocomplete="nombre" readonly/>
-                            </div>
-                    
-                            <div class="mt-4">
-                                <x-label for="telefono" value="{{ __('Telefono') }}"/>
-                                <x-input id="telefono" class="block mt-1 w-full" type="number" name="telefono" 
-                                value="{{ $paciente->telefono }}" required autocomplete="telefono" readonly/>
-                            </div>
-                    
-                            <div class="mt-4">
-                                <x-label for="fecha_nacimiento" value="{{ __('Fecha de nacimiento') }}" />
-                                <x-input id="fecha_nacimiento" class="block mt-1 w-full" type="date" name="fecha_nacimiento"
-                                value="{{ $paciente->fecha_nacimiento }}" required autocomplete="fecha_nacimiento" readonly/>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <x-label for="edad" value="{{ __('Edad') }}" />
-                                <x-input id="edad" class="block mt-1 w-full" type="number" name="edad" 
-                                value="{{ $paciente->edad }}" required autocomplete="edad"  readonly/>
-                            </div>
-                    
-                            <div class="mt-4">
-                                <x-label for="lugar_procedencia" value="{{ __('Lugar de procedencia') }}" />
-                                <x-input id="lugar_procedencia" class="block mt-1 w-full" type="text" name="lugar_procedencia"
-                                value="{{ $paciente->lugar_procedencia }}" required autocomplete="new-lugar_procedencia" readonly/>
-                            </div>
-
-                            <div class="flex items-center justify-end mt-4">
-                                <a href="{{ route('pacientes') }}">
-                                    <x-boton-cancelar id="regresar" class="ms-4">
-                                        {{ __('Regresar') }}
-                                    </x-boton-cancelar>
-                                </a>
-
-                                <x-boton-editar id="editar-btn" class="ms-4">
-                                    {{ __('Editar') }}
-                                </x-boton-editar>
-                    
-                                <x-boton-cancelar id="cancelar" class="ms-4" style="display: none;">
-                                    {{ __('Cancelar') }}
-                                </x-boton-cancelar>
-                                
-                                <x-button class="ms-4" id="guardar-btn" style="display: none;">
-                                    {{ __('Actualizar') }}
-                                </x-button>
-                            </div>
+                            @method('DELETE')
+                            <x-boton-eliminar>Eliminar</x-boton-eliminar>
                         </form>
-                        <div class="flex items-center justify-end mt-4">
-                            <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
-                                onsubmit="return confirm('¿Estás seguro que deseas eliminar este paciente?');"
-                                style=" display: inline;" id="boton-elimiar">
-                                @csrf
-                                @method('DELETE')
-                                <x-boton-eliminar>Eliminar</x-boton-eliminar>
-                            </form>
+                    </div>
+
+                    @php
+                        $hayProxima = false;
+                        $hayConfirmada = false;
+                        $hayFinalizada = false;
+                        $hayCancelada = false;
+                        foreach ($consultas as $consulta) {
+                            if ($consulta->estado == 'próxima') {
+                                $hayProxima = true;
+                            } elseif ($consulta->estado == 'confirmada') {
+                                $hayConfirmada = true;
+                            }  elseif ($consulta->estado == 'finalizada') {
+                                $hayFinalizada = true;
+                            } elseif ($consulta->estado == 'cancelada') {
+                                $hayCancelada = true;
+                            }
+                        }
+                    @endphp
+                    @if ($hayProxima or $hayConfirmada)
+                        <div class="titulo-listado flex flex-col items-left">
+                            
+                            <x-paciente.lista-consultas-proximas :consultas="$consultas" :paciente="$paciente" />
                         </div>
-                    
-                        
-                    </x-authentication-card>
-                    
+                    @elseif(!$hayProxima && !$hayConfirmada)
+                        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                            <x-boton-mas class="mb-2" id="mostrarRegistro">
+                                {{ __('Agregar consulta') }}
+                            </x-boton-mas>
+                            <p id="inicioConsultas"></p>
+                            <div id="formConsulta" style="display: none">
+                                <form action="{{ route('consultas.store', $paciente->id) }}" method="POST"
+                                    style="margin: 1%;" id="formRegistrar">
+                                    @csrf
+                                    
+                                    <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
+                                        style="margin: 0; display: inline;" />
+                                    <select id="tipo_consulta" name="tipo_consulta" required
+                                        class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-2 focus:ring-indigo-600"
+                                        onchange="comprobar_tipo()">
+                                        <option disabled selected class="text-gray-400 italic">Selecciona un tipo de
+                                            consulta</option>
+                                        <option value="Ginecologica">Ginecologica</option>
+                                        <option value="Retiro de puntos">Retiro de puntos</option>
+                                        <option value="Procedimientos">Procedimientos</option>
+                                        <option value="Control prenatal">Control prenatal</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <div id="otro_tipo" style="display: none">
+                                        <x-label for="otro_tipo_consulta" value="{{ __('Detalles:') }}"
+                                            class="mt-1" />
+                                        <x-input id="otro_tipo_consulta" class="block mt-1 w-full" type="text"
+                                            name="otro_tipo_consulta" value=""
+                                            autocomplete="new-otro-tipo-consulta" />
+                                    </div>
+                                    <div>
+                                        <x-label for="fecha" value="{{ __('Fecha') }}" />
+                                        <x-input id="fecha" class="block mt-1 w-full md:w-1/2" type="date" name="fecha" value=""
+                                         autocomplete="fecha" required />
+                                    </div>
+                                    <x-boton-cancelar id="cancelar-tipo-consulta">Cancelar</x-boton-cancelar>
+                                    <x-button class="ms-4 mt-1">
+                                        {{ __('Aceptar') }}
+                                    </x-button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+
+
+                    @if ($hayFinalizada or $hayCancelada)
+                        <div class="titulo-listado flex flex-col items-left">
+                            <h1 class='text-1xl font-bold mb-3 text-purple-800 mt-6'>Historial de
+                                Consultas:
+                            </h1>
+                            <x-paciente.lista-consultas :consultas="$consultas" />
+                        </div>
+                    @endif
+
+                @endif
             </div>
-
-            <script>
-                document.getElementById('editar-btn').addEventListener('click', function() {
-                    // Habilitar la edición de los campos
-                    document.querySelectorAll('#paciente-form input').forEach(function(input) {
-                        input.removeAttribute('readonly');
-                    });
-
-                    // Mostrar el botón de guardar y ocultar el botón de editar
-                    document.getElementById('guardar-btn').style.display = 'inline';
-                    document.getElementById('cancelar').style.display = 'inline';                 
-                    document.getElementById('regresar').style.display = 'none';
-                    this.style.display = 'none';
-                });
-                document.getElementById('cancelar').addEventListener('click', function() {
-                    // Habilitar la edición de los campos
-                    document.querySelectorAll('#paciente-form input').forEach(function(input) {
-                        input.setAttribute('readonly', 'readonly');
-                    });
-               
-                    document.getElementById('regresar').style.display = 'inline';
-                    document.getElementById('editar-btn').style.display = 'inline';
-                    document.getElementById('guardar-btn').style.display = 'none';
-                    this.style.display = 'none';
-                });
-            </script>
-            @endif
         </div>
     </div>
-    </div>
+
+    <script src="{{ asset('js/funciones-propias.js') }}"></script>
+
+    <script>
+        let creando = false;
+        let cancelarTipoConsulta = false;
+        let mostrarRegistro = document.getElementById('mostrarRegistro');
+
+        if (mostrarRegistro) {
+            mostrarRegistro.addEventListener('click', function() {
+
+                if (!creando) {
+                    document.getElementById('formConsulta').style.display = 'inline';
+                    deslizar('inicioConsultas');
+                    creando = true;
+                    cancelarTipoConsulta = true;
+                } else {
+                    deslizar('inicioConsultas');
+                    setTimeout(function() {
+                        document.getElementById('formConsulta').style.display = 'none';
+                        creando = false;
+                        cancelarTipoConsulta = true;
+                    }, 300);
+                }
+                if (cancelarTipoConsulta) {
+                    document.getElementById('cancelar-tipo-consulta').addEventListener('click', function() {
+                        deslizar('inicioConsultas');
+                        setTimeout(function() {
+                            document.getElementById('formConsulta').style.display = 'none';
+                            creando = false;;
+                        }, 200);
+                    });
+                }
+            });
+        }
+
+        function comprobar_tipo() {
+            var tipoconsulta = document.getElementsByName("tipo_consulta")[0];
+            var otroTipoDiv = document.getElementById('otro_tipo');
+
+            if (tipoconsulta.value.toLowerCase() === 'otro') {
+                otroTipoDiv.style.display = 'inline';
+            } else {
+                otroTipoDiv.style.display = 'none';
+            }
+        }
+    </script>
 </x-app-layout>

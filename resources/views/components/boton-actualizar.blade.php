@@ -1,4 +1,4 @@
-<button id="guardarConsultaBtn" {{ $attributes->merge([
+<button id="botonActualizar" {{ $attributes->merge([
     'type' => 'submit', 
     'class' => 'inline-flex items-center px-4 py-2 bg-green-500 
                 border border-transparent rounded-md font-semibold

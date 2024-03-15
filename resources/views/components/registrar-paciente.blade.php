@@ -5,7 +5,7 @@
 
     {{-- <x-validation-errors class="mb-4" /> --}}
 
-    <form method="POST" action="{{ route('pacientes.store', $user->id) }}">
+    <form method="POST" action="{{ route('pacientes.store', $user->id) }}" id="formRegistrar">
         @csrf
 
         <div class="mt-4">

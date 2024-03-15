@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PacientesController;
+
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PacientesController;
+use App\Http\Controllers\ConsultasController;
+use App\Models\Consulta;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,10 +42,10 @@ Route::middleware([
     })->name('register');
 
     if (Features::enabled(Features::registration())) {
-       
+
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
     }
-   
+
     Route::group(['prefix' => 'gestion-usuarios'], function () {
         Route::get('/', [UserController::class, 'show'])->name('gestion-usuarios');
         Route::put('{id}', [UserController::class, 'update'])->name('usuarios.update');
@@ -55,10 +59,27 @@ Route::middleware([
         Route::put('{id}', [PacientesController::class, 'update'])->name('pacientes.update');
         Route::delete('{id}', [PacientesController::class, 'destroy'])->name('pacientes.eliminar');
     });
-    
+
+    Route::group(['prefix' => 'consultas'], function () {
+        Route::get('{id}', [ConsultasController::class, 'show'])->name('consultas.show');
+        Route::post('{id}', [ConsultasController::class, 'store'])->name('consultas.store');
+        Route::put('{id} {estado} {p_id}', [ConsultasController::class, 'update'])->name('consultas.update');
+        Route::put('{id} {estado}', [ConsultasController::class, 'updateHoy'])->name('consultas.updateHoy');
+        Route::delete('{id}', [ConsultasController::class, 'destroy'])->name('cosultas.eliminar');
+    });
+
+    Route::get('/consultas-dia', function () {
+        $consultas = Consulta::where('fecha', now()->toDateString())
+            ->where(function ($query) {
+                $query->where('estado', 'próxima')
+                    ->orWhere('estado', 'confirmada');
+            })
+            ->orderBy('updated_at', 'desc')->get();
+        return view('lista-consultas-dia', compact('consultas'));
+    })->name('consultas_dia');
 });
 
-if (DB::table('users')->count() === 0){
+if (DB::table('users')->count() === 0) {
     $enableViews = config('fortify.views', true);
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
@@ -67,6 +88,6 @@ if (DB::table('users')->count() === 0){
                 ->name('register');
         }
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
-            // ->middleware(['guest:'.config('fortify.guard')]);
+        // ->middleware(['guest:'.config('fortify.guard')]);
     }
 }
