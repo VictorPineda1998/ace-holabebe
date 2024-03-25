@@ -6,7 +6,7 @@
         <div>
             <input type="text" id="searchInput"
                 class="mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                placeholder="Buscar nombre o ...">
+                placeholder="Buscar por nombre, telefono o edad...">
         </div>
         <div>
             <ul class="overflow-x-auto">
@@ -22,7 +22,7 @@
                         <span class="w-1/4 text-sm lg:text-base">Opciones</span>
                     </li>
                     @foreach ($pacientes as $paciente)
-                    <li class="flex items-center border-b py-2 bg-pink-{{$i % 2 != 0 ? '200' : '100'}}" style="padding: 1%">
+                    <li class="flex items-center border-b py-2 {{$i % 2 != 0 ? 'bg-pink-200': ''}}" style="padding: 1%">
                         <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $paciente->id }}</span>
                         <span class="w-1/4 text-sm lg:text-base">{{ $paciente->nombre }}</span>
                         <span class="w-1/4 text-sm lg:text-base">{{ $paciente->telefono }}</span>

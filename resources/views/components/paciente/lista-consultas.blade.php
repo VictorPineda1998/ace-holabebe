@@ -3,7 +3,7 @@
         <div>
             <input type="text" id="searchInput"
                 class="mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                placeholder="Buscar fecha o tipo ...">
+                placeholder="Buscar por fecha o tipo ...">
         </div>
         <div>
             <ul class="overflow-x-auto">
@@ -19,8 +19,8 @@
                         <span class="w-1/4 text-sm lg:text-base">Opciones</span>
                     </li>
                     @foreach ($consultas as $consulta)
-                        @if ($consulta->estado == 'finalizada' or $consulta->estado == 'cancelada')
-                        <li class="flex items-center border-b py-2 bg-amber-{{$i % 2 != 0 ? '100' : '00'}}" style="padding: 1%">
+                        @if ($consulta->estado == 'Finalizada' or $consulta->estado == 'Cancelada')
+                        <li class="flex items-center border-b py-2 bg-amber-{{$i % 2 != 0 ? '100' : ''}}" style="padding: 1%">
                                 <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $consulta->id }}</span>
                                 <span class="w-1/4 text-sm lg:text-base">{{ $consulta->fecha}}</span>
                                 @if ($consulta->tipo_consulta == 'Otro')
@@ -28,17 +28,17 @@
                                 @else
                                     <span class="w-1/4 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
                                 @endif
-                                @if ($consulta->estado == 'cancelada')
+                                @if ($consulta->estado == 'Cancelada')
                                     <span class="w-1/4 text-sm lg:text-base">{{ $consulta->estado }}</span>
                                 @else
                                     <span class="w-1/4 text-sm lg:text-base"></span>
                                 @endif
                                 <span class="w-1/4 text-sm lg:text-base">
-                                    {{-- <a href="{{ route('pacientes.show', $paciente->id) }} "> --}}
+                                    <a href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
                                     <x-boton-editar>
                                         Ver
                                     </x-boton-editar>
-                                    {{-- </a> --}}
+                                    </a>
                                 </span>
 
                             </li>

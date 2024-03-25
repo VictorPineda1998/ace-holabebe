@@ -49,9 +49,10 @@
 <script>
     document.getElementById('editar-btn').addEventListener('click', function() {
         // Habilitar la edición de los campos
-        document.querySelectorAll('#paciente-form input').forEach(function(input) {
+        document.querySelectorAll('#paciente-form input:not([name="edad"])').forEach(function(input) {
             input.removeAttribute('readonly');
         });
+
 
         // Mostrar el botón de guardar y ocultar el botón de editar
         document.getElementById('botonActualizar').style.display = 'inline';
@@ -94,5 +95,22 @@
             // Actualizar el valor del campo de edad
             edadInput.value = edad;
         });
+
+        const telefonoInput = document.getElementById('telefono');
+
+            // Verificar si el elemento existe antes de agregar el event listener
+            if (telefonoInput) {
+                // Agregar un event listener al campo de teléfono
+                telefonoInput.addEventListener('change', function() {
+                    // Obtener el número de teléfono del input
+                    const telefono = telefonoInput.value;
+
+                    // Verificar si la longitud del número de teléfono es igual a 10
+                    if (telefono.length !== 10) {
+                        alert("Por favor, coloque un número de teléfono de 10 dígitos");
+                        return;
+                    }
+                });
+            }
     }
 </script>

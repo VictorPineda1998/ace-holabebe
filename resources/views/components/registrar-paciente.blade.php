@@ -48,7 +48,7 @@
             
 
             <x-button class="ms-4">
-                {{ __('Register') }}
+                {{ __('Registrar') }}
             </x-button>
         </div>
     </form>

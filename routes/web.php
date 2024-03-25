@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\ConsultasController;
+use App\Http\Controllers\TriajesController;
 use App\Models\Consulta;
 
 /*
@@ -61,7 +62,7 @@ Route::middleware([
     });
 
     Route::group(['prefix' => 'consultas'], function () {
-        Route::get('{id}', [ConsultasController::class, 'show'])->name('consultas.show');
+        Route::get('{id} {lugar}', [ConsultasController::class, 'show'])->name('consultas.show');
         Route::post('{id}', [ConsultasController::class, 'store'])->name('consultas.store');
         Route::put('{id} {estado} {p_id}', [ConsultasController::class, 'update'])->name('consultas.update');
         Route::put('{id} {estado}', [ConsultasController::class, 'updateHoy'])->name('consultas.updateHoy');
@@ -71,12 +72,25 @@ Route::middleware([
     Route::get('/consultas-dia', function () {
         $consultas = Consulta::where('fecha', now()->toDateString())
             ->where(function ($query) {
-                $query->where('estado', 'próxima')
-                    ->orWhere('estado', 'confirmada');
-            })
-            ->orderBy('updated_at', 'desc')->get();
+                $query->where('estado', 'Sin confirmar')
+                    ->orWhere('estado', 'Confirmada');
+            })->get();
         return view('lista-consultas-dia', compact('consultas'));
     })->name('consultas_dia');
+
+    Route::get('/sala-espera', function () {
+        $consultas = Consulta::where('fecha', now()->toDateString())
+            ->Where('estado', 'Confirmada')->get();
+        return view('lista-consultas-espera', compact('consultas'));
+    })->name('consultas_espera');
+
+    Route::group(['prefix' => 'triajes'], function () {
+        Route::get('/', [TriajesController::class, 'index'])->name('triajes');
+        Route::get('{id} {lugar}', [TriajesController::class, 'show'])->name('triajes.show');
+        Route::post('{id}', [TriajesController::class, 'store'])->name('triajes.store');
+        Route::put('{id}', [TriajesController::class, 'update'])->name('triajes.update');
+        Route::delete('{id}', [TriajesController::class, 'destroy'])->name('triajes.eliminar');
+    });
 });
 
 if (DB::table('users')->count() === 0) {

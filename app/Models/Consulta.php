@@ -12,10 +12,15 @@ class Consulta extends Model
     protected $fillable = [
         'tipo_consulta',
         'paciente_id',
+        'triaje_id',
     ];
 
     public function paciente()
 {
     return $this->belongsTo(Paciente::class, 'paciente_id');
+}
+public function triaje()
+{
+    return $this->belongsTo(Triaje::class, 'triaje_id');
 }
 }

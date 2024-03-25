@@ -1,12 +1,14 @@
 @foreach ($consultas as $consulta)
-    @if (($consulta->estado == 'próxima' || $consulta->estado == 'confirmada') && $consulta->fecha >= now()->toDateString())
+    @if (
+        ($consulta->estado == 'Sin confirmar' || $consulta->estado == 'Confirmada') &&
+            $consulta->fecha >= now()->toDateString())
         <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta proxima:
         </h1>
-    @elseif($consulta->estado == 'próxima' or $consulta->estado == 'confirmada')
+    @elseif($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
         <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta pendiente:
         </h1>
     @endif
-    @if ($consulta->estado == 'próxima' or $consulta->estado == 'confirmada')
+    @if ($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
         <div id="divPadre">
             <div>
                 {{-- <div>
@@ -45,18 +47,13 @@
                                 @endif
                                 <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
                                 <span class="w-2/5 text-sm lg:text-base">
-                                    {{-- <a href="{{ route('pacientes.show', $paciente->id) }} "> --}}
-                                    <x-boton-editar>
-                                        Ver
-                                    </x-boton-editar>
-                                    {{-- </a> --}}
-                                    @if ($consulta->estado != 'confirmada')
+
+                                    @if ($consulta->estado != 'Confirmada')
                                         <x-boton-editar id="mostrarFormulario">
                                             Reprogramar
                                         </x-boton-editar>
                                     @endif
-                                    {{-- @if ($esConsultaHoy and $consulta->estado == 'próxima') --}}
-                                    @if ($consulta->estado != 'confirmada' && $consulta->fecha == now()->toDateString())
+                                    @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
                                         <form style="display:inline;" method="POST"
                                             action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'confirmar', 'p_id' => $paciente->id]) }}">
                                             @csrf
@@ -66,10 +63,18 @@
                                             </x-boton-actualizar>
                                         </form>
                                     @endif
+                                    @if ($consulta->estado == 'Confirmada')
+                                        <a
+                                            href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
+                                            <x-boton-editar>
+                                                Ver
+                                            </x-boton-editar>
+                                        </a>
+                                    @endif
                                     @if (
-                                        (($consulta->estado == 'confirmada' || $consulta->estado == 'próxima') &&
+                                        (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
                                             $consulta->fecha != now()->toDateString()) ||
-                                            $consulta->estado == 'confirmada')
+                                            $consulta->estado == 'Confirmada')
                                         <form style="display:inline;"
                                             onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"
                                             method="POST"
@@ -81,6 +86,7 @@
                                             </x-boton-eliminar>
                                         </form>
                                     @endif
+                                    
                                 </span>
                             </li>
                             {{-- @php
@@ -124,9 +130,11 @@
                             <x-input id="fecha" class="block mt-1 w-full" type="date" name="fecha"
                                 value="" autocomplete="fecha" />
                         </div>
-                        <x-button class="mt-1 ">
-                            {{ __('Aceptar') }}
-                        </x-button>
+                        <div class="flex mt-2 justify-end">
+                            <x-button>
+                                {{ __('Aceptar') }}
+                            </x-button>
+                        </div>
                     </form>
                 </div>
             </div>

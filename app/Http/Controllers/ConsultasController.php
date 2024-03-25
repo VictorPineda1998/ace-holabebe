@@ -12,7 +12,6 @@ class ConsultasController extends Controller
     public function store(Request $request, $id /* CreatesNewUsers $creator*/)
     {
         // Validación de datos
-        // Validación de datos
         $request->validate([
             'tipo_consulta' => 'required',
             'otro_tipo_consulta' => 'nullable|required_if:tipo_consulta,Otro', // Requerido solo si el tipo de consulta es "Otro"
@@ -25,32 +24,28 @@ class ConsultasController extends Controller
         $consulta = new Consulta();
         $consulta->tipo_consulta = $request->input('tipo_consulta');
         $consulta->detalles_consulta = $request->input('otro_tipo_consulta');
-        $consulta->estado = 'proxima';
+        $consulta->estado = 'Sin confirmar';
         $consulta->paciente_id = $id;
-        if($request->fecha){
+        if ($request->fecha) {
             $consulta->fecha = $request->fecha;
         }
         // Puedes agregar otros campos según tu modelo
 
         // Guarda la consulta 
         $consulta->save();
-        // Redirige con un mensaje de éxito
+        // Redirige 
         return redirect()->route('pacientes.show', ['id' => $paciente->id]);
     }
 
-    public function show($id)
+    public function show($id, $lugar)
     {
-        // Obtener el paciente por su ID
-        //     $paciente = Paciente::find($id);
-
-        //     // Verificar si el paciente fue encontrado
-        //     if (!$paciente) {
-        //         // Redireccionar o mostrar un error, dependiendo de tus necesidades
-        //         return redirect()->route('pacientes')->with('error', 'Paciente no encontrado');
-        //     }
-
-        //     // Si el paciente fue encontrado, mostrar la vista de detalles
-        //     return view('pacientes-show', compact('paciente'));
+        // Obtener el la consulta por su ID
+        $consulta = Consulta::find($id);
+        if($consulta->triaje == true){
+            return redirect()->route('triajes.show', compact('id', 'lugar'));
+        }
+        //  Mostrar la vista de detalles
+        return view('consultas-show', compact('consulta', 'lugar'));
     }
 
 
@@ -62,25 +57,30 @@ class ConsultasController extends Controller
 
         if ($estado == 'confirmar') {
 
-            $consulta->estado = 'confirmada';
+            $consulta->estado = 'Confirmada';
             $consulta->save();
         }
 
         if ($estado == 'cancelar') {
 
-            $consulta->estado = 'cancelada';
+            $consulta->estado = 'Cancelada';
             $consulta->save();
         }
         if ($estado == 'reprogramar') {
-            
-            if($request->fecha or $request->tipo_consulta){
-                if($request->tipo_consulta){
+
+            if ($request->fecha or $request->tipo_consulta) {
+                if ($request->tipo_consulta) {
                     $consulta->tipo_consulta = $request->tipo_consulta;
+                    if ($request->tipo_consulta == 'Otro') {
+                        $consulta->detalles_consulta = $request->input('otro_tipo_consulta');
+                    } else {
+                        $consulta->detalles_consulta = null;
+                    }
                 }
-                if($request->fecha){
+                if ($request->fecha) {
                     $consulta->fecha = $request->fecha;
                 }
-                $consulta->estado = 'proxima';
+                $consulta->estado = 'Sin confirmar';
                 $consulta->save();
             }
         }
@@ -100,31 +100,34 @@ class ConsultasController extends Controller
 
         if ($estado == 'confirmar') {
 
-            $consulta->estado = 'confirmada';
+            $consulta->estado = 'Confirmada';
             $consulta->save();
         }
 
         if ($estado == 'cancelar') {
 
-            $consulta->estado = 'cancelada';
+            $consulta->estado = 'Cancelada';
             $consulta->save();
         }
         if ($estado == 'reprogramar') {
-            
-            if($request->fecha or $request->tipo_consulta){
-                if($request->tipo_consulta){
+
+            if ($request->fecha or $request->tipo_consulta) {
+                if ($request->tipo_consulta) {
                     $consulta->tipo_consulta = $request->tipo_consulta;
-                    $consulta->detalles_consulta = $request->input('otro_tipo_consulta');
+                    if ($request->tipo_consulta == 'Otro') {
+                        $consulta->detalles_consulta = $request->input('otro_tipo_consulta');
+                    } else {
+                        $consulta->detalles_consulta = null;
+                    }
                 }
-                if($request->fecha){
+                if ($request->fecha) {
                     $consulta->fecha = $request->fecha;
                 }
-                $consulta->estado = 'proxima';
+                $consulta->estado = 'Sin confirmar';
                 $consulta->save();
             }
         }
 
         return redirect()->route('consultas_dia');
     }
-
 }

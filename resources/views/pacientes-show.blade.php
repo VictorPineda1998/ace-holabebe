@@ -18,6 +18,7 @@
                     </div>
 
                     <x-paciente.datos-generales :paciente="$paciente" />
+
                     <div class="flex items-center justify-end mt-4">
                         <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
                             onsubmit="return confirm('¿Estás seguro que deseas eliminar este paciente?');"
@@ -34,13 +35,13 @@
                         $hayFinalizada = false;
                         $hayCancelada = false;
                         foreach ($consultas as $consulta) {
-                            if ($consulta->estado == 'próxima') {
+                            if ($consulta->estado == 'Sin confirmar') {
                                 $hayProxima = true;
-                            } elseif ($consulta->estado == 'confirmada') {
+                            } elseif ($consulta->estado == 'Confirmada') {
                                 $hayConfirmada = true;
-                            }  elseif ($consulta->estado == 'finalizada') {
+                            }  elseif ($consulta->estado == 'Finalizada') {
                                 $hayFinalizada = true;
-                            } elseif ($consulta->estado == 'cancelada') {
+                            } elseif ($consulta->estado == 'Cancelada') {
                                 $hayCancelada = true;
                             }
                         }
@@ -49,6 +50,7 @@
                         <div class="titulo-listado flex flex-col items-left">
                             
                             <x-paciente.lista-consultas-proximas :consultas="$consultas" :paciente="$paciente" />
+                            
                         </div>
                     @elseif(!$hayProxima && !$hayConfirmada)
                         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -62,9 +64,9 @@
                                     @csrf
                                     
                                     <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
-                                        style="margin: 0; display: inline;" />
+                                        style="margin: 0;" />
                                     <select id="tipo_consulta" name="tipo_consulta" required
-                                        class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-2 focus:ring-indigo-600"
+                                        class="mt-1 w-full md:w-1/2 rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-2 focus:ring-indigo-600"
                                         onchange="comprobar_tipo()">
                                         <option disabled selected class="text-gray-400 italic">Selecciona un tipo de
                                             consulta</option>

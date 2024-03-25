@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
-    // server: {
-    //         host: '192.168.1.68' || 'localhost',
-    //     },
+    server: {
+            host: '192.168.1.68' || 'localhost',
+        },
     // server: {
     //     host: '10.174.1.200' || 'localhost',
     // },

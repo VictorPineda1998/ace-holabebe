@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('tipo_consulta');
             $table->text('detalles_consulta')->nullable();
-            $table->enum('estado', ['próxima', 'confirmada', 'cancelada', 'finalizada'])->default('próxima')->length(20);
+            $table->enum('estado', ['Sin confirmar', 'Confirmada', 'Cancelada', 'Finalizada'])->default('Sin confirmar')->length(20);
+            $table->integer('triaje_id')->default(0);
             $table->unsignedBigInteger('paciente_id');
             $table->foreign('paciente_id')->references('id')-> on ('pacientes')->onDelete('cascade');
             $table->date('fecha');

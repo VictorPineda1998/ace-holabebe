@@ -1,10 +1,13 @@
 @if (!empty($consultas))
     <div id="divPadre">
         <div>
+            <div class="titulo-listado flex flex-col items-center">
+                <h1 class='text-4xl font-bold mb-6 text-purple-800'>Consultas del dia</h1>
+            </div>
             <div>
                 <input type="text" id="searchInput"
                     class="mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                    placeholder="Buscar nombre, tipo o estado ...">
+                    placeholder="Buscar por nombre, tipo o estado ...">
             </div>
             <div>
                 <ul class="overflow-x-auto">
@@ -27,8 +30,8 @@
                         @endphp --}}
                             {{-- <li class="flex items-center border-b py-2 {{ $esConsultaHoy ? 'bg-emerald-500 mb-6 mt-6' : ($i % 2 == 0 ? '' : 'bg-amber-100') }}"
                             style="padding: 1%"> --}}
-                            @if ($consulta->estado == 'próxima' or $consulta->estado == 'confirmada')
-                                <li class="flex items-center border-b py-2 bg-purple-{{ $i % 2 != 0 ? '200' : '50' }}"
+                            @if ($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
+                                <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-purple-200' : '' }}"
                                     style="padding: 1%">
                                     <span class="text-sm lg:text-base"
                                         style="margin-right: 2%">{{ $consulta->id }}</span>
@@ -42,18 +45,19 @@
                                     @endif
                                     <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
                                     <span class="w-2/5 text-sm lg:text-base">
-                                        {{-- <a href="{{ route('pacientes.show', $paciente->id) }} "> --}}
-                                        <x-boton-editar>
-                                            Ver
-                                        </x-boton-editar>
-                                        {{-- </a> --}}
-                                        @if ($consulta->estado != 'confirmada')
+                                        <a
+                                            href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'hoy']) }} ">
+                                            <x-boton-editar>
+                                                Ver
+                                            </x-boton-editar>
+                                        </a>
+                                        @if ($consulta->estado != 'Confirmada')
                                             <x-boton-editar class="mostrarFormulario" data-boton="{{ $i }}">
                                                 Reprogramar
                                             </x-boton-editar>
                                         @endif
                                         {{-- @if ($esConsultaHoy and $consulta->estado == 'próxima') --}}
-                                        @if ($consulta->estado != 'confirmada' && $consulta->fecha == now()->toDateString())
+                                        @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
                                             <form style="display:inline;" method="POST"
                                                 action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'confirmar']) }}">
                                                 @csrf
@@ -63,7 +67,7 @@
                                                 </x-boton-actualizar>
                                             </form>
                                         @endif
-                                        @if ($consulta->estado == 'confirmada')
+                                        @if ($consulta->estado == 'Confirmada')
                                             <form style="display:inline;"
                                                 onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"
                                                 method="POST"
@@ -79,22 +83,23 @@
                                 </li>
 
                                 <div id="myModal{{ $i }}" class="modal">
-                                    <div class="modal-content">
-                                        <span class="close"><x-boton-cancelar
-                                                class="cerrarModal{{ $i }}">&times;</x-boton-cancelar></span>
+                                    <div class="modal-content w-full md:w-1/2">
                                         <div>
+                                            <span class="close"><x-boton-cancelar
+                                                    class="cerrarModal{{ $i }}">&times;</x-boton-cancelar></span>
                                             <form
                                                 action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'reprogramar']) }}"
                                                 method="POST" style="margin: 1%;" id="formularioConsulta">
                                                 @csrf
                                                 @method('PUT')
-                                                <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
-                                                    style="margin: 0; display: inline;" />
                                                 <div>
-                                                    <x-label for="fecha" value="{{ __('Fecha') }}" />
+                                                    <x-label for="fecha" class="mt-1"
+                                                        value="{{ __('Fecha') }}" />
                                                     <x-input id="fecha" class="block mt-1 w-full" type="date"
                                                         name="fecha" value="" autocomplete="fecha" />
                                                 </div>
+                                                <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
+                                                    style="margin: 0;" />
                                                 <select id="tipo_consulta" name="tipo_consulta"
                                                     class="tipo_consulta{{ $i }} mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-2 focus:ring-indigo-600"
                                                     onchange="comprobar_tipo({{ $i }})">
@@ -151,7 +156,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 85%;
+        /* width: 85%; */
         transform: translate(-50%, -50%);
         background-color: #fff;
         padding: 20px;
@@ -213,11 +218,9 @@
             let searchTerm = this.value.toLowerCase();
             document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
                 if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                    let nombre = li.querySelector('span:nth-child(2)').textContent
-                .toLowerCase();
+                    let nombre = li.querySelector('span:nth-child(2)').textContent.toLowerCase();
                     let tipo = li.querySelector('span:nth-child(3)').textContent.toLowerCase();
-                    let estado = li.querySelector('span:nth-child(4)').textContent
-                .toLowerCase();
+                    let estado = li.querySelector('span:nth-child(4)').textContent.toLowerCase();
                     li.style.display = (nombre.includes(searchTerm) || tipo.includes(
                         searchTerm) || estado.includes(searchTerm)) ? '' : 'none';
                 }
