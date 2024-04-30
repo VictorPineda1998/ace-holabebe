@@ -49,30 +49,30 @@
 
 
     @media (max-width: 600px) {
-        .table-responsive {
+        .table {
             overflow-x: auto;
         }
 
-        .table-responsive table,
-        .table-responsive thead,
-        .table-responsive tbody,
-        .table-responsive th,
-        .table-responsive td,
-        .table-responsive tr {
+
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
             display: block;
         }
 
-        .table-responsive thead tr {
+        thead tr {
             /* position: absolute; */
             /* top: -9999px;
             left: -9999px; */
         }
 
-        .table-responsive tr {
+        tr {
             margin-bottom: 0.625rem;
         }
 
-        .table-responsive td {
+        td {
             /* border: none; */
             border-bottom: 2px solid #3470be;
 
@@ -84,7 +84,7 @@
             text-align: left;
         }
 
-        .table-responsive td:before {
+        td:before {
             /* Now like a table header */
             position: absolute;
             /* Top/left values mimic padding */
@@ -98,25 +98,29 @@
         }
 
         /* Label the data */
-        .table-responsive td:before {
+        td:before {
             content: attr(data-label);
         }
     }
 </style>
 
 <div class="table-responsive">
-    <div class="items-left mt-8 mb-3 me-3">
-        @php
-            $si = false;
-            if ($consulta->tipo_consulta == 'Control prenatal') {
-                $si = true;
-            }
-        @endphp
-        <h1 class='text-1xl font-bold mb-3 text-purple-800'>
-            {{ $si ? 'Triage y valoración obstétrica:' : 'Signos vitales:' }}</h1>
-    </div>
-    <form id="formtriage" method="POST" action="{{ route('triajes.store', $consulta->id) }}">
+    @php
+        $si = false;
+        $siColposcopia = false;
+        if ($consulta->tipo_consulta == 'Control prenatal') {
+            $si = true;
+        } elseif ($consulta->tipo_consulta == 'Ginecologica') {
+            $siColposcopia = true;
+        }
+    @endphp
+    <form id="formtriage" method="POST" action="{{ $triaje ? route('triajes.update', $consulta->triaje_id) : route('triajes.store', $consulta->id) }}">
         @csrf
+
+        @if($triaje)
+            @method('PUT')
+        @endif
+        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Signos vitales:</h1>
         <div class="mb-2 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2 ">
             <div>
                 <x-label for="tension_arterial" value="{{ __('Tension arterial') }}" />
@@ -125,7 +129,6 @@
                     autocomplete="tension_arterial" />
 
             </div>
-
             <div>
                 <x-label for="frecuencia_cardiaca" value="{{ __('Frecuencia cardiaca') }}" />
                 <x-input id="frecuencia_cardiaca" class="block mt-1 w-full" type="text"
@@ -133,21 +136,26 @@
                     value="{{ $triaje ? $triaje->tomaSignosVitales->frecuencia_cardiaca_toma : '' }}"
                     {{-- readonly --}} />
             </div>
-
             <div>
                 <x-label for="talla" value="{{ __('Talla') }}" />
                 <x-input id="talla" class="block mt-1 w-full" type="text" name="talla"
                     value="{{ $triaje ? $triaje->tomaSignosVitales->talla : '' }}" required autocomplete="talla"
                     {{-- readonly --}} />
             </div>
-
             <div>
                 <x-label for="peso" value="{{ __('Peso') }}" />
                 <x-input id="peso" class="block mt-1 w-full" type="text" name="peso"
                     value="{{ $triaje ? $triaje->tomaSignosVitales->peso : '' }}" required autocomplete="peso"
                     {{-- readonly --}} />
             </div>
-
+            @if ($siColposcopia or $si)
+                <div>
+                    <x-label for="temperatura" value="{{ __('Temperatura') }}" />
+                    <x-input id="temperatura" class="block mt-1 w-full" type="text" name="temperatura_toma"
+                        value="{{ $triaje ? $triaje->tomaSignosVitales->temperatura_toma : '' }}"
+                        autocomplete="temperatura" {{-- readonly --}} />
+                </div>
+            @endif
             @if ($si)
                 <div>
                     <x-label for="frecuencia_respiratoria" value="{{ __('Frecuencia respiratoria ') }}" />
@@ -157,13 +165,6 @@
                         autocomplete="new-frecuencia_respiratoria" {{-- readonly --}} />
                 </div>
                 <div>
-                    <x-label for="temperatura" value="{{ __('Temperatura') }}" />
-                    <x-input id="temperatura" class="block mt-1 w-full" type="text" name="temperatura_toma"
-                        value="{{ $triaje ? $triaje->tomaSignosVitales->temperatura_toma : '' }}"
-                        autocomplete="temperatura" {{-- readonly --}} />
-                </div>
-
-                <div>
                     <x-label for="frecuencia_cardiaca_fetal" value="{{ __('Frecuencia cardiaca fetal') }}" />
                     <x-input id="frecuencia_cardiaca_fetal" class="block mt-1 w-full" type="text"
                         name="frecuencia_cardiaca_fetal_toma"
@@ -172,8 +173,19 @@
                 </div>
             @endif
         </div>
+        @if ($triaje && $si)
+            <div class="flex items-center justify-end">
+                <div id="cajaFcf">
+                    <x-boton-mas id="fcf">Editar la FCF</x-boton-mas>
+                </div>
+                <div id="cajaActualizar" style="display: none">
+                    <x-boton-mas id="actualizarFcf">Guardar cambios</x-boton-mas>
+                </div>
+            </div>
+        @endif
 
         @if ($si)
+            <h1 class='text-1xl font-bold mb-3 text-purple-800'>Triage y valoración obstétrica:</h1>
             <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
 
                 <thead>
@@ -686,6 +698,11 @@
                 </tbody>
             </table>
         @endif
+        {{-- @elseif($siColposcopia)
+            <h1 class='text-1xl font-bold mb-3 text-purple-800'>Datos de colposcopia:</h1>
+            <x-paciente.colposcopia/>
+        @endif --}}
+
         <div id="triaje" class="rounded-md pt-2 mt-1">
             <div id="divResultado" style="display: none">
                 <div class="flex items-center justify-end mt-4">
@@ -700,78 +717,8 @@
         </div>
     </form>
 </div>
-{{-- <div id="imageContainer" class="mt-4"></div>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script> --}}
 
 <script>
-    document.getElementById('autovaloracion').addEventListener('click', function() {
-        // Obtener todos los elementos de radio en la tabla
-        const radios = document.querySelectorAll('input[type="radio"]');
-
-        document.getElementById('autovaloracion').style.display = 'none';
-        // Inicializar contadores para cada color
-        let countRojo = 0;
-        let countAmarillo = 0;
-        let countVerde = 0;
-
-        // Iterar sobre los radios y contar cuántos están seleccionados para cada color
-        radios.forEach(radio => {
-            if (radio.checked) {
-                const valor = radio.value;
-                if (valor === "rojo") {
-                    countRojo++;
-                } else if (valor === "amarillo") {
-                    countAmarillo++;
-                } else if (valor === "verde") {
-                    countVerde++;
-                }
-            }
-            // radio.disabled = true;
-        });
-        switch (true) {
-            case (countRojo >= 1):
-                document.getElementById('divResultado').style.display = 'inline';
-                document.getElementById('resultado').value = 'Emergencia! Atención Inmediata!';
-                document.getElementById('triaje').classList.add('parpadeo');
-                break;
-            case (countAmarillo >= 3):
-                document.getElementById('divResultado').style.display = 'inline';
-                document.getElementById('resultado').value =
-                    'Urgencia Calificada! Atención de 0 a 15 minutos';
-                document.getElementById('triaje').classList.add('parpadeo2');
-                document.getElementById('triaje').style.backgroundColor = 'rgb(253, 206, 50)';
-                break;
-            default:
-                document.getElementById('divResultado').style.display = 'inline';
-                document.getElementById('resultado').value =
-                    'Urgente No Calificada, Atención de 15 a 30 minutos';
-                document.getElementById('triaje').classList.add('parpadeo3');
-                document.getElementById('triaje').style.backgroundColor = 'rgb(115, 243, 154)';
-        }
-
-        document.querySelector('#formtriage').submit();
-        //     html2canvas(document.querySelector(".table-responsive")).then(canvas => {
-        //     const imgData = canvas.toDataURL('image/png');
-
-        //     // Crear un elemento <img> para mostrar la imagen
-        //     const img = document.createElement('img');
-        //     img.src = imgData;
-        //     img.style.width = '100%';
-
-        //     // Agregar el <img> al contenedor
-        //     document.getElementById('imageContainer').innerHTML = ''; // Limpiar el contenedor
-        //     document.getElementById('imageContainer').appendChild(img);
-        // });
-        // Mostrar el resultado
-        // console.log("Cantidad de radios Rojos seleccionados:", countRojo);
-        // console.log("Cantidad de radios Amarillos seleccionados:", countAmarillo);
-        // console.log("Cantidad de radios Verdes seleccionados:", countVerde);
-    });
-
-
     var triaje = @json($triaje);
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -801,47 +748,87 @@
                 for (var i = 0; i < radios.length; i++) {
                     if (radios[i].value === valueToCheck) {
                         radios[i].checked = true;
-                        
+
                     }
                     radios[i].disabled = true;
                 }
             }
 
-            checkRadioButton('estado_conciencia', triaje.observaciones.estado_conciencia);
-            checkRadioButton('hemorragia', triaje.observaciones.hemorragia);
-            checkRadioButton('crisis_convulsivas', triaje.observaciones.crisis_convulsivas);
-            checkRadioButton('respiración', triaje.observaciones.respiración);
-            checkRadioButton('color_de_piel', triaje.observaciones.color_de_piel);
+            if (triaje.observaciones != null) {
+                checkRadioButton('estado_conciencia', triaje.observaciones.estado_conciencia);
+                checkRadioButton('hemorragia', triaje.observaciones.hemorragia);
+                checkRadioButton('crisis_convulsivas', triaje.observaciones.crisis_convulsivas);
+                checkRadioButton('respiración', triaje.observaciones.respiración);
+                checkRadioButton('color_de_piel', triaje.observaciones.color_de_piel);
 
-            checkRadioButton('sangrado_transvaginal', triaje.interrogatorio.sangrado_transvaginal);
-            checkRadioButton('crisis_convulsiva', triaje.interrogatorio.crisis_convulsiva);
-            checkRadioButton('cefalea', triaje.interrogatorio.cefalea);
-            checkRadioButton('acufenos_fosfenos', triaje.interrogatorio.acufenos_fosfenos);
-            checkRadioButton('epigastralgia_amaurosis', triaje.interrogatorio.epigastralgia_amaurosis);
-            checkRadioButton('sindrome_febril', triaje.interrogatorio.sindrome_febril);
-            checkRadioButton('salida_de_liquido_amniotico', triaje.interrogatorio.salida_de_liquido_amniotico);
-            checkRadioButton('motilidad_fetal', triaje.interrogatorio.motilidad_fetal);
-            checkRadioButton('emfermedades_cronicas', triaje.interrogatorio.emfermedades_cronicas);
+                checkRadioButton('sangrado_transvaginal', triaje.interrogatorio.sangrado_transvaginal);
+                checkRadioButton('crisis_convulsiva', triaje.interrogatorio.crisis_convulsiva);
+                checkRadioButton('cefalea', triaje.interrogatorio.cefalea);
+                checkRadioButton('acufenos_fosfenos', triaje.interrogatorio.acufenos_fosfenos);
+                checkRadioButton('epigastralgia_amaurosis', triaje.interrogatorio.epigastralgia_amaurosis);
+                checkRadioButton('sindrome_febril', triaje.interrogatorio.sindrome_febril);
+                checkRadioButton('salida_de_liquido_amniotico', triaje.interrogatorio
+                    .salida_de_liquido_amniotico);
+                checkRadioButton('motilidad_fetal', triaje.interrogatorio.motilidad_fetal);
+                checkRadioButton('emfermedades_cronicas', triaje.interrogatorio.emfermedades_cronicas);
 
-            checkRadioButton('hipertension', triaje.signosVitales.hipertension);
-            checkRadioButton('hipotension', triaje.signosVitales.hipotension);
-            checkRadioButton('frecuencia_cardiaca', triaje.signosVitales.frecuencia_cardiaca);
-            checkRadioButton('indice_de_choque', triaje.signosVitales.indice_de_choque);
-            checkRadioButton('frecuencia_respiratoria', triaje.signosVitales.frecuencia_respiratoria);
-            checkRadioButton('temperatura', triaje.signosVitales.temperatura);
-            
-            checkRadioButton('frecuencia_cardiaca_fetal', triaje.bienestarFetal.frecuencia_cardiaca_fetal);
-            checkRadioButton('contracciones_uterinas', triaje.bienestarFetal.contracciones_uterinas);
+                checkRadioButton('hipertension', triaje.signosVitales.hipertension);
+                checkRadioButton('hipotension', triaje.signosVitales.hipotension);
+                checkRadioButton('frecuencia_cardiaca', triaje.signosVitales.frecuencia_cardiaca);
+                checkRadioButton('indice_de_choque', triaje.signosVitales.indice_de_choque);
+                checkRadioButton('frecuencia_respiratoria', triaje.signosVitales.frecuencia_respiratoria);
+                checkRadioButton('temperatura', triaje.signosVitales.temperatura);
+
+                checkRadioButton('frecuencia_cardiaca_fetal', triaje.bienestarFetal.frecuencia_cardiaca_fetal);
+                checkRadioButton('contracciones_uterinas', triaje.bienestarFetal.contracciones_uterinas);
+            }
 
             document.getElementById('autovaloracion').style.display = 'none';
 
-            switch (true) {
-            case (triaje.resultado == 'Emergencia! Atención Inmediata!'):
+            document.getElementById('fcf').addEventListener('click', function() {
+                document.getElementById('cajaActualizar').style.display = 'inline';
+                document.getElementById('cajaFcf').style.display = 'none';
+                document.getElementById('frecuencia_cardiaca_fetal').removeAttribute('readonly');
+            });
+
+            document.getElementById('actualizarFcf').addEventListener('click', function() {
+                document.querySelector('#formtriage').submit();
+            });
+        }
+    });
+
+    document.getElementById('autovaloracion').addEventListener('click', function() {
+        // Obtener todos los elementos de radio en la tabla
+        const radios = document.querySelectorAll('input[type="radio"]');
+
+        document.getElementById('autovaloracion').style.display = 'none';
+        // Inicializar contadores para cada color
+        let countRojo = 0;
+        let countAmarillo = 0;
+        let countVerde = 0;
+
+        // Iterar sobre los radios y contar cuántos están seleccionados para cada color
+        radios.forEach(radio => {
+            if (radio.checked) {
+                const valor = radio.value;
+                if (valor === "rojo") {
+                    countRojo++;
+                } else if (valor === "amarillo") {
+                    countAmarillo++;
+                } else if (valor === "verde") {
+                    countVerde++;
+                }
+            }
+            // radio.disabled = true;
+        });
+
+        switch (true) {
+            case (countRojo >= 1):
                 document.getElementById('divResultado').style.display = 'inline';
                 document.getElementById('resultado').value = 'Emergencia! Atención Inmediata!';
                 document.getElementById('triaje').classList.add('parpadeo');
                 break;
-            case (triaje.resultado == 'Urgencia Calificada! Atención de 0 a 15 minutos'):
+            case (countAmarillo >= 3):
                 document.getElementById('divResultado').style.display = 'inline';
                 document.getElementById('resultado').value =
                     'Urgencia Calificada! Atención de 0 a 15 minutos';
@@ -855,6 +842,25 @@
                 document.getElementById('triaje').classList.add('parpadeo3');
                 document.getElementById('triaje').style.backgroundColor = 'rgb(115, 243, 154)';
         }
+
+        document.querySelector('#formtriage').submit();
+
+        { //     html2canvas(document.querySelector(".table-responsive")).then(canvas => {
+            //     const imgData = canvas.toDataURL('image/png');
+
+            //     // Crear un elemento <img> para mostrar la imagen
+            //     const img = document.createElement('img');
+            //     img.src = imgData;
+            //     img.style.width = '100%';
+
+            //     // Agregar el <img> al contenedor
+            //     document.getElementById('imageContainer').innerHTML = ''; // Limpiar el contenedor
+            //     document.getElementById('imageContainer').appendChild(img);
+            // });
+            // Mostrar el resultado
+            // console.log("Cantidad de radios Rojos seleccionados:", countRojo);
+            // console.log("Cantidad de radios Amarillos seleccionados:", countAmarillo);
+            // console.log("Cantidad de radios Verdes seleccionados:", countVerde);
         }
     });
 </script>

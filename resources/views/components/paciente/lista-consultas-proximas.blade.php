@@ -47,13 +47,20 @@
                                 @endif
                                 <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
                                 <span class="w-2/5 text-sm lg:text-base">
-
+                                    {{-- @if ($consulta->estado == 'Confirmada') --}}
+                                    <a
+                                        href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
+                                        <x-boton-editar>
+                                            Ver
+                                        </x-boton-editar>
+                                    </a>
+                                    {{-- @endif --}}
                                     @if ($consulta->estado != 'Confirmada')
                                         <x-boton-editar id="mostrarFormulario">
                                             Reprogramar
                                         </x-boton-editar>
                                     @endif
-                                    @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
+                                    {{-- @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
                                         <form style="display:inline;" method="POST"
                                             action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'confirmar', 'p_id' => $paciente->id]) }}">
                                             @csrf
@@ -62,15 +69,8 @@
                                                 Confirmar
                                             </x-boton-actualizar>
                                         </form>
-                                    @endif
-                                    @if ($consulta->estado == 'Confirmada')
-                                        <a
-                                            href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
-                                            <x-boton-editar>
-                                                Ver
-                                            </x-boton-editar>
-                                        </a>
-                                    @endif
+                                    @endif --}}
+
                                     @if (
                                         (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
                                             $consulta->fecha != now()->toDateString()) ||
@@ -86,7 +86,7 @@
                                             </x-boton-eliminar>
                                         </form>
                                     @endif
-                                    
+
                                 </span>
                             </li>
                             {{-- @php

@@ -20,7 +20,7 @@
                     </li>
                     @foreach ($consultas as $consulta)
                         @if ($consulta->estado == 'Finalizada' or $consulta->estado == 'Cancelada')
-                        <li class="flex items-center border-b py-2 bg-amber-{{$i % 2 != 0 ? '100' : ''}}" style="padding: 1%">
+                        <li class="flex items-center border-b py-2 {{$i % 2 != 0 ? 'bg-amber-100' : 'bg-white'}}" style="padding: 1%">
                                 <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $consulta->id }}</span>
                                 <span class="w-1/4 text-sm lg:text-base">{{ $consulta->fecha}}</span>
                                 @if ($consulta->tipo_consulta == 'Otro')

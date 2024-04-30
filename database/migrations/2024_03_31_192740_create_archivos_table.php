@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('consultas', function (Blueprint $table) {
+        Schema::create('archivos', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo_consulta');
-            $table->text('detalles_consulta')->nullable();
-            $table->enum('estado', ['Sin confirmar', 'Confirmada', 'Cancelada', 'Finalizada'])->default('Sin confirmar')->length(20);
-            $table->integer('triaje_id')->default(0);
-            $table->integer('colposcopia_id')->default(0);
+            $table->string('nombre');
+            $table->string('tipo');
+            $table->string('ruta');
             $table->unsignedBigInteger('paciente_id');
             $table->foreign('paciente_id')->references('id')-> on ('pacientes')->onDelete('cascade');
-            $table->date('fecha');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('consultass');
+        Schema::dropIfExists('archivos');
     }
 };

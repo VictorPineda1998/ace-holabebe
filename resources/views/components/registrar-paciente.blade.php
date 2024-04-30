@@ -9,9 +9,19 @@
         @csrf
 
         <div class="mt-4">
-            <x-label for="nombre" value="{{ __('Nombre') }}" />
+            <x-label for="nombre" value="{{ __('Nombre(s)') }}" />
             <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')" required
                 autofocus autocomplete="nombre" />
+        </div>
+        <div class="mt-4">
+            <x-label for="apellidoP" value="{{ __('Apellido Paterno') }}" />
+            <x-input id="apellidoP" class="block mt-1 w-full" type="text" name="apellidoP" :value="old('apellidoP')" required
+                autofocus autocomplete="apellidoP" />
+        </div>
+        <div class="mt-4">
+            <x-label for="apellidoM" value="{{ __('Apellido Materno') }}" />
+            <x-input id="apellidoM" class="block mt-1 w-full" type="text" name="apellidoM" :value="old('apellidoM')" required
+                autofocus autocomplete="apellidoM" />
         </div>
 
         <div class="mt-4">
@@ -26,8 +36,8 @@
         </div>
         
         <div class="mt-4">
-            <x-label for="edad" value="{{ __('Edad') }}" style="display: none"/>
-            <x-input id="edad" class="block mt-1 w-full" type="number" name="edad" required autocomplete="edad" style="display: none"/>
+            {{-- <x-label for="edad" value="{{ __('Edad') }}" style="display: none"/> --}}
+            <x-input id="edad"  type="number" name="edad"  style="display: none"/>
         </div>
         
 

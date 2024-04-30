@@ -4,9 +4,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="padding: 1%">
+            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg" style="padding: 1%">
                 {{-- @if (!isset($user) and isset($users)) --}}
-                <x-boton-mas id="mostrarRegistro" class="ms-4">
+                <x-boton-mas id="mostrarRegistro" >
                     {{ __('Agregar usuario') }}
                 </x-boton-mas>
                 {{-- @endif --}}

@@ -8,10 +8,20 @@ use App\Models\Paciente;
 
 class PacientesController extends Controller
 {
-    public function index()
-    {   
+    public function index(Request $request)
+    {
         $user = auth()->user();
-        $pacientes = Paciente::orderBy('created_at', 'desc')->get();
+        // Obtener el término de búsqueda del request
+        $search = $request->input('search');
+
+        // Modificar la consulta para incluir la búsqueda
+        $pacientes = Paciente::when($search, function ($query, $search) {
+            return $query->where('nombre', 'like', '%' . $search . '%');
+        })
+            ->orderBy('created_at', 'asc')
+            ->paginate(10);
+        // $pacientes = Paciente::orderBy('created_at', 'desc')->paginate(2);
+        // $pacientes = Paciente::orderBy('created_at', 'asc')->paginate(1);
         return view('gestion-pacientes', compact('user'), compact('pacientes'));
     }
 
@@ -20,6 +30,8 @@ class PacientesController extends Controller
         // Validación de datos
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'apellidoP' => 'required|string|max:255',
+            'apellidoM' => 'required|string|max:255',
             'telefono' => 'required|string',
             'fecha_nacimiento' => 'required|date',
             'edad' => 'required|integer',
@@ -32,6 +44,8 @@ class PacientesController extends Controller
         // Crear un nuevo paciente con los datos del formulario
         $paciente = new Paciente([
             'nombre' => $request->input('nombre'),
+            'apellido_P' => $request->input('apellidoP'),
+            'apellido_M' => $request->input('apellidoM'),
             'telefono' => $telefono,
             'fecha_nacimiento' => $request->input('fecha_nacimiento'),
             'edad' => $request->input('edad'),
@@ -65,8 +79,10 @@ class PacientesController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validarDatos =$request->validate([
+        $validarDatos = $request->validate([
             'nombre' => 'required|string|max:255',
+            'apellidoP' => 'required|string|max:255',
+            'apellidoM' => 'required|string|max:255',
             'telefono' => 'required|string',
             'fecha_nacimiento' => 'required|date',
             'edad' => 'required|integer',
@@ -78,21 +94,23 @@ class PacientesController extends Controller
         $paciente = Paciente::findOrFail($request->id);
         // Crear un nuevo paciente con los datos del formulario
         $paciente->nombre = $validarDatos['nombre'];
+        $paciente->apellido_P = $validarDatos['apellidoP'];
+        $paciente->apellido_M = $validarDatos['apellidoM'];
         $paciente->telefono = $validarDatos['telefono'];
         $paciente->fecha_nacimiento = $validarDatos['fecha_nacimiento'];
         $paciente->edad = $validarDatos['edad'];
         $paciente->lugar_procedencia = $validarDatos['lugar_procedencia'];
-        
+
 
         // Guardar el paciente en la base de datos
         $paciente->save();
-        
+
         $paciente = Paciente::find($id);
-        
+
         // Obtener las consultas del paciente por su ID
         $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
         // Redireccionar a la vista de detalles del paciente recién creado
-        
+
         // Si el paciente fue encontrado, mostrar la vista de detalles
         return view('pacientes-show', compact('paciente', 'consultas'));
     }

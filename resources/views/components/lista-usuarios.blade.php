@@ -23,9 +23,9 @@
                     </li>
                     @foreach ($users as $user)
                         @if ($i % 2 == 0)
-                            <li class="flex items-center border-b py-2" style="padding: 1%">
+                            <li class="flex items-center border-b py-2 bg-gray-50" style="padding: 1%">
                             @else
-                            <li class="flex items-center border-b py-2 bg-gray-200" style="padding: 1%">
+                            <li class="flex items-center border-b py-2 bg-indigo-200" style="padding: 1%">
                         @endif
                         <span class="text-sm lg:text-base" style="margin-right: 1%">{{ $user->id }}</span>
                         <span class="w-1/4 text-sm lg:text-base">{{ $user->name }}</span>

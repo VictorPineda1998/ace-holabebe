@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <div class="titulo-listado flex flex-col items-center">
                     <h1 class='text-4xl font-bold mb-6 text-green-800'>Sala de espera</h1>
                 </div>
@@ -26,12 +26,12 @@
                             </li>
                             @foreach ($consultas as $consulta)
                                 @if ($consulta->estado == 'Confirmada')
-                                    <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-green-200' : '' }}"
+                                    <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-green-200' : 'bg-white' }}"
                                         style="padding: 1%">
                                         <span class="text-sm lg:text-base"
                                             style="margin-right: 2%">{{ $consulta->id }}</span>
                                         <span
-                                            class="w-1/3 text-sm lg:text-base">{{ optional($consulta->paciente)->nombre }}</span>
+                                            class="w-1/3 text-sm lg:text-base">{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}</span>
                                         @if ($consulta->tipo_consulta == 'Otro')
                                             <span
                                                 class="w-1/3 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>

@@ -1,16 +1,27 @@
 <x-app-layout>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <a href="{{ route('pacientes') }}">
-                    <x-boton-mas class="ms-4">
-                        {{ __('Regresar') }}
+                    <x-boton-mas>
+                        {{ __('pacientes') }}
                     </x-boton-mas>
                 </a>
                 @if (isset($paciente))
                     <div class="titulo-listado flex flex-col items-center">
                         <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Detalles del paciente</h1>
+                    </div>
+                    <div class=" flex items-end mt-2 mb-5">
+                        <div class="flex items-center mt-3">
+                            <h1 class='text-1xl font-bold mb-2 text-purple-800'>Archivos PDF guardados:</h1>
+                        </div>
+                        <div class="flex items-center ms-3">
+                            <a href="{{ route('archivos', $paciente->id) }}">
+                                <x-boton-mas>
+                                    {{ __('archivos pdf') }}
+                                </x-boton-mas>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="titulo-listado flex flex-col items-left">
@@ -39,7 +50,7 @@
                                 $hayProxima = true;
                             } elseif ($consulta->estado == 'Confirmada') {
                                 $hayConfirmada = true;
-                            }  elseif ($consulta->estado == 'Finalizada') {
+                            } elseif ($consulta->estado == 'Finalizada') {
                                 $hayFinalizada = true;
                             } elseif ($consulta->estado == 'Cancelada') {
                                 $hayCancelada = true;
@@ -48,12 +59,12 @@
                     @endphp
                     @if ($hayProxima or $hayConfirmada)
                         <div class="titulo-listado flex flex-col items-left">
-                            
+
                             <x-paciente.lista-consultas-proximas :consultas="$consultas" :paciente="$paciente" />
-                            
+
                         </div>
                     @elseif(!$hayProxima && !$hayConfirmada)
-                        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                        <div class=" overflow-hidden shadow-xl rounded-lg">
                             <x-boton-mas class="mb-2" id="mostrarRegistro">
                                 {{ __('Agregar consulta') }}
                             </x-boton-mas>
@@ -62,7 +73,7 @@
                                 <form action="{{ route('consultas.store', $paciente->id) }}" method="POST"
                                     style="margin: 1%;" id="formRegistrar">
                                     @csrf
-                                    
+
                                     <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
                                         style="margin: 0;" />
                                     <select id="tipo_consulta" name="tipo_consulta" required
@@ -84,14 +95,16 @@
                                             autocomplete="new-otro-tipo-consulta" />
                                     </div>
                                     <div>
-                                        <x-label for="fecha" value="{{ __('Fecha') }}" />
-                                        <x-input id="fecha" class="block mt-1 w-full md:w-1/2" type="date" name="fecha" value=""
-                                         autocomplete="fecha" required />
+                                        <x-label for="fecha" value="{{ __('Fecha:') }}" />
+                                        <x-input id="fecha" class="block mt-1 w-full md:w-1/2" type="date"
+                                            name="fecha" value="" autocomplete="fecha" required />
                                     </div>
-                                    <x-boton-cancelar id="cancelar-tipo-consulta">Cancelar</x-boton-cancelar>
-                                    <x-button class="ms-4 mt-1">
-                                        {{ __('Aceptar') }}
-                                    </x-button>
+                                    <div class="flex mt-2 justify-end w-full md:w-1/2">
+                                        <x-boton-cancelar id="cancelar-tipo-consulta">Cancelar</x-boton-cancelar>
+                                        <x-button class="ms-4 mt-1">
+                                            {{ __('Aceptar') }}
+                                        </x-button>
+                                    </div>
                                 </form>
                             </div>
                         </div>

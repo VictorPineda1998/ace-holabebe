@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-sky-200 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -21,19 +21,20 @@
                             {{ __('Usuarios') }}
                         </x-nav-link>
                     @endif
-                    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios' 
+                        or auth()->user()->tipo_usuario == 'Medico especialista')
                         <x-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
                             {{ __('Pacientes') }}
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->tipo_usuario == 'Administrador' or
-                            auth()->user()->tipo_usuario == 'Enfermeria consultorios' or
-                            auth()->user()->tipo_usuario == 'Medico general')
+                            auth()->user()->tipo_usuario == 'Enfermeria consultorios')
                         <x-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                             {{ __('Consultas del dia') }}
                         </x-nav-link>
                     @endif
-                    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                    @if (auth()->user()->tipo_usuario == 'Administrador' or
+                            auth()->user()->tipo_usuario == 'Medico especialista')
                         <x-nav-link href="{{ route('consultas_espera') }}" :active="request()->routeIs('consultas_espera')">
                             {{ __('Sala de espera') }}
                         </x-nav-link>
@@ -181,19 +182,19 @@
                     {{ __('Usuarios') }}
                 </x-responsive-nav-link>
             @endif
-            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios'
+                or auth()->user()->tipo_usuario == 'Medico especialista')
                 <x-responsive-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
                     {{ __('Pacientes') }}
                 </x-responsive-nav-link>
             @endif
             @if (auth()->user()->tipo_usuario == 'Administrador' or
-                    auth()->user()->tipo_usuario == 'Enfermeria consultorios' or
-                    auth()->user()->tipo_usuario == 'Medico general')
+                    auth()->user()->tipo_usuario == 'Enfermeria consultorios')
                 <x-responsive-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                     {{ __('Consultas del dia') }}
                 </x-responsive-nav-link>
             @endif
-            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista')
                 <x-responsive-nav-link href="{{ route('consultas_espera') }}" :active="request()->routeIs('consultas_espera')">
                     {{ __('Sala de espera') }}
                 </x-responsive-nav-link>

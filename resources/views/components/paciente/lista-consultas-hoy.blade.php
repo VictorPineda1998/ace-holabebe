@@ -17,10 +17,10 @@
                     <div style="width: 900px">
                         <li class="flex items-center bg-purple-400 p-3">
                             <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                            <span class="w-1/5 text-sm lg:text-base">Nombre</span>
-                            <span class="w-1/5 text-sm lg:text-base">Tipo de consulta</span>
-                            <span class="w-1/5 text-sm lg:text-base">Detalle</span>
-                            <span class="w-2/5 text-sm lg:text-base">Opciones</span>
+                            <span class="w-2/6 text-sm lg:text-base">Nombre</span>
+                            <span class="w-1/6 text-sm lg:text-base">Tipo de consulta</span>
+                            <span class="w-1/6 text-sm lg:text-base">Detalle</span>
+                            <span class="w-2/6 text-sm lg:text-base">Opciones</span>
                         </li>
                         @foreach ($consultas as $consulta)
                             {{-- @php
@@ -31,20 +31,20 @@
                             {{-- <li class="flex items-center border-b py-2 {{ $esConsultaHoy ? 'bg-emerald-500 mb-6 mt-6' : ($i % 2 == 0 ? '' : 'bg-amber-100') }}"
                             style="padding: 1%"> --}}
                             @if ($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
-                                <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-purple-200' : '' }}"
+                                <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-purple-200' : 'bg-purple-50' }}"
                                     style="padding: 1%">
                                     <span class="text-sm lg:text-base"
                                         style="margin-right: 2%">{{ $consulta->id }}</span>
                                     <span
-                                        class="w-1/5 text-sm lg:text-base">{{ optional($consulta->paciente)->nombre }}</span>
+                                        class="w-2/6 text-sm lg:text-base">{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}</span>
                                     @if ($consulta->tipo_consulta == 'Otro')
                                         <span
-                                            class="w-1/5 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
+                                            class="w-1/6 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
                                     @else
-                                        <span class="w-1/5 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
+                                        <span class="w-1/6 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
                                     @endif
-                                    <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
-                                    <span class="w-2/5 text-sm lg:text-base">
+                                    <span class="w-1/6 text-sm lg:text-base">{{ $consulta->estado }}</span>
+                                    <span class="w-2/6 text-sm lg:text-base">
                                         <a
                                             href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'hoy']) }} ">
                                             <x-boton-editar>
@@ -57,7 +57,7 @@
                                             </x-boton-editar>
                                         @endif
                                         {{-- @if ($esConsultaHoy and $consulta->estado == 'próxima') --}}
-                                        @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
+                                        {{-- @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
                                             <form style="display:inline;" method="POST"
                                                 action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'confirmar']) }}">
                                                 @csrf
@@ -66,7 +66,7 @@
                                                     Confirmar
                                                 </x-boton-actualizar>
                                             </form>
-                                        @endif
+                                        @endif --}}
                                         @if ($consulta->estado == 'Confirmada')
                                             <form style="display:inline;"
                                                 onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"

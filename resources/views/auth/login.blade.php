@@ -8,12 +8,12 @@
             <div class="titulo-listado flex flex-col items-center">
                 <h1 class='text-1xl font-bold mb-6 text-black-800'>BIENVENIDO AL SISTEMA:</h1>
                 <h1 class='text-1xl font-bold mb-6 text-black-800'> ARCHIVO CLINICO ELECTRONICO</h1>
-            <x-boton-mas>
+            
             <a href="{{ route('register') }}"
                 class="ml-4 font-semibold text-gray-900 hover:text-blue-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                Registrece como primer usuario administrador
+                <x-boton-mas> Registrece como primer usuario administrador</x-boton-mas>
             </a>
-            </x-boton-mas>
+            
         </div>
         @else
             <x-validation-errors class="mb-4" />

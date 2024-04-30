@@ -99,18 +99,15 @@ class ConsultasController extends Controller
         $consulta = Consulta::findOrfail($id);
 
         if ($estado == 'confirmar') {
-
             $consulta->estado = 'Confirmada';
             $consulta->save();
         }
 
         if ($estado == 'cancelar') {
-
             $consulta->estado = 'Cancelada';
             $consulta->save();
         }
         if ($estado == 'reprogramar') {
-
             if ($request->fecha or $request->tipo_consulta) {
                 if ($request->tipo_consulta) {
                     $consulta->tipo_consulta = $request->tipo_consulta;
@@ -127,7 +124,23 @@ class ConsultasController extends Controller
                 $consulta->save();
             }
         }
-
         return redirect()->route('consultas_dia');
+    }
+
+    public function consultas_dia()
+    {
+        $consultas = Consulta::where('fecha', now()->toDateString())
+            ->where(function ($query) {
+                $query->where('estado', 'Sin confirmar')
+                    ->orWhere('estado', 'Confirmada');
+            })->get();
+        return view('lista-consultas-dia', compact('consultas'));
+    }
+    
+    public function consultas_espera()
+    {
+        $consultas = Consulta::where('fecha', now()->toDateString())
+            ->Where('estado', 'Confirmada')->get();
+        return view('lista-consultas-espera', compact('consultas'));
     }
 }

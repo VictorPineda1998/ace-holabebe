@@ -20,7 +20,8 @@
     <body class="font-sans antialiased">
         <x-banner />
 
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen" style="background-image: url('{{ asset('img-empresa/fondo.jpg') }}'); background-size: cover;">
+        
             @livewire('navigation-menu')
 
             <!-- Page Heading -->

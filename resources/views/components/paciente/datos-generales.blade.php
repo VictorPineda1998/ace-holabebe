@@ -1,11 +1,21 @@
 <form id="paciente-form" method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
     @csrf
     @method('PUT')
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-6">
         <div>
             <x-label for="nombre" value="{{ __('Nombre') }}" />
             <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')" required
-                value="{{ $paciente->nombre }}" autofocus autocomplete="nombre" readonly />
+                value="{{ $paciente->nombre }}" autofocus autocomplete="nombre"  readonly />
+        </div>
+        <div>
+            <x-label for="apellidoP" value="{{ __('Apellido Paterno') }}" />
+            <x-input id="apellidoP" class="block mt-1 w-full" type="text" name="apellidoP" :value="old('apellidoP')" required
+                value="{{ $paciente->apellido_P }}" autofocus autocomplete="apellidoP" readonly />
+        </div>
+        <div>
+            <x-label for="apellidoM" value="{{ __('Apellido Materno') }}" />
+            <x-input id="apellidoM" class="block mt-1 w-full" type="text" name="apellidoM" :value="old('apellidoM')" required
+                value="{{ $paciente->apellido_M }}" autofocus autocomplete="apellidoM" readonly />
         </div>
 
         <div>
@@ -33,10 +43,16 @@
         </div>
     </div>
     <div class="flex items-center justify-end mt-4">
-        <x-boton-editar id="editar-btn" class="ms-4">
-            &nbsp;&nbsp;Editar&nbsp;&nbsp;
-        </x-boton-editar>
-
+        <div class=" flex items-end" id="editar-btn">
+            <div class="flex items-center">
+                <h1 class='text-1xl font-bold mb-2 text-purple-800'>Editar los datos generales del paciente:</h1>
+            </div>
+            <div class="flex items-center ms-3">
+                    <x-boton-editar>
+                        &nbsp;&nbsp;Editar&nbsp;&nbsp;
+                    </x-boton-editar>
+            </div>
+        </div>
         <x-boton-cancelar id="cancelar" class="ms-4" style="display: none;">
             {{ __('Cancelar') }}
         </x-boton-cancelar>
@@ -60,14 +76,7 @@
         this.style.display = 'none';
     });
     document.getElementById('cancelar').addEventListener('click', function() {
-        // Habilitar la edición de los campos
-        document.querySelectorAll('#paciente-form input').forEach(function(input) {
-            input.setAttribute('readonly', 'readonly');
-        });
-
-        document.getElementById('editar-btn').style.display = 'inline';
-        document.getElementById('botonActualizar').style.display = 'none';
-        this.style.display = 'none';
+        location.reload();
     });
 
     // Obtener la referencia a los elementos del formulario
@@ -98,19 +107,19 @@
 
         const telefonoInput = document.getElementById('telefono');
 
-            // Verificar si el elemento existe antes de agregar el event listener
-            if (telefonoInput) {
-                // Agregar un event listener al campo de teléfono
-                telefonoInput.addEventListener('change', function() {
-                    // Obtener el número de teléfono del input
-                    const telefono = telefonoInput.value;
+        // Verificar si el elemento existe antes de agregar el event listener
+        if (telefonoInput) {
+            // Agregar un event listener al campo de teléfono
+            telefonoInput.addEventListener('change', function() {
+                // Obtener el número de teléfono del input
+                const telefono = telefonoInput.value;
 
-                    // Verificar si la longitud del número de teléfono es igual a 10
-                    if (telefono.length !== 10) {
-                        alert("Por favor, coloque un número de teléfono de 10 dígitos");
-                        return;
-                    }
-                });
-            }
+                // Verificar si la longitud del número de teléfono es igual a 10
+                if (telefono.length !== 10) {
+                    alert("Por favor, coloque un número de teléfono de 10 dígitos");
+                    return;
+                }
+            });
+        }
     }
 </script>
