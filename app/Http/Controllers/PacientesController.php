@@ -19,7 +19,7 @@ class PacientesController extends Controller
             return $query->where('nombre', 'like', '%' . $search . '%');
         })
             ->orderBy('created_at', 'asc')
-            ->paginate(10);
+            ->paginate(3);
         // $pacientes = Paciente::orderBy('created_at', 'desc')->paginate(2);
         // $pacientes = Paciente::orderBy('created_at', 'asc')->paginate(1);
         return view('gestion-pacientes', compact('user'), compact('pacientes'));

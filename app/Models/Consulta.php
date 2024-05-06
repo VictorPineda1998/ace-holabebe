@@ -28,4 +28,8 @@ class Consulta extends Model
     {
         return $this->belongsTo(Colposcopia::class, 'colposcopia_id');
     }
+    public function diagnostico()
+    {
+        return $this->belongsTo(Diagnostico::class, 'diagnostico_id');
+    }
 }

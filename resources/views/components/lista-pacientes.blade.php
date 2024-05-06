@@ -11,24 +11,24 @@
                 @endphp
                 <div style="width: 900px">
                     <div class="flex">
-                        <div class="flex w-1/2">
+                        <div class="flex w-4/9">
                             <div class="flex items-center">
                                 <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en esta coleccion:</h1>
                             </div>
                             <div class="flex items-center ms-0 w-full">
-                                <input type="text" id="searchInput" class="mb-4 p-2 w-full border border-gray-300 rounded-md"
+                                <input type="text" id="searchInput" class="mb-4 w-full border border-gray-300 rounded-md"
                                     placeholder="Buscar por nombre, telefono o edad...">
                             </div>
                         </div>
             
-                        <div class="flex w-1/2">
-                            <div class="flex items-center ms-3">
-                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar por nombre:</h1>
-                            </div>
+                        <div class="flex w-5/9">
                             <div class="flex items-center ms-2">
+                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en todos los registros:</h1>
+                            </div>
+                            <div class="flex items-center ms-1">
                                 <form action="{{ route('pacientes') }}" method="GET">
-                                    <input class="mb-4 p-2  border border-gray-300 rounded-md"
-                                        type="text" name="search" placeholder="(sin apellidos) "
+                                    <input class="mb-4 border border-gray-300 rounded-md"
+                                        type="text" name="search" placeholder="Solo nombre(s)"
                                         value="{{ request()->search }}">
                                     <x-boton-mas type="submit">Buscar</x-boton-mas>
                                 </form>
@@ -37,20 +37,20 @@
                     </div>
                     <li class="flex items-center bg-pink-500 p-3">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                        <span class="w-1/4 text-sm lg:text-base">Nombre</span>
-                        <span class="w-1/4 text-sm lg:text-base">Telefono</span>
-                        <span class="w-1/4 text-sm lg:text-base">Edad</span>
-                        <span class="w-1/4 text-sm lg:text-base">Opciones</span>
+                        <span class="w-3/6 text-sm lg:text-base">Nombre</span>
+                        <span class="w-1/6 text-sm lg:text-base">Telefono</span>
+                        <span class="w-1/6 text-sm lg:text-base">Edad</span>
+                        <span class="w-1/6 text-sm lg:text-base">Opciones</span>
                     </li>
                     @foreach ($pacientes as $paciente)
                         <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-pink-300' : '' }}"
                             style="padding: 1%">
                             <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $paciente->id }}</span>
-                            <span class="w-1/4 text-sm lg:text-base">{{ $paciente->nombre }} {{ $paciente->apellido_P }}
+                            <span class="w-3/6 text-sm lg:text-base">{{ $paciente->nombre }} {{ $paciente->apellido_P }}
                                 {{ $paciente->apellido_M }}</span>
-                            <span class="w-1/4 text-sm lg:text-base">{{ $paciente->telefono }}</span>
-                            <span class="w-1/4 text-sm lg:text-base">{{ $paciente->edad }} años</span>
-                            <span class="w-1/4 text-sm lg:text-base">
+                            <span class="w-1/6 text-sm lg:text-base">{{ $paciente->telefono }}</span>
+                            <span class="w-1/6 text-sm lg:text-base">{{ $paciente->edad }} años</span>
+                            <span class="w-1/6 text-sm lg:text-base">
                                 <a href="{{ route('pacientes.show', $paciente->id) }} ">
                                     <x-boton-editar class="boton-editar" style="margin: 0; display: inline;">
                                         Ver

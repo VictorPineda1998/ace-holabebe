@@ -5,7 +5,7 @@
     @if ($colposcopia)
         @method('PUT')
         <div class="flex items-center justify-start mt-3 mb-3">
-            <x-boton-mas id="imprimir">convertir a pdf</x-boton-mas>
+            <x-boton-mas id="imprimir">Convertir a pdf</x-boton-mas>
         </div>
     @endif
     <div class="div_colposcopia">
@@ -434,20 +434,22 @@
             </tbody>
         </table>
     </div>
-    <div class="flex items-center justify-end mt-4">
-        @if ($colposcopia)
-            <div class="flex items-center justify-end mt-4" id="divEditar">
-                <x-boton-mas id="btnEditar">{{ 'Editar' }}</x-boton-mas>
-            </div>
-            <div id="divCancelar" style="display: none; margin: 2%">
-                <x-boton-mas id="btnCancelar">{{ 'Cancelar' }}</x-boton-mas>
-            </div>
-        @endif
+    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista')
+        <div class="flex items-center justify-end mt-4">
+            @if ($colposcopia)
+                <div class="flex items-center justify-end mt-4" id="divEditar">
+                    <x-boton-editar id="btnEditar">{{ 'Editar' }}</x-boton-editar>
+                </div>
+                <div id="divCancelar" style="display: none; margin: 2%">
+                    <x-boton-cancelar id="btnCancelar">{{ 'Cancelar' }}</x-boton-cancelar>
+                </div>
+            @endif
 
-        <div id="div_button">
-            <x-boton-mas id="guardarForm">{{ $colposcopia ? 'Guardar cambios' : 'Guardar' }}</x-boton-mas>
+            <div id="div_button">
+                <x-boton-mas id="guardarForm">{{ $colposcopia ? 'Guardar cambios' : 'Guardar' }}</x-boton-mas>
+            </div>
         </div>
-    </div>
+    @endif
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
@@ -487,7 +489,7 @@
             'diagnostico_citologico',
             'sintomatologia', 'indice_colposcopico_REID', 'color', 'margen', 'tincion_con_yodo',
             'vasos',
-            'radio', 'dx', 'grado', 'otros_dx', 'observaciones','proxima_cita'
+            'radio', 'dx', 'grado', 'otros_dx', 'observaciones', 'proxima_cita'
         ];
 
         if (colposcopia && !editando) {
@@ -531,7 +533,10 @@
 
 
             document.getElementById('img_botones').style.display = 'none';
-            document.getElementById('div_button').style.display = 'none';
+            let div_button = document.getElementById('div_button');
+            if (div_button) {
+                div_button.style.display = 'none';
+            }
 
             trazos = JSON.parse(colposcopia.ago2.coordenadas);
             redibujarTrazos()
@@ -710,86 +715,98 @@
             trazos = []; // Vacía el arreglo de trazos
         });
 
-        document.getElementById('guardarForm').addEventListener('click', function(event) {
-            // Previene el comportamiento por defecto del botón, que es enviar el formulario
-            event.preventDefault();
+        let guardarForm = document.getElementById('guardarForm');
+        if (guardarForm) {
+            guardarForm.addEventListener('click', function(event) {
+                // Previene el comportamiento por defecto del botón, que es enviar el formulario
+                event.preventDefault();
 
-            // Genera la imagen y actualiza el contenedor de imagen
-            // html2canvas(document.querySelector(".div_img")).then(canvas => {
-            //     const imgData = canvas.toDataURL('image/png');
+                // Genera la imagen y actualiza el contenedor de imagen
+                // html2canvas(document.querySelector(".div_img")).then(canvas => {
+                //     const imgData = canvas.toDataURL('image/png');
 
-            //     const img = document.createElement('input');
-            //     img.type = 'hidden';
-            //     img.name = 'imagen'; // Nombre del campo en el formulario Laravel
-            //     img.value = imgData;
+                //     const img = document.createElement('input');
+                //     img.type = 'hidden';
+                //     img.name = 'imagen'; // Nombre del campo en el formulario Laravel
+                //     img.value = imgData;
 
-            //     // Agrega la imagen al formulario
-            //     document.getElementById('formColposcopia').appendChild(img);
-            // });
+                //     // Agrega la imagen al formulario
+                //     document.getElementById('formColposcopia').appendChild(img);
+                // });
 
 
-            const coordenadas = document.createElement('input');
-            coordenadas.type = 'hidden';
-            coordenadas.name = 'coordenadas'; // Nombre del campo en el formulario Laravel
+                const coordenadas = document.createElement('input');
+                coordenadas.type = 'hidden';
+                coordenadas.name = 'coordenadas'; // Nombre del campo en el formulario Laravel
 
-            coordenadas.value = JSON.stringify(trazos);
+                coordenadas.value = JSON.stringify(trazos);
 
-            // Agrega la el input con las coordenadas de los trazoa al formulario
-            document.getElementById('formColposcopia').appendChild(coordenadas);
+                // Agrega la el input con las coordenadas de los trazoa al formulario
+                document.getElementById('formColposcopia').appendChild(coordenadas);
 
-            // Envía el formulario
-            document.getElementById('formColposcopia').submit();
+                // Envía el formulario
+                document.getElementById('formColposcopia').submit();
 
-        });
-
-        document.getElementById('btnEditar').addEventListener('click', function() {
-            document.getElementById('divEditar').style.display = 'none';
-            document.getElementById('div_button').style.display = 'inline';
-
-            inputIds.forEach(function(id) {
-                var input = document.getElementById(id);
-                if (input) {
-                    input.removeAttribute('readonly');
-                }
             });
-            // Seleccionar todos los inputs de tipo radio que están deshabilitados
-            var radiosDeshabilitados = document.querySelectorAll('input[type="radio"][disabled]');
+        }
 
-            // Iterar sobre cada radio deshabilitado y habilitarlo
-            radiosDeshabilitados.forEach(function(radio) {
-                radio.removeAttribute('disabled');
+        let btnEditar = document.getElementById('btnEditar');
+        if (btnEditar) {
+            btnEditar.addEventListener('click', function() {
+                document.getElementById('divEditar').style.display = 'none';
+                document.getElementById('div_button').style.display = 'inline';
+
+                inputIds.forEach(function(id) {
+                    var input = document.getElementById(id);
+                    if (input) {
+                        input.removeAttribute('readonly');
+                    }
+                });
+                // Seleccionar todos los inputs de tipo radio que están deshabilitados
+                var radiosDeshabilitados = document.querySelectorAll('input[type="radio"][disabled]');
+
+                // Iterar sobre cada radio deshabilitado y habilitarlo
+                radiosDeshabilitados.forEach(function(radio) {
+                    radio.removeAttribute('disabled');
+                });
+                document.getElementById('comentarios').removeAttribute('readonly');
+                document.getElementById('img_botones').style.display = 'inline';
+                document.getElementById('div_button').style.display = 'inline';
+                document.getElementById('divCancelar').style.display = 'inline';
+                document.getElementById('imprimir').style.display = 'none';
+                editando = true;
             });
-            document.getElementById('comentarios').removeAttribute('readonly');
-            document.getElementById('img_botones').style.display = 'inline';
-            document.getElementById('div_button').style.display = 'inline';
-            document.getElementById('divCancelar').style.display = 'inline';
-            document.getElementById('imprimir').style.display = 'none';
-            editando = true;
-        });
+        }
 
-        document.getElementById('btnCancelar').addEventListener('click', function() {
-            location.reload();
-        });
-
-        document.getElementById('imprimir').addEventListener('click', function() {
-            html2canvas(document.querySelector(".div_img")).then(canvas => {
-                const imgData2 = canvas.toDataURL('image/png');
-
-                // Crear un elemento <img> para mostrar la imagen
-                const img = document.createElement('img');
-                img.src = imgData2;
-                // img.style.width = '20%';
-
-                // // Agregar el <img> al contenedor
-                // document.getElementById('imageContainer').innerHTML =
-                // ''; // Limpiar el contenedor
-                // document.getElementById('imageContainer').appendChild(img);
-                let paciente = @json($consulta->paciente);
-                let imgData3 = "{{ asset('img-empresa/fondo-colposcopia.jpg') }}";
-                console.log(triaje);
-                generarPDF(colposcopia, imgData2, imgData3, paciente, triaje);
+        let btnCancelar = document.getElementById('btnCancelar');
+        if (btnCancelar) {
+            btnCancelar.addEventListener('click', function() {
+                location.reload();
             });
+        }
 
-        });
+        let imprimir = document.getElementById('imprimir');
+        if (imprimir) {
+            imprimir.addEventListener('click', function() {
+                html2canvas(document.querySelector(".div_img")).then(canvas => {
+                    const imgData2 = canvas.toDataURL('image/png');
+
+                    // Crear un elemento <img> para mostrar la imagen
+                    const img = document.createElement('img');
+                    img.src = imgData2;
+                    // img.style.width = '20%';
+
+                    // // Agregar el <img> al contenedor
+                    // document.getElementById('imageContainer').innerHTML =
+                    // ''; // Limpiar el contenedor
+                    // document.getElementById('imageContainer').appendChild(img);
+                    let paciente = @json($consulta->paciente);
+                    let imgData3 = "{{ asset('img-empresa/fondo-colposcopia.jpg') }}";
+                    console.log(triaje);
+                    generarPDF(colposcopia, imgData2, imgData3, paciente, triaje);
+                });
+
+            });
+        }
     });
 </script>

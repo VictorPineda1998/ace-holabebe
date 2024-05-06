@@ -28,11 +28,7 @@
                                 @else
                                     <span class="w-1/4 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
                                 @endif
-                                @if ($consulta->estado == 'Cancelada')
-                                    <span class="w-1/4 text-sm lg:text-base">{{ $consulta->estado }}</span>
-                                @else
-                                    <span class="w-1/4 text-sm lg:text-base"></span>
-                                @endif
+                                    <span class="w-1/4 text-sm lg:text-base">{{ $consulta->estado }}</span>                               
                                 <span class="w-1/4 text-sm lg:text-base">
                                     <a href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
                                     <x-boton-editar>

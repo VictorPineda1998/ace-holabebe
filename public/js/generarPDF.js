@@ -32,7 +32,7 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje) {
         doc.text(`${new Date(paciente.fecha_nacimiento).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}`, 165, 48.5);
         doc.text(`${paciente.apellido_P}`, 45, 56);
         doc.text(`${paciente.apellido_M}`, 90, 56);
-        doc.text(`${paciente.nombre}`, 125, 56);        
+        doc.text(`${paciente.nombre}`, 135, 56);        
         doc.text(`${paciente.edad}`, 190, 56);       
         doc.text(`Años`, 196, 56);              
         doc.text(`${paciente.lugar_procedencia}`, 55, 66);
@@ -91,7 +91,7 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje) {
         doc.text(colposcopia.ago2.proxima_cita, 37, 249,);
         
         // Guardar el PDF
-        doc.save(`${paciente.nombre}-${paciente.apellido_P}-${paciente.apellido_M}-colposcopia.pdf`);
+        doc.save(`${paciente.nombre} ${paciente.apellido_P} ${paciente.apellido_M} colposcopia.pdf`);
     }).catch(error => {
         console.error('Error al cargar imágenes:', error);
     });

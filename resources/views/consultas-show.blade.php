@@ -37,7 +37,7 @@
                 <x-paciente.datos-generales :paciente="$consulta->paciente" />
                 <div class=" flex items-end mt-2">
                     <div class="flex items-center mt-3">
-                        <h1 class='text-1xl font-bold mb-2 text-purple-800'>Historial clinico:</h1>
+                        <h1 class='text-1xl font-bold mb-2 text-purple-800'>Historial de consultas:</h1>
                     </div>
                     <div class="flex items-center ms-3">
                         <a href="{{ route('pacientes.show', $consulta->paciente_id) }} ">
@@ -75,29 +75,50 @@
                 </div>
                 @if (
                     $consulta->tipo_consulta == 'Ginecologica' &&
-                        ($consulta->estado == 'Confirmada' || $consulta->estado == 'Cancelada'))
-                    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista')
-                    <div id="cajaColposcopiaPadre">
+                        ($consulta->estado == 'Confirmada' || $consulta->estado == 'Cancelada' || $consulta->estado == 'Finalizada'))
+                    {{-- @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista') --}}
+                        <div id="cajaColposcopiaPadre">
+                            <div class="flex items-center justify-end">
+                                <div class="items-left mt-8 mb-2 me-3">
+                                    <h1 class='text-1xl font-bold mb-3 text-purple-800'>Toma de datos colposcopia:</h1>
+                                </div>
+                                <x-boton-mas id="mostrarColposcopia" class="ps-5 pe-6">Mostrar</x-boton-mas>
+                            </div>
+                            <div id="divColposcopia" style="display: none">
+
+                                <div>
+                                    <h1 class='text-1xl font-bold mb-3 text-purple-800'>Colposcopia:</h1>
+                                    <x-paciente.colposcopia :consulta="$consulta" :colposcopia="$colposcopia ?? null" :triaje="$triaje ?? null" />
+                                </div>
+
+                                <div class="flex items-center justify-end mt-4 mb-3">
+                                    <x-boton-cancelar id="ocultarColposcopia">Ocultar</x-boton-cancelar>
+                                </div>
+                            </div>
+                        </div>
+                    {{-- @endif --}}
+                @endif
+                @if (auth()->user()->tipo_usuario == 'Administrador' ||
+                        (auth()->user()->tipo_usuario == 'Medico especialista' && $consulta->colposcopia_id != 0)||
+                        (auth()->user()->tipo_usuario == 'Enfermeria consultorios' && $consulta->estado == 'Finalizada'))
+                    <div id="cajaDiagnosticoPadre">
                         <div class="flex items-center justify-end">
                             <div class="items-left mt-8 mb-2 me-3">
-                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Toma de datos colposcopia:</h1>
+                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Diagnostico y receta medica:</h1>
                             </div>
-                            <x-boton-mas id="mostrarColposcopia" class="ps-5 pe-6">Mostrar</x-boton-mas>
+                            <x-boton-mas id="mostrarDiagnostico" class="ps-5 pe-6">Mostrar</x-boton-mas>
                         </div>
-                        <div id="divColposcopia" style="display: none">
-    
+                        <div id="divDiagnostico" style="display: none">
+
                             <div>
-                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Colposcopia:</h1>
-                                <x-paciente.colposcopia :consulta="$consulta" :colposcopia="$colposcopia ?? null" :triaje="$triaje ?? null" />
+                                <x-paciente.diagnostico :consulta="$consulta" :diagnostico="$diagnostico ?? null" :triaje="$triaje ?? null" />
                             </div>
-    
+
                             <div class="flex items-center justify-end mt-4 mb-3">
-                                <x-boton-cancelar id="ocultarColposcopia">Ocultar</x-boton-cancelar>
+                                <x-boton-cancelar id="ocultarDiagnostico">Ocultar</x-boton-cancelar>
                             </div>
                         </div>
                     </div>
-                    
-                    @endif
                 @endif
             </div>
         </div>
@@ -108,6 +129,9 @@
     <script>
         let creandoTriaje = false;
         let creandoColposcopia = false;
+        let creandoDiagnostico = false;
+
+        let mostrarColposcopia = document.getElementById('mostrarColposcopia');
 
         document.getElementById('mostrarPrimerosDatos').addEventListener('click', function() {
             if (!creandoTriaje) {
@@ -116,7 +140,7 @@
                 deslizar('mostrarPrimerosDatos');
                 creandoTriaje = true;
             } else {
-                deslizar('inicio');
+                deslizar('formPrimerosDatos');
 
                 setTimeout(function() {
                     document.getElementById('formPrimerosDatos').style.display = 'none';
@@ -124,7 +148,7 @@
                 creandoTriaje = false;
             }
             document.getElementById('ocultarPrimerosDatos').addEventListener('click', function() {
-                deslizar('inicio');
+                deslizar('formPrimerosDatos');
                 setTimeout(function() {
                     document.getElementById('formPrimerosDatos').style.display = 'none';
                 }, 300);
@@ -133,26 +157,51 @@
             });
         });
 
-        document.getElementById('mostrarColposcopia').addEventListener('click', function() {
-            if (!creandoColposcopia) {
+        if (mostrarColposcopia) {
+            mostrarColposcopia.addEventListener('click', function() {
+                if (!creandoColposcopia) {
 
-                document.getElementById('divColposcopia').style.display = 'inline';
-                deslizar('mostrarColposcopia');
-                creandoColposcopia = true;
+                    document.getElementById('divColposcopia').style.display = 'inline';
+                    deslizar('mostrarColposcopia');
+                    creandoColposcopia = true;
+                } else {
+                    deslizar('mostrarPrimerosDatos');
+
+                    setTimeout(function() {
+                        document.getElementById('divColposcopia').style.display = 'none';
+                    }, 300);
+                    creandoColposcopia = false;
+                }
+                document.getElementById('ocultarColposcopia').addEventListener('click', function() {
+                    deslizar('divColposcopia');
+                    setTimeout(function() {
+                        document.getElementById('divColposcopia').style.display = 'none';
+                    }, 300);
+                    creandoColposcopia = false;
+                });
+            });
+        }
+
+        document.getElementById('mostrarDiagnostico').addEventListener('click', function() {
+            if (!creandoDiagnostico) {
+
+                document.getElementById('divDiagnostico').style.display = 'inline';
+                deslizar('mostrarDiagnostico');
+                creandoDiagnostico = true;
             } else {
                 deslizar('mostrarPrimerosDatos');
 
                 setTimeout(function() {
-                    document.getElementById('divColposcopia').style.display = 'none';
+                    document.getElementById('divDiagnostico').style.display = 'none';
                 }, 300);
-                creandoColposcopia = false;
+                creandoDiagnostico = false;
             }
-            document.getElementById('ocultarColposcopia').addEventListener('click', function() {
-                deslizar('divColposcopia');
+            document.getElementById('ocultarDiagnostico').addEventListener('click', function() {
+                deslizar('divDiagnostico');
                 setTimeout(function() {
-                    document.getElementById('divColposcopia').style.display = 'none';
+                    document.getElementById('divDiagnostico').style.display = 'none';
                 }, 300);
-                creandoColposcopia = false;                
+                creandoDiagnostico = false;
             });
         });
     </script>

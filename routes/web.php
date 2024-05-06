@@ -8,13 +8,11 @@ use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use Laravel\Fortify\RoutePath;
 use Illuminate\Support\Facades\DB;
 
-
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\ConsultasController;
+use App\Http\Controllers\DiagnosticosController;
 use App\Http\Controllers\TriajesController;
-use App\Http\Controllers\ConsultasDeHoyController;
-use App\Models\Consulta;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +28,16 @@ use App\Models\Consulta;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+if (DB::table('users')->count() === 0) {
+    $enableViews = config('fortify.views', true);
+    if (Features::enabled(Features::registration())) {
+        if ($enableViews) {
+            Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])->name('register');
+        }
+        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);        
+    }
+}
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 ])->group(function () {
@@ -92,17 +100,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::put('{id}', [ColposcopiasController::class, 'update'])->name('colposcopia.update');
         // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
     });
-});
 
-if (DB::table('users')->count() === 0) {
-    $enableViews = config('fortify.views', true);
-    if (Features::enabled(Features::registration())) {
-        if ($enableViews) {
-            Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
-                // ->middleware(['guest:'.config('fortify.guard')])
-                ->name('register');
-        }
-        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
-        // ->middleware(['guest:'.config('fortify.guard')]);
-    }
-}
+    Route::group(['prefix' => 'diagnostico', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
+        // Route::get('/', [ColposcopiasController::class, 'index'])->name('colposcopia');
+        // Route::get('{id} {lugar} {triaje_id}', [DiagnosticosController::class, 'show'])->name('diagnostico.show');
+        Route::post('{id}', [DiagnosticosController::class, 'store'])->name('diagnostico.store');
+        Route::put('{id}', [DiagnosticosController::class, 'update'])->name('diagnostico.update');
+        // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
+    });
+});
