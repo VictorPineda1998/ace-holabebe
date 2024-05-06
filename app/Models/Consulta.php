@@ -14,6 +14,8 @@ class Consulta extends Model
         'paciente_id',
         'triaje_id',
         'colposcopia_id',
+        'diagnostico_id',
+        'nota_id',
     ];
 
     public function paciente()
@@ -31,5 +33,9 @@ class Consulta extends Model
     public function diagnostico()
     {
         return $this->belongsTo(Diagnostico::class, 'diagnostico_id');
+    }
+    public function nota()
+    {
+        return $this->belongsTo(Nota::class, 'nota_id');
     }
 }

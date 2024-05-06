@@ -28,7 +28,8 @@
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->tipo_usuario == 'Administrador' or
-                            auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                            auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
+                            auth()->user()->tipo_usuario == 'Medico especialista')
                         <x-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                             {{ __('Consultas del dia') }}
                         </x-nav-link>
@@ -189,7 +190,8 @@
                 </x-responsive-nav-link>
             @endif
             @if (auth()->user()->tipo_usuario == 'Administrador' or
-                    auth()->user()->tipo_usuario == 'Enfermeria consultorios')
+                    auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
+                    auth()->user()->tipo_usuario == 'Medico especialista')
                 <x-responsive-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                     {{ __('Consultas del dia') }}
                 </x-responsive-nav-link>

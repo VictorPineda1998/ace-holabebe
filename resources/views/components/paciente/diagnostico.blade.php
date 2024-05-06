@@ -122,8 +122,10 @@
                 // Aquí podrías hacer procesamiento adicional como generar un PDF
                 generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico);
 
-                // Finalmente, enviar el formulario programáticamente si todo está correcto
+                // Retrasa el envío del formulario por 3 segundos
+            setTimeout(function() {
                 formElement.submit();
+            }, 2000); // 3000 milisegundos = 3 segundos
             });
         }
     }

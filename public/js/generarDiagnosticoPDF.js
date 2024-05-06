@@ -9,7 +9,7 @@ function generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico){
         doc.addImage(this, 'JPEG', 0, 0, 218, 280);
         doc.text(`${paciente.apellido_P}`, 30, 36.5);
         doc.text(`${paciente.apellido_M}`, 65, 36.5);
-        doc.text(`${paciente.nombre}`, 95, 36.5); 
+        doc.text(`${paciente.nombre}`, 98, 36.5); 
         doc.text(new Date(triaje.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 180,36.5,);        
         doc.text(`${paciente.edad}`, 32, 43);      
         doc.text(`Años`, 41, 43);              

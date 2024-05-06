@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\DiagnosticosController;
+use App\Http\Controllers\NotasController;
 use App\Http\Controllers\TriajesController;
 
 /*
@@ -106,6 +107,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         // Route::get('{id} {lugar} {triaje_id}', [DiagnosticosController::class, 'show'])->name('diagnostico.show');
         Route::post('{id}', [DiagnosticosController::class, 'store'])->name('diagnostico.store');
         Route::put('{id}', [DiagnosticosController::class, 'update'])->name('diagnostico.update');
+        // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
+    });
+    Route::group(['prefix' => 'nota', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
+        // Route::get('/', [ColposcopiasController::class, 'index'])->name('colposcopia');
+        // Route::get('{id} {lugar} {triaje_id}', [DiagnosticosController::class, 'show'])->name('diagnostico.show');
+        Route::post('{id}', [NotasController::class, 'store'])->name('nota.store');
+        Route::put('{id}', [NotasController::class, 'update'])->name('nota.update');
         // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
     });
 });

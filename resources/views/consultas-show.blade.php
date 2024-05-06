@@ -73,33 +73,57 @@
                         </div>
                     </div>
                 </div>
+
+                @if ($consulta->estado != 'Sin confirmar')
+                    <div id="cajaNotaPadre">
+                        <div class="flex items-center justify-end">
+                            <div class="items-left mt-8 mb-2 me-3">
+                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Notas:</h1>
+                            </div>
+                            <x-boton-mas id="mostrarNota" class="ps-5 pe-6">Mostrar</x-boton-mas>
+                        </div>
+                        <div id="divNota" style="display: none">
+
+                            <div>
+                                <x-paciente.nota :consulta="$consulta ?? null" :nota="$nota ?? null" />
+                            </div>
+
+                            <div class="flex items-center justify-end mt-4 mb-3">
+                                <x-boton-cancelar id="ocultarNota">Ocultar</x-boton-cancelar>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if (
                     $consulta->tipo_consulta == 'Ginecologica' &&
                         ($consulta->estado == 'Confirmada' || $consulta->estado == 'Cancelada' || $consulta->estado == 'Finalizada'))
-                    {{-- @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista') --}}
-                        <div id="cajaColposcopiaPadre">
-                            <div class="flex items-center justify-end">
-                                <div class="items-left mt-8 mb-2 me-3">
-                                    <h1 class='text-1xl font-bold mb-3 text-purple-800'>Toma de datos colposcopia:</h1>
-                                </div>
-                                <x-boton-mas id="mostrarColposcopia" class="ps-5 pe-6">Mostrar</x-boton-mas>
+                    @if ((auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista') ||
+                    (auth()->user()->tipo_usuario == 'Enfermeria consultorios' && $consulta->estado == 'Finalizada'))
+                    <div id="cajaColposcopiaPadre">
+                        <div class="flex items-center justify-end">
+                            <div class="items-left mt-8 mb-2 me-3">
+                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Toma de datos colposcopia:</h1>
                             </div>
-                            <div id="divColposcopia" style="display: none">
+                            <x-boton-mas id="mostrarColposcopia" class="ps-5 pe-6">Mostrar</x-boton-mas>
+                        </div>
+                        <div id="divColposcopia" style="display: none">
 
-                                <div>
-                                    <h1 class='text-1xl font-bold mb-3 text-purple-800'>Colposcopia:</h1>
-                                    <x-paciente.colposcopia :consulta="$consulta" :colposcopia="$colposcopia ?? null" :triaje="$triaje ?? null" />
-                                </div>
+                            <div>
+                                <h1 class='text-1xl font-bold mb-3 text-purple-800'>Colposcopia:</h1>
+                                <x-paciente.colposcopia :consulta="$consulta" :colposcopia="$colposcopia ?? null" :triaje="$triaje ?? null" />
+                            </div>
 
-                                <div class="flex items-center justify-end mt-4 mb-3">
-                                    <x-boton-cancelar id="ocultarColposcopia">Ocultar</x-boton-cancelar>
-                                </div>
+                            <div class="flex items-center justify-end mt-4 mb-3">
+                                <x-boton-cancelar id="ocultarColposcopia">Ocultar</x-boton-cancelar>
                             </div>
                         </div>
-                    {{-- @endif --}}
+                    </div>
+                    @endif
                 @endif
+
                 @if (auth()->user()->tipo_usuario == 'Administrador' ||
-                        (auth()->user()->tipo_usuario == 'Medico especialista' && $consulta->colposcopia_id != 0)||
+                        (auth()->user()->tipo_usuario == 'Medico especialista' && $consulta->triaje_id != 0) ||
                         (auth()->user()->tipo_usuario == 'Enfermeria consultorios' && $consulta->estado == 'Finalizada'))
                     <div id="cajaDiagnosticoPadre">
                         <div class="flex items-center justify-end">
@@ -130,8 +154,9 @@
         let creandoTriaje = false;
         let creandoColposcopia = false;
         let creandoDiagnostico = false;
+        let creandoNota = false;
 
-        let mostrarColposcopia = document.getElementById('mostrarColposcopia');
+
 
         document.getElementById('mostrarPrimerosDatos').addEventListener('click', function() {
             if (!creandoTriaje) {
@@ -157,6 +182,7 @@
             });
         });
 
+        let mostrarColposcopia = document.getElementById('mostrarColposcopia');
         if (mostrarColposcopia) {
             mostrarColposcopia.addEventListener('click', function() {
                 if (!creandoColposcopia) {
@@ -182,7 +208,9 @@
             });
         }
 
-        document.getElementById('mostrarDiagnostico').addEventListener('click', function() {
+        let mostrarDiagnostico = document.getElementById('mostrarDiagnostico');
+        if(mostrarDiagnostico){
+            mostrarDiagnostico.addEventListener('click', function() {
             if (!creandoDiagnostico) {
 
                 document.getElementById('divDiagnostico').style.display = 'inline';
@@ -202,6 +230,30 @@
                     document.getElementById('divDiagnostico').style.display = 'none';
                 }, 300);
                 creandoDiagnostico = false;
+            });
+        });
+        }
+
+        document.getElementById('mostrarNota').addEventListener('click', function() {
+            if (!creandoNota) {
+
+                document.getElementById('divNota').style.display = 'inline';
+                deslizar('mostrarNota');
+                creandoNota = true;
+            } else {
+                deslizar('mostrarPrimerosDatos');
+
+                setTimeout(function() {
+                    document.getElementById('divNota').style.display = 'none';
+                }, 300);
+                creandoNota = false;
+            }
+            document.getElementById('ocultarNota').addEventListener('click', function() {
+                deslizar('divNota');
+                setTimeout(function() {
+                    document.getElementById('divNota').style.display = 'none';
+                }, 300);
+                creandoNota = false;
             });
         });
     </script>
