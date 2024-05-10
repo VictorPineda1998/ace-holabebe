@@ -16,7 +16,8 @@ return new class extends Migration
             $table->text('diagnostico');
             $table->text('receta_medica');
             $table->unsignedBigInteger('consulta_id');
-            $table->foreign('consulta_id')->references('id')->on('consultas')->onDelete('cascade');
+            $table->foreign('consulta_id')->references('id')->on('consultas')->onDelete('cascade');            
+            $table->integer('usuario_id')->default(0);
             $table->timestamps();
         });
     }

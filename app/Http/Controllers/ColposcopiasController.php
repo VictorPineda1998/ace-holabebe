@@ -92,6 +92,7 @@ class ColposcopiasController extends Controller
             'ago2' => json_encode($ago2),
             // 'ruta' => 'storage'.$array[1],
             'consulta_id' => $consulta->id,
+            'usuario_id' => $request->user()->id,
         ]);
         $colposcopia->save();
 

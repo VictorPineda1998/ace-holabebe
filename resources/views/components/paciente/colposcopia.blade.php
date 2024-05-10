@@ -461,7 +461,7 @@
 
         var colposcopia = @json($colposcopia);
         let triaje = @json($triaje);
-
+        let medico = @json($consulta->colposcopia->usuario ?? new stdClass());
         let editando = false;
 
         const canvas = document.getElementById('canvas');
@@ -802,8 +802,8 @@
                     // document.getElementById('imageContainer').appendChild(img);
                     let paciente = @json($consulta->paciente);
                     let imgData3 = "{{ asset('img-empresa/fondo-colposcopia.jpg') }}";
-                    console.log(triaje);
-                    generarPDF(colposcopia, imgData2, imgData3, paciente, triaje);
+                    // console.log(triaje);
+                    generarPDF(colposcopia, imgData2, imgData3, paciente, triaje, medico);
                 });
 
             });

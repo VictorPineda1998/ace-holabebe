@@ -83,8 +83,8 @@ class TriajesController extends Controller
         $consulta->triaje_id = $triaje->id;
         $consulta->estado = 'Confirmada';
         $consulta->save();
-    
-        return redirect()->route('consultas_dia');
+        $lugar = 'hoy';
+        return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar]);
         
         // return view('welcome', compact('observaciones'));
     }

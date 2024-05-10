@@ -155,7 +155,7 @@
         let creandoColposcopia = false;
         let creandoDiagnostico = false;
         let creandoNota = false;
-
+        
 
 
         document.getElementById('mostrarPrimerosDatos').addEventListener('click', function() {

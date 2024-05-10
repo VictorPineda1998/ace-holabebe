@@ -16,5 +16,11 @@ class Colposcopia extends Model
         'ago2',
         'ruta',
         'consulta_id',
+        'usuario_id',
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
 }

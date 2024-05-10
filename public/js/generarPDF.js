@@ -1,4 +1,4 @@
-function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje) {
+function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje, medico) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ format: 'letter' });
 
@@ -25,14 +25,17 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje) {
         doc.addImage(image2, 'JPEG', 10, 169, 43.5, 40);
 
         // Agregar texto
-        doc.setFontSize(12);
-        doc.setTextColor("#3f3f3f");
+        doc.setFontSize(15);
+        doc.setTextColor("#3f3f3f");        
         
+        doc.text(medico.name, 110, 28.5,); 
+        
+        doc.setFontSize(12);
         doc.text(`${new Date(colposcopia.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}`, 49, 48.5);
         doc.text(`${new Date(paciente.fecha_nacimiento).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}`, 165, 48.5);
         doc.text(`${paciente.apellido_P}`, 45, 56);
         doc.text(`${paciente.apellido_M}`, 90, 56);
-        doc.text(`${paciente.nombre}`, 135, 56);        
+        doc.text(`${paciente.nombre}`, 132, 56);        
         doc.text(`${paciente.edad}`, 190, 56);       
         doc.text(`Años`, 196, 56);              
         doc.text(`${paciente.lugar_procedencia}`, 55, 66);

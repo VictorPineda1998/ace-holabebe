@@ -114,10 +114,11 @@
             $siColposcopia = true;
         }
     @endphp
-    <form id="formtriage" method="POST" action="{{ $triaje ? route('triajes.update', $consulta->triaje_id) : route('triajes.store', $consulta->id) }}">
+    <form id="formtriage" method="POST"
+        action="{{ $triaje ? route('triajes.update', $consulta->triaje_id) : route('triajes.store', $consulta->id) }}">
         @csrf
 
-        @if($triaje)
+        @if ($triaje)
             @method('PUT')
         @endif
         <h1 class='text-1xl font-bold mb-3 text-purple-800'>Signos vitales:</h1>
@@ -785,15 +786,21 @@
 
             document.getElementById('autovaloracion').style.display = 'none';
 
-            document.getElementById('fcf').addEventListener('click', function() {
-                document.getElementById('cajaActualizar').style.display = 'inline';
-                document.getElementById('cajaFcf').style.display = 'none';
-                document.getElementById('frecuencia_cardiaca_fetal').removeAttribute('readonly');
-            });
+            let fcf = document.getElementById('fcf');
+            if (fcf) {
+                fcf.addEventListener('click', function() {
+                    document.getElementById('cajaActualizar').style.display = 'inline';
+                    document.getElementById('cajaFcf').style.display = 'none';
+                    document.getElementById('frecuencia_cardiaca_fetal').removeAttribute('readonly');
+                });
+            }
 
-            document.getElementById('actualizarFcf').addEventListener('click', function() {
-                document.querySelector('#formtriage').submit();
-            });
+            let actualizarFcf = document.getElementById('actualizarFcf');
+            if (actualizarFcf) {
+                actualizarFcf.addEventListener('click', function() {
+                    document.querySelector('#formtriage').submit();
+                });
+            }
         }
     });
 

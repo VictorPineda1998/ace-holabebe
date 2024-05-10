@@ -17,6 +17,7 @@ class DiagnosticosController extends Controller
         $diagnostico->diagnostico = $request->input('diagnostico');
         $diagnostico->receta_medica = $request->input('receta_medica');
         $diagnostico->consulta_id = $id;
+        $diagnostico->usuario_id = $request->user()->id;
         $diagnostico->save();
 
         $consulta->estado = 'Finalizada';
@@ -24,7 +25,8 @@ class DiagnosticosController extends Controller
         $consulta->save();
         
         $lugar = 'espera';
-        return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar]);
+        return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar])
+                                        ->with('success', 'Operación realizada correctamente.');
     }
 
     public function update(Request $request, $id)

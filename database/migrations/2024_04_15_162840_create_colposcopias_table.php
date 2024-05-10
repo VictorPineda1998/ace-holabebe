@@ -19,7 +19,8 @@ return new class extends Migration
             $table->json('ago2')->nullable();
             // $table->string('ruta');
             $table->unsignedBigInteger('consulta_id');
-            $table->foreign('consulta_id')->references('id')->on('consultas')->onDelete('cascade');
+            $table->foreign('consulta_id')->references('id')->on('consultas')->onDelete('cascade');            
+            $table->integer('usuario_id')->default(0);
             $table->timestamps();
         });
     }

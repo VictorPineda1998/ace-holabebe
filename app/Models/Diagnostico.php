@@ -12,5 +12,11 @@ class Diagnostico extends Model
     protected $fillable = [
         'diagnostico',
         'receta_medica',
+        'usuario_id',
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
 }

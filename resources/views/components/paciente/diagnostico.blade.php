@@ -41,10 +41,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
     let diagnostico = @json($consulta->diagnostico);
+    
     let editandoDiagnostico = false;
 
     let paciente = @json($consulta->paciente);
-
+    let medico = @json($consulta->diagnostico->usuario ?? new stdClass());
+    
     let imgDiagnostico = "{{ asset('img-empresa/fondo-diagnostico.jpg') }}";
 
     if (diagnostico && !editandoDiagnostico) {
@@ -79,7 +81,7 @@
     if (imprimirDiagnostico) {
         imprimirDiagnostico.addEventListener('click', function() {
 
-            generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico);
+            generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico, medico);
         });
     }
 
@@ -119,8 +121,12 @@
                     diagnostico: formData.get('diagnostico'),
                     receta_medica: formData.get('receta_medica')
                 };
+
+                medico = {
+                    name : @json(auth()->user()->name)
+                };
                 // Aquí podrías hacer procesamiento adicional como generar un PDF
-                generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico);
+                generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico, medico);
 
                 // Retrasa el envío del formulario por 3 segundos
             setTimeout(function() {
