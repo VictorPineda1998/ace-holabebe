@@ -3,7 +3,7 @@
         <h1 class='text-4xl font-bold mb-6 text-pink-400'>Pacientes registrados</h1>
     </div>
     <div>
-    
+
         <div>
             <ul class="overflow-x-auto">
                 @php
@@ -16,32 +16,32 @@
                                 <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en esta coleccion:</h1>
                             </div>
                             <div class="flex items-center ms-0 w-full">
-                                <input type="text" id="searchInput" class="mb-4 w-full border border-gray-300 rounded-md"
-                                    placeholder="Buscar por nombre, telefono o edad...">
+                                <input type="text" id="searchInput"
+                                    class="mb-4 w-full border border-gray-300 rounded-md"
+                                    placeholder="Buscar coincidencias">
                             </div>
                         </div>
-            
+
                         <div class="flex w-5/9">
                             <div class="flex items-center ms-2">
                                 <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en todos los registros:</h1>
                             </div>
                             <div class="flex items-center ms-1">
                                 <form action="{{ route('pacientes') }}" method="GET">
-                                    <input class="mb-4 border border-gray-300 rounded-md"
-                                        type="text" name="search" placeholder="Solo nombre(s)"
-                                        value="{{ request()->search }}">
+                                    <input class="mb-4 border border-gray-300 rounded-md" type="text" name="search"
+                                        placeholder="Solo nombre(s)" value="{{ request()->search }}">
                                     <x-boton-mas type="submit">Buscar</x-boton-mas>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <li class="flex items-center bg-pink-500 p-3">
+                    <ul class="flex items-center bg-pink-500 p-3">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
                         <span class="w-3/6 text-sm lg:text-base">Nombre</span>
                         <span class="w-1/6 text-sm lg:text-base">Telefono</span>
                         <span class="w-1/6 text-sm lg:text-base">Edad</span>
                         <span class="w-1/6 text-sm lg:text-base">Opciones</span>
-                    </li>
+                    </ul>
                     @foreach ($pacientes as $paciente)
                         <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-pink-300' : '' }}"
                             style="padding: 1%">
@@ -76,20 +76,31 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('searchInput').addEventListener('input', function() {
+
             let searchTerm = this.value.toLowerCase();
+            let searchTerm2 = quitarAcentos(searchTerm);
+
             document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
                 if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                    let nombre = li.querySelector('span:nth-child(2)').textContent
+                    let nombre = quitarAcentos(li.querySelector('span:nth-child(2)')
+                            .textContent)
                         .toLowerCase();
-                    let telefonno = li.querySelector('span:nth-child(3)').textContent
+                    let telefono = quitarAcentos(li.querySelector('span:nth-child(3)')
+                            .textContent)
                         .toLowerCase();
-                    let edad = li.querySelector('span:nth-child(4)').textContent
+                    let edad = quitarAcentos(li.querySelector('span:nth-child(4)').textContent)
                         .toLowerCase();
-                    li.style.display = (nombre.includes(searchTerm) || telefonno.includes(
-                        searchTerm) || edad.includes(searchTerm)) ? '' : 'none';
+                    li.style.display = (nombre.includes(searchTerm2) || telefono.includes(
+                        searchTerm2) || edad.includes(searchTerm2)) ? '' : 'none';
                 }
             });
+
+            function quitarAcentos(texto) {
+                return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            }
         });
+
+
 
     });
 </script>

@@ -18,7 +18,7 @@ export default defineConfig({
     //         host: '192.168.216.149' || 'localhost',
     //     },
     server: {
-                host: '10.135.1.202' || 'localhost',
+                host: '10.135.1.200' || 'localhost',
             },
     // server: {
     //             host: '10.25.1.201' || 'localhost',
