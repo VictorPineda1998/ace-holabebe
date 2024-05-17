@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="flex items-center bg-pink-500 p-3">
+                    <ul class="flex items-center bg-pink-500 p-3 rounded-t-lg">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
                         <span class="w-3/6 text-sm lg:text-base">Nombre</span>
                         <span class="w-1/6 text-sm lg:text-base">Telefono</span>

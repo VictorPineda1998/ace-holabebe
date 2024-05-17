@@ -15,7 +15,7 @@
                         $i = 1;
                     @endphp
                     <div style="width: 900px">
-                        <li class="flex items-center bg-purple-400 p-3">
+                        <li class="flex items-center bg-purple-400 p-3 rounded-t-lg">
                             <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
                             <span class="w-2/6 text-sm lg:text-base">Nombre</span>
                             <span class="w-1/6 text-sm lg:text-base">Tipo de consulta</span>

@@ -84,26 +84,6 @@
             generarDiagnosticoPDF(diagnostico, paciente, triaje, imgDiagnostico, medico);
         });
     }
-
-    function autoNewLine(textArea) {
-        const maxLineLength = 65;
-        let lines = textArea.value.split('\n');
-        let modified = false;
-
-        for (let i = 0; i < lines.length; i++) {
-            if (lines[i].length > maxLineLength) {
-                let spaceIndex = lines[i].lastIndexOf(' ', maxLineLength);
-                if (spaceIndex === -1) spaceIndex = maxLineLength; // Si no hay espacio, corta en el límite máximo
-                lines[i] = lines[i].substring(0, spaceIndex) + '\n' + lines[i].substring(spaceIndex).trim();
-                modified = true;
-            }
-        }
-
-        if (modified) {
-            textArea.value = lines.join('\n');
-        }
-    }
-
     // Verifica si 'diagnostico' es null
     if (diagnostico == null) {
         let guardarDiagnostico = document.getElementById('guardarDiagnostico');

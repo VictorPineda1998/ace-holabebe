@@ -5,7 +5,7 @@
         <div>
             <x-label for="nombre" value="{{ __('Nombre') }}" />
             <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')" required
-                value="{{ $paciente->nombre }}" autofocus autocomplete="nombre"  readonly />
+                value="{{ $paciente->nombre }}" autofocus autocomplete="nombre" readonly />
         </div>
         <div>
             <x-label for="apellidoP" value="{{ __('Apellido Paterno') }}" />
@@ -42,43 +42,52 @@
                 value="{{ $paciente->lugar_procedencia }}" required autocomplete="new-lugar_procedencia" readonly />
         </div>
     </div>
-    <div class="flex items-center justify-end mt-4">
-        <div class=" flex items-end" id="editar-btn">
-            <div class="flex items-center">
-                <h1 class='text-1xl font-bold mb-2 text-purple-800'>Editar los datos generales del paciente:</h1>
-            </div>
-            <div class="flex items-center ms-3">
+    @if (Route::is('pacientes.show'))
+        <div class="flex items-center justify-end mt-4">
+            <div class=" flex items-end" id="editar-btn">
+                <div class="flex items-center">
+                    <h1 class='text-1xl font-bold mb-2 text-purple-800'>Editar los datos generales del paciente:</h1>
+                </div>
+                <div class="flex items-center ms-3">
                     <x-boton-editar>
                         &nbsp;&nbsp;Editar&nbsp;&nbsp;
                     </x-boton-editar>
+                </div>
             </div>
-        </div>
-        <x-boton-cancelar id="cancelar" class="ms-4" style="display: none;">
-            {{ __('Cancelar') }}
-        </x-boton-cancelar>
+            <x-boton-cancelar id="cancelar" class="ms-4" style="display: none;">
+                {{ __('Cancelar') }}
+            </x-boton-cancelar>
 
-        <x-boton-actualizar class="ms-4" style="display: none;">
-            {{ __('Guardar') }}
-        </x-boton-actualizar>
-    </div>
+            <x-boton-actualizar class="ms-4" style="display: none;">
+                {{ __('Guardar') }}
+            </x-boton-actualizar>
+        </div>
+    @endif
+
 </form>
 <script>
-    document.getElementById('editar-btn').addEventListener('click', function() {
-        // Habilitar la edición de los campos
-        document.querySelectorAll('#paciente-form input:not([name="edad"])').forEach(function(input) {
-            input.removeAttribute('readonly');
+    let editar_btn = document.getElementById('editar-btn');
+    if (editar_btn) {
+        editar_btn.addEventListener('click', function() {
+            // Habilitar la edición de los campos
+            document.querySelectorAll('#paciente-form input:not([name="edad"])').forEach(function(input) {
+                input.removeAttribute('readonly');
+            });
+
+
+            // Mostrar el botón de guardar y ocultar el botón de editar
+            document.getElementById('botonActualizar').style.display = 'inline';
+            document.getElementById('cancelar').style.display = 'inline';
+            this.style.display = 'none';
         });
+    }
 
-
-        // Mostrar el botón de guardar y ocultar el botón de editar
-        document.getElementById('botonActualizar').style.display = 'inline';
-        document.getElementById('cancelar').style.display = 'inline';
-        this.style.display = 'none';
-    });
-    document.getElementById('cancelar').addEventListener('click', function() {
-        location.reload();
-    });
-
+    let cancelar = document.getElementById('cancelar');
+    if (cancelar) {
+        cancelar.addEventListener('click', function() {
+            location.reload();
+        });
+    }
     // Obtener la referencia a los elementos del formulario
     const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
     const edadInput = document.getElementById('edad');

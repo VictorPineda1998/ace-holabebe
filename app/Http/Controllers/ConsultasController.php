@@ -41,11 +41,13 @@ class ConsultasController extends Controller
     {
         // Obtener el la consulta por su ID
         $consulta = Consulta::find($id);
+        
         if($consulta->triaje == true){
             return redirect()->route('triajes.show', compact('id', 'lugar'));
         }
+        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
         //  Mostrar la vista de detalles
-        return view('consultas-show', compact('consulta', 'lugar'));
+        return view('consultas-show', compact('consulta', 'lugar', 'consultas'));
     }
 
 

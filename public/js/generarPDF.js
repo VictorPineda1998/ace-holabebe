@@ -68,9 +68,15 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje, medico) {
         doc.text(colposcopia.ago.resultados, 155, 133.5,); 
         doc.text(colposcopia.ago.tx, 71, 140,); 
         doc.text(colposcopia.ago.cuales, 155, 140,); 
-        doc.text(new Date(colposcopia.ago.fecha_de_toma).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 41, 146,); 
-        doc.text(new Date(colposcopia.ago.fecha_de_interpretacion).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 122, 146,); 
-        doc.text(new Date(colposcopia.ago.fecha_de_envio).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 184, 146,); 
+        if(colposcopia.ago.fecha_de_toma != " "){
+            doc.text(new Date(colposcopia.ago.fecha_de_toma).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 41, 146,); 
+        }
+        if(colposcopia.ago.fecha_de_interpretacion != " "){
+            doc.text(new Date(colposcopia.ago.fecha_de_interpretacion).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 122, 146,); 
+        }
+        if(colposcopia.ago.fecha_de_envio != " "){
+            doc.text(new Date(colposcopia.ago.fecha_de_envio).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }), 184, 146,); 
+        }
         doc.text(colposcopia.ago2.diagnostico_citologico, 60, 153,); 
         doc.text(colposcopia.ago2.sintomatologia, 45, 159,);
         doc.text(triaje.tomaSignosVitales.talla, 55, 166,); 

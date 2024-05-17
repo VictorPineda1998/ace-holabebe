@@ -21,7 +21,7 @@
                             <span>Si</span>
                             <input type="radio" name="cancer" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="cancer" value="No" />
+                            <input type="radio" name="cancer" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Diabetes:</td>
@@ -30,7 +30,7 @@
                             <span>Si</span>
                             <input type="radio" name="diabetes_heredica" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="diabetes_heredica" value="No" />
+                            <input type="radio" name="diabetes_heredica" value="No" checked />
                         </div>
                     </td>
                 </tr>
@@ -44,7 +44,7 @@
                             <span>Si</span>
                             <input type="radio" name="has" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="has" value="No" />
+                            <input type="radio" name="has" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Cardiopatia:
@@ -52,7 +52,7 @@
                             <span>Si</span>
                             <input type="radio" name="cardiopatia" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="cardiopatia" value="No" />
+                            <input type="radio" name="cardiopatia" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Tabaquismo:
@@ -60,7 +60,7 @@
                             <span>Si</span>
                             <input type="radio" name="tabaquismo" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="tabaquismo" value="No" />
+                            <input type="radio" name="tabaquismo" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Hipertension:
@@ -68,7 +68,7 @@
                             <span>Si</span>
                             <input type="radio" name="hipertension" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="hipertension" value="No" />
+                            <input type="radio" name="hipertension" value="No" checked />
                         </div>
                     </td>
                 </tr>
@@ -78,7 +78,7 @@
                             <span>Si</span>
                             <input type="radio" name="alcoholismo" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="alcoholismo" value="No" />
+                            <input type="radio" name="alcoholismo" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Diabetes:
@@ -86,7 +86,7 @@
                             <span>Si</span>
                             <input type="radio" name="diabetes" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="diabetes" value="No" />
+                            <input type="radio" name="diabetes" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Alergicos:
@@ -110,10 +110,13 @@
                 <tr>
                     <td class="border-indigo-600 border-2 px-4 py-2">Menarca:
                         <div class="flex items-center justify-between">
-                            <x-input id="menarca" class="block w-3/4" type="number" name="menarca" required
-                                value="{{ $colposcopia ? $colposcopia->ago->menarca : '' }}" autofocus
-                                autocomplete="menarca" />Años
+                            <x-input id="menarca" class="block w-3/4 numeric-input" type="text" name="menarca"
+                                required value="{{ $colposcopia ? $colposcopia->ago->menarca : '' }}" autofocus
+                                autocomplete="menarca" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />Años
+
                         </div>
+                        <span id="menarcaError" class="text-red-500"></span>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Ritmo:
                         <div class="flex items-center justify-between">
@@ -122,49 +125,66 @@
                                 autocomplete="ritmo" />
                         </div>
                     </td>
-                    <td class="border-indigo-600 border-2 px-4 py-2">IVSA:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">IVSA:
                         <div class="flex items-center justify-between">
-                            <x-input id="ivsa" class="block w-3/4" type="number" name="ivsa" required
+                            <x-input id="ivsa" class="block w-3/4" type="text" name="ivsa" required
                                 value="{{ $colposcopia ? $colposcopia->ago->ivsa : '' }}" autofocus
-                                autocomplete="ivsa" /> Años
+                                autocomplete="ivsa" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." /> Años
                         </div>
+                        <span id="ivsaError" class="text-red-500"></span>
                     </td>
-                    <td class="border-indigo-600 border-2 px-4 py-2">Parejas sexuales:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">Parejas sexuales:
                         <div class="flex items-center justify-between">
                             <x-input id="pSexuales" class="block w-full" type="text" name="pSexuales" required
                                 value="{{ $colposcopia ? $colposcopia->ago->pSexuales : '' }}" autofocus
-                                autocomplete="pSexules" />
+                                autocomplete="pSexuales" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />
+
                         </div>
+                        <span id="pSexualesError" class="text-red-500"></span>
                     </td>
                 </tr>
                 <tr>
-                    <td class="border-indigo-600 border-2 px-4 py-2">Gestas:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">Gestas:
                         <div class="flex items-center justify-between">
-                            <x-input id="gestas" class="block w-full" type="number" name="gestas" required
+                            <x-input id="gestas" class="block w-full" type="text" name="gestas" required
                                 value="{{ $colposcopia ? $colposcopia->ago->gestas : '' }}" autofocus
-                                autocomplete="gestas" />
+                                autocomplete="gestas" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />
+
                         </div>
+                        <span id="gestasError" class="text-red-500"></span>
                     </td>
-                    <td class="border-indigo-600 border-2 px-4 py-2">Partos:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">Partos:
                         <div class="flex items-center justify-between">
-                            <x-input id="partos" class="block w-full" type="number" name="partos" required
+                            <x-input id="partos" class="block w-full" type="text" name="partos" required
                                 value="{{ $colposcopia ? $colposcopia->ago->partos : '' }}" autofocus
-                                autocomplete="partos" />
+                                autocomplete="partos" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />
+
                         </div>
+                        <span id="partosError" class="text-red-500"></span>
                     </td>
-                    <td class="border-indigo-600 border-2 px-4 py-2">Cesareas:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">Cesareas:
                         <div class="flex items-center justify-between">
-                            <x-input id="cesareas" class="block w-full" type="number" name="cesareas" required
+                            <x-input id="cesareas" class="block w-full" type="text" name="cesareas" required
                                 value="{{ $colposcopia ? $colposcopia->ago->cesareas : '' }}" autofocus
-                                autocomplete="cesareas" />
+                                autocomplete="cesareas" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />
+
                         </div>
+                        <span id="cesareasError" class="text-red-500"></span>
                     </td>
-                    <td class="border-indigo-600 border-2 px-4 py-2">Abortos:
+                    <td class="border-indigo-600 border-2 px-4 py-2 numeric-input">Abortos:
                         <div class="flex items-center justify-between">
-                            <x-input id="abortos" class="block w-full" type="number" name="abortos" required
+                            <x-input id="abortos" class="block w-full" type="text" name="abortos" required
                                 value="{{ $colposcopia ? $colposcopia->ago->abortos : '' }}" autofocus
-                                autocomplete="abortos" />
+                                autocomplete="abortos" pattern="\d*"
+                                title="Por favor, ingresa solo números enteros positivos." />
+
                         </div>
+                        <span id="abortosError" class="text-red-500"></span>
                     </td>
                 </tr>
                 <tr>
@@ -204,7 +224,7 @@
                             <span>Si</span>
                             <input type="radio" name="capt" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="capt" value="No" />
+                            <input type="radio" name="capt" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">TX: Cervicales previos:
@@ -212,7 +232,7 @@
                             <span>Si</span>
                             <input type="radio" name="tx" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="tx" value="No" />
+                            <input type="radio" name="tx" value="No" checked />
                         </div>
                     </td>
                     <td class="border-indigo-600 border-2 px-4 py-2">Resultados:
@@ -315,7 +335,7 @@
                             </div>
                             <div>
                                 <x-label for="comentarios" value="{{ __('Comentarios:') }}" class="" />
-                                <textarea id="comentarios" name="comentarios" class="rounded-md w-full" rows="5">{{ $colposcopia ? $colposcopia->ago2->comentarios : '' }}</textarea>
+                                <textarea oninput="autoNewLine(this)" id="comentarios" name="comentarios" class="rounded-md w-full" rows="5">{{ $colposcopia ? $colposcopia->ago2->comentarios : '' }}</textarea>
                             </div>
                         </div>
                     </td>
@@ -369,7 +389,7 @@
                             <span>Si</span>
                             <input type="radio" name="biopsia" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="biopsia" value="No" />
+                            <input type="radio" name="biopsia" value="No" checked />
                         </div>
                     </td>
                     <td class="px-3 py-2 border-l-2 border-r-2  border-b-2 border-indigo-600">Radio:
@@ -384,7 +404,7 @@
                             <span>Si</span>
                             <input type="radio" name="cepillado_endocervical" value="Si" />
                             <span>No</span>
-                            <input type="radio" name="cepillado_endocervical" value="No" />
+                            <input type="radio" name="cepillado_endocervical" value="No" checked />
                         </div>
                     </td>
                 </tr>
@@ -808,5 +828,45 @@
 
             });
         }
+
+        document.querySelectorAll('.numeric-input').forEach(function(input) {
+            input.addEventListener('input', function(event) {
+                var inputValue = event.target.value;
+                var errorSpan = document.getElementById(event.target.id + 'Error');
+
+                if (!/^\d*$/.test(inputValue)) {
+                    errorSpan.textContent =
+                        "Por favor, ingresa solo números enteros positivos.";
+                    event.target.value = inputValue.replace(/\D/g,
+                        ''); // Elimina caracteres no numéricos
+                } else {
+                    errorSpan.textContent = "";
+                }
+            });
+        });
+
+        const fechaDeToma = document.getElementById('fecha_de_toma');
+        const fechaDeInterpretacion = document.getElementById('fecha_de_interpretacion');
+        const fechaDeEnvio = document.getElementById('fecha_de_envio');
+
+        function validateDates() {
+            const tomaDate = new Date(fechaDeToma.value);
+            const interpretacionDate = new Date(fechaDeInterpretacion.value);
+            const envioDate = new Date(fechaDeEnvio.value);
+
+            if (fechaDeToma.value && fechaDeInterpretacion.value && tomaDate > interpretacionDate) {
+                alert("La Fecha de toma debe ser menor o igual a la Fecha de interpretación.");
+                fechaDeToma.value = '';
+            }
+
+            if (fechaDeInterpretacion.value && fechaDeEnvio.value && envioDate < interpretacionDate) {
+                alert("La Fecha de envío debe ser mayor o igual a la Fecha de interpretación.");
+                fechaDeEnvio.value = '';
+            }
+        }
+
+        fechaDeToma.addEventListener('change', validateDates);
+        fechaDeInterpretacion.addEventListener('change', validateDates);
+        fechaDeEnvio.addEventListener('change', validateDates);
     });
 </script>

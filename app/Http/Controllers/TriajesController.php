@@ -91,6 +91,7 @@ class TriajesController extends Controller
     public function show($id, $lugar)
     {
         $consulta = Consulta::find($id);
+        
         $triaje = Triaje::find($consulta->triaje_id);
         if($consulta->colposcopia == true){
             $triaje_id = $triaje->id;
@@ -103,8 +104,8 @@ class TriajesController extends Controller
             $triaje->bienestarFetal = json_decode($triaje->bienestar_fetal);
         }        
         $triaje->tomaSignosVitales = json_decode($triaje->toma_signos_vitales);
-        
-        return view('consultas-show', compact('consulta', 'lugar', 'triaje'));
+        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'consultas'));
     }
 
 

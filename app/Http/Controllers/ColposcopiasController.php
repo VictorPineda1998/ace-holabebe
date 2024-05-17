@@ -118,8 +118,8 @@ class ColposcopiasController extends Controller
         $colposcopia->app = json_decode($colposcopia->app);
         $colposcopia->ago = json_decode($colposcopia->ago);
         $colposcopia->ago2 = json_decode($colposcopia->ago2);
-
-        return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'colposcopia'));
+        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'colposcopia', 'consultas'));
     }
 
     public function update(Request $request, $id)
