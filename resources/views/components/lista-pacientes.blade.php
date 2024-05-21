@@ -1,6 +1,6 @@
 <div>
     <div class="titulo-listado flex flex-col items-center">
-        <h1 class='text-4xl font-bold mb-6 text-pink-400'>Pacientes registrados</h1>
+        <h1 class='text-3xl font-bold mb-6 text-pink-400'>Pacientes registrados</h1>
     </div>
     <div>
 
@@ -9,7 +9,7 @@
                 @php
                     $i = 1;
                 @endphp
-                <div style="width: 900px">
+                <div style="width: 950px">
                     <div class="flex">
                         <div class="flex w-4/9">
                             <div class="flex items-center">
@@ -43,7 +43,7 @@
                         <span class="w-1/6 text-sm lg:text-base">Opciones</span>
                     </ul>
                     @foreach ($pacientes as $paciente)
-                        <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-pink-300' : '' }}"
+                        <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-pink-300' : 'bg-pink-200' }}"
                             style="padding: 1%">
                             <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $paciente->id }}</span>
                             <span class="w-3/6 text-sm lg:text-base">{{ $paciente->nombre }} {{ $paciente->apellido_P }}

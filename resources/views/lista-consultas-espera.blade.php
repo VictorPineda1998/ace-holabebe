@@ -29,7 +29,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <x-div-fondo>
                 <div class="titulo-listado flex flex-col items-center">
                     <h1 class='text-4xl font-bold mb-6 text-green-800'>Sala de espera</h1>
                 </div>
@@ -98,7 +98,7 @@
                     </ul>
 
                 @endif
-            </div>
+            </x-div-fondo>
         </div>
     </div>
 

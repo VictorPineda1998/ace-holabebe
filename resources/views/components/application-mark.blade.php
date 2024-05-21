@@ -5,5 +5,5 @@
   {{-- <img src="{{ asset('img-empresa/logo-hola-bebe.jpg') }}" alt="logo"
    style="border-radius: 50%; 
    max-width: 27%;"> --}}
-   <img class="h-12 w-12 rounded-full object-cover"
+   <img class="h-16 w-16 rounded-full object-cover"
    src="{{ asset('img-empresa/logo-hola-bebe.jpg') }}"alt="logo" />

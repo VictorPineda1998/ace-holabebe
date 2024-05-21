@@ -85,22 +85,41 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <x-div-fondo>
                 <div class="flex flex-col items-center">
                     <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Detalles de la consulta</h1>
                 </div>
-
+                <div class="mb-3">
+                    <li class="flex items-center mt-3 bg-green-400 p-3 rounded-t-lg">
+                        <span class="w-1/3 text-sm lg:text-base">Tipo de consulta</span>
+                        @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
+                            <span class="w-1/3 text-sm lg:text-base">Estado de la consulta</span>
+                        @endif
+                        <span class="w-1/3 text-sm lg:text-base">Fecha de la consulta:</span>
+                    </li>
+                    <li class="flex items-center bg-green-200 p-3 rounded-b-lg">
+                        @if ($consulta->tipo_consulta == 'Otro')
+                            <span class="w-1/3 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
+                        @else
+                            <span class="w-1/3 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
+                        @endif
+                        @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
+                            <span class="w-1/3 text-sm lg:text-base">{{ $consulta->estado }}</span>
+                        @endif
+                        <span class="w-1/3 text-sm lg:text-base">{{ $consulta->fecha }}</span>
+                    </li>
+                </div>
                 <div class=" flex flex-col items-left">
                     <h1 class='text-1xl font-bold mb-3 text-purple-800'>Datos generales del paciente:</h1>
                 </div>
                 <x-paciente.datos-generales :paciente="$consulta->paciente" />
-                <div class=" flex items-end mt-2 mb-3">
+                <div class=" flex items-center justify-end mt-4 mb-3">
                     <div class="flex items-center mt-4">
                         <h1 class='text-1xl font-bold mb-2 text-purple-800'>Historial de consultas:</h1>
                     </div>
                     <div class="flex items-center ms-3">
-                        <x-boton-mas id="mostrarHistorial">
-                            {{ __('Historial') }}
+                        <x-boton-mas id="mostrarHistorial" class="ps-5 pe-6">
+                            {{ __('Mostrar') }}
                         </x-boton-mas>
                     </div>
                 </div>
@@ -110,24 +129,6 @@
                         <x-boton-cancelar id="ocultarHistorial">Ocultar</x-boton-cancelar>
                     </div>
                 </div>
-                <li class="flex items-center mt-3 bg-green-400 p-3 rounded-t-lg">
-                    <span class="w-1/3 text-sm lg:text-base">Tipo de consulta</span>
-                    @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
-                        <span class="w-1/3 text-sm lg:text-base">Estado de la consulta</span>
-                    @endif
-                    <span class="w-1/3 text-sm lg:text-base">Fecha de la consulta:</span>
-                </li>
-                <li class="flex items-center bg-green-200 p-3 rounded-b-lg">
-                    @if ($consulta->tipo_consulta == 'Otro')
-                        <span class="w-1/3 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
-                    @else
-                        <span class="w-1/3 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
-                    @endif
-                    @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
-                        <span class="w-1/3 text-sm lg:text-base">{{ $consulta->estado }}</span>
-                    @endif
-                    <span class="w-1/3 text-sm lg:text-base">{{ $consulta->fecha }}</span>
-                </li>
                 <div id="cajaTriajePadre">
                     <div class="flex items-center justify-end mt-4">
                         <div class="items-left mt-8 mb-2 me-3">
@@ -216,7 +217,7 @@
                         </div>
                     </div>
                 @endif
-            </div>
+            </x-div-fondo>
         </div>
     </div>
 

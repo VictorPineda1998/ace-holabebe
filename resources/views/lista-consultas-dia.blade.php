@@ -29,10 +29,10 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <x-div-fondo>
 
                 <x-paciente.lista-consultas-hoy :consultas="$consultas" />
-            </div>
+            </x-div-fondo>
         </div>
     </div>
 </x-app-layout>

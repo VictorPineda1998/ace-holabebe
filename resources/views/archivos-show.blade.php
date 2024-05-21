@@ -55,7 +55,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <x-div-fondo>
                 <a href="{{ route('pacientes.show', $paciente->id) }} ">
                     <x-boton-mas>
                         {{ __('Regresar') }}
@@ -168,7 +168,7 @@
                         @endforeach
                     </div>
                 </ul>
-            </div>
+            </x-div-fondo>
         </div>
     </div>
     <style>

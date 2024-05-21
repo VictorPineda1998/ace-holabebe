@@ -10,6 +10,10 @@ class DiagnosticosController extends Controller
 {
     public function store(Request $request, $id)
     {
+        $request->validate([
+            'diagnostico' => 'required|string|max:255',
+            'receta_medica' => 'required|string|max:255',
+        ]);
         
         $consulta = Consulta::findOrFail($id);
 

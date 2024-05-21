@@ -30,7 +30,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-rose-200 overflow-hidden shadow-xl sm:rounded-lg" style="padding: 1%">
+            <x-div-fondo>
 
                 <x-boton-mas id="mostrarRegistro">
                     {{ __('Registrar paciente') }}
@@ -42,7 +42,7 @@
                 @if (isset($pacientes))
                     <x-lista-pacientes :pacientes="$pacientes" />
                 @endif
-            </div>
+            </x-div-fondo>
         </div>
     </div>
 
