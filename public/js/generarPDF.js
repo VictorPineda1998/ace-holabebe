@@ -24,6 +24,19 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje, medico) {
         // Agregar la segunda imagen
         doc.addImage(image2, 'JPEG', 10, 169, 43.5, 40);
 
+        // Obtener la fecha de nacimiento  y convertirla a objeto Date
+        const fechaNacimiento = new Date(paciente.fecha_nacimiento);
+        // Obtener la fecha actual
+        const hoy = new Date();
+        // Calcular la edad
+        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+
+        // Ajustar la edad si todavía no ha pasado el cumpleaños este año
+        if (hoy.getMonth() < fechaNacimiento.getMonth() ||
+            (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            edad--;
+        }
+
         // Agregar texto
         doc.setFontSize(15);
         doc.setTextColor("#3f3f3f");        
@@ -36,7 +49,7 @@ function generarPDF(colposcopia, imgData2, imgData3, paciente, triaje, medico) {
         doc.text(`${paciente.apellido_P}`, 45, 56);
         doc.text(`${paciente.apellido_M}`, 90, 56);
         doc.text(`${paciente.nombre}`, 132, 56);        
-        doc.text(`${paciente.edad}`, 190, 56);       
+        doc.text(`${edad}`, 190, 56);       
         doc.text(`Años`, 196, 56);              
         doc.text(`${paciente.lugar_procedencia}`, 55, 66);
         doc.text(`${paciente.telefono}`, 165, 66);   

@@ -76,12 +76,12 @@
                                             </a>
                                             @if ($consulta->estado == 'Confirmada')
                                                 <form style="display:inline;"
-                                                    onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"
+                                                    {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
                                                     method="POST"
                                                     action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'cancelar']) }}">
                                                     @csrf
                                                     @method('PUT')
-                                                    <x-boton-eliminar>
+                                                    <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsultaHoy').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}');">
                                                         Cancelar
                                                     </x-boton-eliminar>
                                                 </form>

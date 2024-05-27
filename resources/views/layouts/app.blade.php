@@ -17,6 +17,7 @@
 
     <!-- Styles -->
     @livewireStyles
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="font-sans antialiased">
@@ -58,6 +59,8 @@
     @stack('modals')
 
     @livewireScripts
+    <x-alert-modal></x-alert-modal>
+    <x-confirm-modal></x-confirm-modal>
 </body>
 
 </html>

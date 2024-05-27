@@ -1,3 +1,8 @@
+@php
+// Calcular la edad a partir de la fecha de nacimiento
+$fechaNacimiento = \Carbon\Carbon::parse($paciente->fecha_nacimiento);
+$edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
+@endphp
 <form id="paciente-form" method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
     @csrf
     @method('PUT')
@@ -20,7 +25,7 @@
 
         <div>
             <x-label for="telefono" value="{{ __('Telefono') }}" />
-            <x-input id="telefono" class="block mt-1 w-full" type="number" name="telefono"
+            <x-input id="telefono" class="block mt-1 w-full" type="text" name="telefono"
                 value="{{ $paciente->telefono }}" readonly />
         </div>
 
@@ -33,7 +38,7 @@
         <div>
             <x-label for="edad" value="{{ __('Edad') }}" />
             <x-input id="edad" class="block mt-1 w-full" type="number" name="edad"
-                value="{{ $paciente->edad }}" required autocomplete="edad" readonly />
+                value="{{ $edad }}" required autocomplete="edad" readonly />
         </div>
 
         <div>
@@ -42,7 +47,7 @@
                 value="{{ $paciente->lugar_procedencia }}" required autocomplete="new-lugar_procedencia" readonly />
         </div>
     </div>
-    @if (Route::is('pacientes.show'))
+    @if (Route::is('pacientes.show') || Route::is('pacientes.update'))
         <div class="flex items-center justify-end mt-4">
             <div class=" flex items-end" id="editar-btn">
                 <div class="flex items-center">
@@ -89,30 +94,46 @@
         });
     }
     // Obtener la referencia a los elementos del formulario
-    const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
-    const edadInput = document.getElementById('edad');
+   // Verificar si los elementos existen antes de agregar el event listener
+const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+const edadInput = document.getElementById('edad');
 
-    // Verificar si los elementos existen antes de agregar el event listener
-    if (fechaNacimientoInput && edadInput) {
-        // Agregar un event listener al campo de fecha de nacimiento
-        fechaNacimientoInput.addEventListener('change', function() {
-            // Obtener la fecha de nacimiento del input
-            const fechaNacimiento = new Date(fechaNacimientoInput.value);
+if (fechaNacimientoInput && edadInput) {
+    // Agregar un event listener al campo de fecha de nacimiento
+    fechaNacimientoInput.addEventListener('change', function() {
+        // Obtener la fecha de nacimiento del input y convertirla a objeto Date
+        const fechaNacimiento = new Date(fechaNacimientoInput.value);
 
-            // Validar que la fecha de nacimiento no sea en el futuro
-            const hoy = new Date();
-            if (fechaNacimiento > hoy) {
-                alert("Por favor, seleccione una fecha de nacimiento válida.");
-                fechaNacimientoInput.value = ''; // Puedes restablecer el valor si lo deseas
-                return;
-            }
+        // Validar si la fecha de nacimiento es válida
+        if (isNaN(fechaNacimiento.getTime())) {
+            alert("Por favor, seleccione una fecha de nacimiento válida.");
+            fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
+            return;
+        }
 
-            // Calcular la edad
-            const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+        // Obtener la fecha actual
+        const hoy = new Date();
 
-            // Actualizar el valor del campo de edad
-            edadInput.value = edad;
-        });
+        // Validar que la fecha de nacimiento no sea en el futuro
+        if (fechaNacimiento > hoy) {
+            alert("Por favor, seleccione una fecha de nacimiento válida.");
+            fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
+            return;
+        }
+
+        // Calcular la edad
+        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+
+        // Ajustar la edad si todavía no ha pasado el cumpleaños este año
+        if (hoy.getMonth() < fechaNacimiento.getMonth() ||
+            (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            edad--;
+        }
+
+        // Actualizar el valor del campo de edad
+        edadInput.value = edad;
+    });
+
 
         const telefonoInput = document.getElementById('telefono');
 

@@ -75,13 +75,13 @@
                                         (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
                                             $consulta->fecha != now()->toDateString()) ||
                                             $consulta->estado == 'Confirmada')
-                                        <form style="display:inline;"
-                                            onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"
+                                        <form style="display:inline;" id="cancelarConsulta"
+                                            {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
                                             method="POST"
                                             action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'cancelar', 'p_id' => $paciente->id]) }}">
                                             @csrf
                                             @method('PUT')
-                                            <x-boton-eliminar>
+                                            <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsulta').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ $paciente->nombre }} {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}');">
                                                 Cancelar
                                             </x-boton-eliminar>
                                         </form>

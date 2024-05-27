@@ -20,7 +20,7 @@
                             d="m1 9 4-4-4-4" />
                     </svg>
                     <a href="{{ route('pacientes') }} "
-                        class="ms-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">                        
+                        class="ms-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
                         Pacientes
                     </a>
                 </div>
@@ -37,13 +37,13 @@
                         Detalles del pacientes
                     </span>
                 </div>
-            </li>           
+            </li>
         </ol>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <x-div-fondo>                
+            <x-div-fondo>
                 @if (isset($paciente))
                     <div class="titulo-listado flex flex-col items-center">
                         <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Detalles del paciente</h1>
@@ -72,12 +72,22 @@
                                 <h1 class='text-1xl font-bold mb-2 text-purple-800'>Eliminar el paciente:</h1>
                             </div>
                             <div class="flex items-center ms-3">
-                                <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
+                                {{-- <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
                                     onsubmit="return confirm('¿Estás seguro que deseas eliminar este paciente?');"
                                     style="display: inline;" id="boton-eliminar">
                                     @csrf
                                     @method('DELETE')
                                     <x-boton-eliminar>Eliminar</x-boton-eliminar>
+                                </form> --}}
+
+                                <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST"
+                                    id="deletePaciente" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-boton-eliminar
+                                    onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('deletePaciente').submit(), '¿Estás seguro que deseas eliminar este paciente?', '{{ $paciente->nombre }} {{ $paciente->apellido_P}} {{ $paciente->apellido_M}}');">
+                                        Eliminar
+                                    </x-boton-eliminar>
                                 </form>
                             </div>
                         </div>
@@ -115,7 +125,7 @@
                                 <form action="{{ route('consultas.store', $paciente->id) }}" method="POST"
                                     style="margin: 1%;" id="formRegistrar">
                                     @csrf
-
+                                    <x-validation-errors />
                                     <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
                                         style="margin: 0;" />
                                     <select id="tipo_consulta" name="tipo_consulta" required
@@ -123,23 +133,32 @@
                                         onchange="comprobar_tipo()">
                                         <option disabled selected class="text-gray-400 italic">Selecciona un tipo de
                                             consulta</option>
-                                        <option value="Ginecologica">Ginecologica</option>
-                                        <option value="Retiro de puntos">Retiro de puntos</option>
-                                        <option value="Procedimientos">Procedimientos</option>
-                                        <option value="Control prenatal">Control prenatal</option>
-                                        <option value="Otro">Otro</option>
+                                        <option value="Ginecologica"
+                                            {{ old('tipo_consulta') == 'Ginecologica' ? 'selected' : '' }}>Ginecológica
+                                        </option>
+                                        <option value="Retiro de puntos"
+                                            {{ old('tipo_consulta') == 'Retiro de puntos' ? 'selected' : '' }}>Retiro de
+                                            puntos</option>
+                                        <option value="Procedimientos"
+                                            {{ old('tipo_consulta') == 'Procedimientos' ? 'selected' : '' }}>
+                                            Procedimientos</option>
+                                        <option value="Control prenatal"
+                                            {{ old('tipo_consulta') == 'Control prenatal' ? 'selected' : '' }}>Control
+                                            prenatal</option>
+                                        <option value="Otro" {{ old('tipo_consulta') == 'Otro' ? 'selected' : '' }}>
+                                            Otro</option>
                                     </select>
                                     <div id="otro_tipo" style="display: none">
                                         <x-label for="otro_tipo_consulta" value="{{ __('Detalles:') }}"
                                             class="mt-1" />
-                                        <x-input id="otro_tipo_consulta" class="block mt-1 w-full" type="text"
-                                            name="otro_tipo_consulta" value=""
+                                        <x-input id="otro_tipo_consulta" class="block mt-1 w-full md:w-1/2"
+                                            type="text" name="otro_tipo_consulta" value=""
                                             autocomplete="new-otro-tipo-consulta" />
                                     </div>
                                     <div>
                                         <x-label for="fecha" value="{{ __('Fecha:') }}" />
                                         <x-input id="fecha" class="block mt-1 w-full md:w-1/2" type="date"
-                                            name="fecha" value="" autocomplete="fecha" required />
+                                            name="fecha" value="{{ old('fecha') }}" autocomplete="fecha" required />
                                     </div>
                                     <div class="flex mt-2 justify-end w-full md:w-1/2">
                                         <x-boton-cancelar id="cancelar-tipo-consulta">Cancelar</x-boton-cancelar>
@@ -168,6 +187,15 @@
     </div>
 
     <script src="{{ asset('js/funciones-propias.js') }}"></script>
+
+    @if (!$errors->isEmpty())
+        <script>
+            window.onload = function() {
+                document.getElementById("mostrarRegistro").click();
+                comprobar_tipo();
+            };
+        </script>
+    @endif
 
     <script>
         let creando = false;

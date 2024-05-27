@@ -16,17 +16,6 @@ class ColposcopiasController extends Controller
         $data = $request->all();
         $consulta = Consulta::findOrFail($id);
 
-        // Decodifica la imagen de base64
-        // $imagenCodificada = $data['imagen'];
-        // // Separa la parte de la cadena que contiene la imagen codificada en base64
-        // $partes = explode(";base64,", $imagenCodificada);
-        // $imagenDecodificada = base64_decode($partes[1]);
-
-        // // Guarda la imagen en la carpeta de almacenamiento
-        // $rutaImagen = 'public/imagenes_colposcopia/' . uniqid() . '.png'; // Genera un nombre de archivo único
-        // Storage::put($rutaImagen, $imagenDecodificada);
-        // $array = explode('public', $rutaImagen);
-
         $ahf = [
             'cancer' => $data['cancer'] ?? ' ',
             'diabetes_heredica' => $data['diabetes_heredica'] ?? ' '
@@ -118,7 +107,8 @@ class ColposcopiasController extends Controller
         $colposcopia->app = json_decode($colposcopia->app);
         $colposcopia->ago = json_decode($colposcopia->ago);
         $colposcopia->ago2 = json_decode($colposcopia->ago2);
-        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        // $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->paginate(8);
         return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'colposcopia', 'consultas'));
     }
 

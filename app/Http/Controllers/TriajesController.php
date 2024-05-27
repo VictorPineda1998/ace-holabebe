@@ -104,7 +104,8 @@ class TriajesController extends Controller
             $triaje->bienestarFetal = json_decode($triaje->bienestar_fetal);
         }        
         $triaje->tomaSignosVitales = json_decode($triaje->toma_signos_vitales);
-        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        // $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->paginate(8);
         return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'consultas'));
     }
 

@@ -17,7 +17,7 @@
                     <div style="width: 900px">
                         <li class="flex items-center bg-purple-400 p-3 rounded-t-lg">
                             <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                            <span class="w-2/6 text-sm lg:text-base">Nombre</span>
+                            <span class="w-2/6 text-sm lg:text-base">Nombre completo</span>
                             <span class="w-1/6 text-sm lg:text-base">Tipo de consulta</span>
                             <span class="w-1/6 text-sm lg:text-base">Detalle</span>
                             <span class="w-2/6 text-sm lg:text-base">Opciones</span>
@@ -68,13 +68,13 @@
                                             </form>
                                         @endif --}}
                                         @if ($consulta->estado == 'Confirmada')
-                                            <form style="display:inline;"
-                                                onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');"
+                                            <form style="display:inline;" id="cancelarConsultaHoy"
+                                                {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
                                                 method="POST"
                                                 action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'cancelar']) }}">
                                                 @csrf
                                                 @method('PUT')
-                                                <x-boton-eliminar>
+                                                <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsultaHoy').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}');">
                                                     Cancelar
                                                 </x-boton-eliminar>
                                             </form>
@@ -91,13 +91,7 @@
                                                 action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'reprogramar']) }}"
                                                 method="POST" style="margin: 1%;" id="formularioConsulta">
                                                 @csrf
-                                                @method('PUT')
-                                                <div>
-                                                    <x-label for="fecha" class="mt-1"
-                                                        value="{{ __('Fecha') }}" />
-                                                    <x-input id="fecha" class="block mt-1 w-full" type="date"
-                                                        name="fecha" value="" autocomplete="fecha" />
-                                                </div>
+                                                @method('PUT')                                                
                                                 <x-label for="tipo_consulta" value="{{ __('Tipo de consulta:') }}"
                                                     style="margin: 0;" />
                                                 <select id="tipo_consulta" name="tipo_consulta"
@@ -118,9 +112,17 @@
                                                         type="text" name="otro_tipo_consulta" value=""
                                                         autocomplete="new-otro-tipo-consulta" />
                                                 </div>
-                                                <x-button class="mt-1 ">
-                                                    {{ __('Aceptar') }}
-                                                </x-button>
+                                                <div>
+                                                    <x-label for="fecha" class="mt-1"
+                                                        value="{{ __('Fecha') }}" />
+                                                    <x-input id="fecha" class="block mt-1 w-full" type="date"
+                                                        name="fecha" value="" autocomplete="fecha" />
+                                                </div>
+                                                <div class="flex mt-2 justify-end w-full">                                                    
+                                                    <x-button class="ms-4 mt-1">
+                                                        {{ __('Aceptar') }}
+                                                    </x-button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>

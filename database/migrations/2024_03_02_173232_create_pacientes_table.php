@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('apellido_M');
             $table->string('telefono');
             $table->date('fecha_nacimiento');
-            $table->tinyInteger('edad');
+            // $table->tinyInteger('edad');
             $table->string('lugar_procedencia');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')-> on ('users');

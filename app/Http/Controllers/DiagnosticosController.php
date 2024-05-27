@@ -10,10 +10,10 @@ class DiagnosticosController extends Controller
 {
     public function store(Request $request, $id)
     {
-        $request->validate([
-            'diagnostico' => 'required|string|max:255',
-            'receta_medica' => 'required|string|max:255',
-        ]);
+        // $request->validate([
+        //     'diagnostico' => 'required|string|max:255',
+        //     'receta_medica' => 'required|string|max:255',
+        // ]);
         
         $consulta = Consulta::findOrFail($id);
 
@@ -30,7 +30,7 @@ class DiagnosticosController extends Controller
         
         $lugar = 'espera';
         return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar])
-                                        ->with('success', 'Operación realizada correctamente.');
+                                        ->with('success', 'Consulta finalizada correctamente.');
     }
 
     public function update(Request $request, $id)
@@ -45,6 +45,7 @@ class DiagnosticosController extends Controller
         
         $consulta_id = $diagnostico->consulta_id;
         $lugar = 'espera';
-        return redirect()->route('consultas.show', ['id' => $consulta_id, 'lugar' => $lugar]);
+        return redirect()->route('consultas.show', ['id' => $consulta_id, 'lugar' => $lugar])
+                                        ->with('success', 'Informacion  actualizada correctamente.');
     }
 }

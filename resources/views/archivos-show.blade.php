@@ -56,22 +56,25 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-div-fondo>
-                <a href="{{ route('pacientes.show', $paciente->id) }} ">
+                {{-- <a href="{{ route('pacientes.show', $paciente->id) }} ">
                     <x-boton-mas>
                         {{ __('Regresar') }}
                     </x-boton-mas>
-                </a>
+                </a> --}}
                 <div class="titulo-listado flex flex-col items-center">
                     <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Listado de archivos</h1>
                     <h1 class='text-2xl font-bold mb-6 text-indigo-800'>del paciente: {{ $paciente->nombre }}
                         {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}</h1>
                 </div>
-                <x-boton-editar id="agregar_archivo" class="justify-end mb-2">
+                <x-validation-errors/>
+                <x-boton-editar id="agregar_archivo" class="justify-end mt-2 mb-2">
                     {{ __('Agregar archivo') }}
                 </x-boton-editar>
+                
                 <div id="formArchivo" class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="display: none">
                     <form action="{{ route('archivos.store', $paciente->id) }}" method="post"
                         enctype="multipart/form-data" id="formRegistrar">
+                        
                         <x-label for="nombre"
                             value="{{ __('Nombre:   (Si gusta no colocar el nombre, se usara el nombre original del archivo)') }}"
                             class="mt-1 " />
@@ -126,11 +129,12 @@
                                     </x-boton-editar>
                                     <form
                                         action="{{ route('archivos.eliminar', ['id' => $archivo->id, 'paciente_id' => $archivo->paciente_id]) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este archivo?');">
+                                        method="POST" id="deleteArchivo">
                                         @csrf
                                         @method('DELETE')
-                                        <x-boton-eliminar class="ms-2">Eliminar</x-boton-eliminar>
+                                        <x-boton-eliminar class="ms-2" onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('deleteArchivo').submit(), '¿Estás seguro que deseas eliminar este archivo?', '{{ $archivo->nombre }}');">
+                                            Eliminar
+                                        </x-boton-eliminar>
                                     </form>
                                 </span>
                             </li>

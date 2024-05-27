@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 use function Laravel\Prompts\alert;
@@ -29,7 +30,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->tipo_usuario = $request->input('tipo_usuario');
         $user->save();
-        return redirect()->route('gestion-usuarios');
+        return redirect()->route('gestion-usuarios')->with('success', 'Usuario actualizado exitosamente');
     }
 
     public function destroy($id)
@@ -38,7 +39,9 @@ class UserController extends Controller
         $user = User::find($id);
         $user->deleteProfilePhoto();
         $user->tokens->each->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $user->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         return redirect()->route('gestion-usuarios')->with('success', 'Usuario eliminado exitosamente');
     }
 }

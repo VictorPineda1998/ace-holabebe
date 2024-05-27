@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('diagnosticos', function (Blueprint $table) {
             $table->id();
-            $table->text('diagnostico');
-            $table->text('receta_medica');
+            $table->text('diagnostico')->nullable();
+            $table->text('receta_medica')->nullable();
             $table->unsignedBigInteger('consulta_id');
             $table->foreign('consulta_id')->references('id')->on('consultas')->onDelete('cascade');            
             $table->integer('usuario_id')->default(0);

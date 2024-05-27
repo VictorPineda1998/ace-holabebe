@@ -18,8 +18,8 @@ class PacientesController extends Controller
         $pacientes = Paciente::when($search, function ($query, $search) {
             return $query->where('nombre', 'like', '%' . $search . '%');
         })
-            ->orderBy('created_at', 'asc')
-            ->paginate(50);
+            ->orderBy('id', 'asc')
+            ->paginate(15);
         // $pacientes = Paciente::orderBy('created_at', 'desc')->paginate(2);
         // $pacientes = Paciente::orderBy('created_at', 'asc')->paginate(1);
         return view('gestion-pacientes', compact('user'), compact('pacientes'));
@@ -34,7 +34,7 @@ class PacientesController extends Controller
             'apellidoM' => 'required|string|max:255',
             'telefono' => 'required|string',
             'fecha_nacimiento' => 'required|date',
-            'edad' => 'required|integer',
+            // 'edad' => 'required|integer',
             'lugar_procedencia' => 'required|string|max:255',
         ]);
 
@@ -48,7 +48,7 @@ class PacientesController extends Controller
             'apellido_M' => $request->input('apellidoM'),
             'telefono' => $telefono,
             'fecha_nacimiento' => $request->input('fecha_nacimiento'),
-            'edad' => $request->input('edad'),
+            // 'edad' => $request->input('edad'),
             'lugar_procedencia' => $request->input('lugar_procedencia'),
             'user_id' => $id,
         ]);
@@ -57,14 +57,16 @@ class PacientesController extends Controller
         $paciente->save();
 
         // Redireccionar a la vista de detalles del paciente recién creado
-        return redirect()->route('pacientes');
+        return redirect()->route('pacientes')->with('success', 'Paciente registrado correctamente.');
     }
     public function show($id)
     {
         // Obtener el paciente por su ID
         $paciente = Paciente::find($id);
         // Obtener las consultas del paciente por su ID
-        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
+        // $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
+        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->paginate(8);
+
 
         // Verificar si el paciente fue encontrado
         if (!$paciente) {
@@ -85,7 +87,7 @@ class PacientesController extends Controller
             'apellidoM' => 'required|string|max:255',
             'telefono' => 'required|string',
             'fecha_nacimiento' => 'required|date',
-            'edad' => 'required|integer',
+            // 'edad' => 'required|integer',
             'lugar_procedencia' => 'required|string|max:255',
         ]);
 
@@ -98,7 +100,7 @@ class PacientesController extends Controller
         $paciente->apellido_M = $validarDatos['apellidoM'];
         $paciente->telefono = $validarDatos['telefono'];
         $paciente->fecha_nacimiento = $validarDatos['fecha_nacimiento'];
-        $paciente->edad = $validarDatos['edad'];
+        // $paciente->edad = $validarDatos['edad'];
         $paciente->lugar_procedencia = $validarDatos['lugar_procedencia'];
 
 
@@ -108,16 +110,18 @@ class PacientesController extends Controller
         $paciente = Paciente::find($id);
 
         // Obtener las consultas del paciente por su ID
-        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
+        // $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->get();
+        $consultas = Consulta::where('paciente_id', $id)->orderBy('created_at', 'desc')->paginate(8);
+
         // Redireccionar a la vista de detalles del paciente recién creado
 
         // Si el paciente fue encontrado, mostrar la vista de detalles
-        return view('pacientes-show', compact('paciente', 'consultas'));
+        return view('pacientes-show', compact('paciente', 'consultas'))->with('success', 'Paciente actualizado correctamente.');
     }
 
     public function destroy($id)
     {
         $paciente = Paciente::destroy($id);
-        return redirect()->route('pacientes');
+        return redirect()->route('pacientes')->with('success', 'Paciente eliminado correctamente.');
     }
 }

@@ -30,7 +30,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-div-fondo>
-
+                <x-alert-modal></x-alert-modal>
                 <x-paciente.lista-consultas-hoy :consultas="$consultas" />
             </x-div-fondo>
         </div>

@@ -11,7 +11,7 @@
                 @endphp
                 <div style="width: 950px">
                     <div class="flex">
-                        <div class="flex w-4/9">
+                        {{-- <div class="flex w-4/9">
                             <div class="flex items-center">
                                 <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en esta coleccion:</h1>
                             </div>
@@ -20,7 +20,7 @@
                                     class="mb-4 w-full border border-gray-300 rounded-md"
                                     placeholder="Buscar coincidencias">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="flex w-5/9">
                             <div class="flex items-center ms-2">
@@ -37,20 +37,28 @@
                     </div>
                     <ul class="flex items-center bg-pink-500 p-3 rounded-t-lg">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                        <span class="w-3/6 text-sm lg:text-base">Nombre</span>
-                        <span class="w-1/6 text-sm lg:text-base">Telefono</span>
-                        <span class="w-1/6 text-sm lg:text-base">Edad</span>
-                        <span class="w-1/6 text-sm lg:text-base">Opciones</span>
+                        <span class="w-3/12 text-sm lg:text-base">Nombre(s)</span>
+                        <span class="w-2/12 text-sm lg:text-base">Apellido Paterno</span>
+                        <span class="w-2/12 text-sm lg:text-base">Apellido Materno</span>
+                        <span class="w-2/12 text-sm lg:text-base">Telefono</span>
+                        <span class="w-2/12 text-sm lg:text-base">Edad</span>
+                        <span class="w-1/12 text-sm lg:text-base">Opciones</span>
                     </ul>
                     @foreach ($pacientes as $paciente)
-                        <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-pink-300' : 'bg-pink-200' }}"
+                        @php
+                            // Calcular la edad a partir de la fecha de nacimiento
+                            $fechaNacimiento = \Carbon\Carbon::parse($paciente->fecha_nacimiento);
+                            $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
+                        @endphp
+                        <li class="flex items-center border-b py-2 {{ $loop->odd ? 'bg-pink-300' : 'bg-pink-200' }}"
                             style="padding: 1%">
                             <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $paciente->id }}</span>
-                            <span class="w-3/6 text-sm lg:text-base">{{ $paciente->nombre }} {{ $paciente->apellido_P }}
-                                {{ $paciente->apellido_M }}</span>
-                            <span class="w-1/6 text-sm lg:text-base">{{ $paciente->telefono }}</span>
-                            <span class="w-1/6 text-sm lg:text-base">{{ $paciente->edad }} años</span>
-                            <span class="w-1/6 text-sm lg:text-base">
+                            <span class="w-3/12 text-sm lg:text-base">{{ $paciente->nombre }}</span>
+                            <span class="w-2/12 text-sm lg:text-base">{{ $paciente->apellido_P }}</span>
+                            <span class="w-2/12 text-sm lg:text-base"> {{ $paciente->apellido_M }}</span>
+                            <span class="w-2/12 text-sm lg:text-base">{{ $paciente->telefono }}</span>
+                            <span class="w-2/12 text-sm lg:text-base">{{ $edad }} años</span>
+                            <span class="w-1/12 text-sm lg:text-base">
                                 <a href="{{ route('pacientes.show', $paciente->id) }} ">
                                     <x-boton-editar class="boton-editar" style="margin: 0; display: inline;">
                                         Ver
@@ -72,7 +80,7 @@
     </div>
 </div>
 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('searchInput').addEventListener('input', function() {
@@ -103,4 +111,4 @@
 
 
     });
-</script>
+</script> --}}

@@ -21,9 +21,13 @@ class ArchivosController extends Controller
     public function store(Request $request, $id)
     {
         $request->validate([
-            'archivo' => 'required|mimes:pdf|max:2048', // Validación de tipo y tamaño del archivo
+            'archivo' => 'required|mimes:pdf|max:5120', // Validación de tipo y tamaño del archivo (5MB)
+        ], [
+            'archivo.required' => 'El campo archivo es obligatorio.',
+            'archivo.mimes' => 'El archivo debe ser un PDF.',
+            'archivo.max' => 'El tamaño del archivo no debe exceder los 5MB.',
         ]);
-
+    
         $file = $request->file('archivo');
         $nombre = $request->nombre == null ? $file->getClientOriginalName() : $request->nombre;
         $filePath = $file->store('public/files'); // Almacenar el archivo 
@@ -35,7 +39,7 @@ class ArchivosController extends Controller
         $pdf->ruta = 'storage'.$array[1];
         $pdf->paciente_id = $id;
         $pdf->save();
-        return redirect()->route('archivos', $id);
+        return redirect()->route('archivos', $id)->with('success', 'Archivo guardado exitosamente');
     }
 
     public function update(Request $request, $id, $paciente_id)
@@ -64,7 +68,7 @@ class ArchivosController extends Controller
         
         if($file){$pdf->ruta = 'storage'.$array[1];}
         $pdf->save();
-        return redirect()->route('archivos', $paciente_id);
+        return redirect()->route('archivos', $paciente_id)->with('success', 'Archivo actualizado exitosamente');
     }
 
     public function destroy($id, $paciente_id)
@@ -74,6 +78,6 @@ class ArchivosController extends Controller
         $ruta = str_replace('storage', 'public', $archivo->ruta);
         Storage::delete($ruta);
         $archivo->delete();
-        return redirect()->route('archivos', $paciente_id);
+        return redirect()->route('archivos', $paciente_id)->with('success', 'Archivo eliminado exitosamente');
     }
 }

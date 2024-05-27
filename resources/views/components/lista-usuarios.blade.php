@@ -58,20 +58,29 @@
                                 <x-boton-cancelar class="cancelar" data-boton="{{ $i }}"
                                     style="display: none;">Cancelar</x-boton-cancelar>
 
-                                <form action="{{ route('usuarios.eliminar', $user->id) }}" method="POST"
+                                {{-- <form action="{{ route('usuarios.eliminar', $user->id) }}" method="POST"
                                     onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');"
                                     style="margin: 0; display: inline;" class="boton-elimiar">
                                     @csrf
                                     @method('DELETE')
                                     <x-boton-eliminar type="submit" class="boton-mas">Eliminar</x-boton-eliminar>
+                                </form> --}}
+
+                                <form action="{{ route('usuarios.eliminar', $user->id) }}" method="POST" id="deleteUser" style="display: inline;" class="boton-elimiar">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('deleteUser').submit(), '¿Estás seguro que deseas eliminar este usuario?', '{{ $user->name }}');">
+                                        Eliminar
+                                    </x-boton-eliminar>
                                 </form>
+
                             </div>
                         </span>
                         </li>
                         @php
                             $i++;
                         @endphp
-                    @endforeach
+                    @endforeach                    
                 </div>
             </ul>
         </div>

@@ -35,10 +35,10 @@
                 required autocomplete="fecha_nacimiento" />
         </div>
         
-        <div class="mt-4">
+        {{-- <div class="mt-4"> --}}
             {{-- <x-label for="edad" value="{{ __('Edad') }}" style="display: none"/> --}}
-            <x-input id="edad"  type="number" name="edad"  style="display: none"/>
-        </div>
+            {{-- <x-input id="edad"  type="number" name="edad"  style="display: none"/>
+        </div> --}}
         
 
         

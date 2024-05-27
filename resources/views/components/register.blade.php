@@ -11,7 +11,7 @@
             <div class="mt-4">
                 <select id="tipo_usuario" name="tipo_usuario"
                     class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600"
-                    required style="display: none;" >
+                    required style="display: none;">
                     <option value="Administrador" selected>Administrador</option>
                 </select>
             </div>
@@ -22,13 +22,22 @@
                     class="mt-1 w-full rounded-md bg-white py-2 pl-3 pr-10 text-gray-500 focus:ring-4 focus:ring-indigo-600"
                     required>
                     <option disabled selected class="text-gray-400 italic">Selecciona un tipo de usuario</option>
-                    <option value="Medico general">Médico General</option>
-                    <option value="Medico especialista">Médico Especialista</option>
-                    <option value="Enfermeria consultorios">Enfermeria Consultorios</option>
-                    <option value="Enfermeria hospitalizacion">Enfermeria Hospitalizacion</option>
-                    <option value="Contador">Contador</option>
-                    <option value="Administrador">Administrador</option>
+                    <option value="Medico general" {{ old('tipo_usuario') == 'Medico general' ? 'selected' : '' }}>
+                        Médico General</option>
+                    <option value="Medico especialista"
+                        {{ old('tipo_usuario') == 'Medico especialista' ? 'selected' : '' }}>Médico Especialista
+                    </option>
+                    <option value="Enfermeria consultorios"
+                        {{ old('tipo_usuario') == 'Enfermeria consultorios' ? 'selected' : '' }}>Enfermería Consultorios
+                    </option>
+                    <option value="Enfermeria hospitalizacion"
+                        {{ old('tipo_usuario') == 'Enfermeria hospitalizacion' ? 'selected' : '' }}>Enfermería
+                        Hospitalización</option>
+                    <option value="Contador" {{ old('tipo_usuario') == 'Contador' ? 'selected' : '' }}>Contador</option>
+                    <option value="Administrador" {{ old('tipo_usuario') == 'Administrador' ? 'selected' : '' }}>
+                        Administrador</option>
                 </select>
+
             </div>
         @endif
 
@@ -85,7 +94,7 @@
         @endif
 
         <div class="flex items-center justify-end mt-4">
-            
+
             @if (DB::table('users')->count() === 0)
                 <x-boton-cancelar id="cancelar" class="ms-4">
                     <a href="{{ route('login') }}">{{ __('Cancelar') }}</a>

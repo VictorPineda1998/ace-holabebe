@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <img class="h-15 w-15 rounded-full object-cover"
+            <img class="h-48 w-48 rounded-full object-cover"
                 src="{{ asset('img-empresa/logo-hola-bebe.jpg') }}"alt="logo">
         </x-slot>
         @if (DB::table('users')->count() === 0)

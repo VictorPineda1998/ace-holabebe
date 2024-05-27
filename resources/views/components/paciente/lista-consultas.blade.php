@@ -43,13 +43,14 @@
                             @endphp
                         @endif
                     @endforeach
-                </div>
+                    <div class="mt-3">{{ $consultas->links() }}</div>
+                </div>                
             </ul>
         </div>
     </div>
 </div>
 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('searchInput').addEventListener('input', function() {
@@ -66,4 +67,4 @@
         });
 
     });
-</script>
+</script> --}}
