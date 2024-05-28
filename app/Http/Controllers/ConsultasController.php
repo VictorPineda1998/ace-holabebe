@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Consulta;
 use App\Models\Paciente;
+use Carbon\Carbon;
 
 class ConsultasController extends Controller
 {
@@ -29,8 +30,7 @@ class ConsultasController extends Controller
             ->where(function ($query) {
                 $query->where('estado', 'Sin confirmar')
                       ->orWhere('estado', 'Confirmada');
-            })
-            ->count();
+            })->count();
 
         // Verificar si el número de consultas es menor a 15
         if ($consultaCount < 15) {
@@ -50,11 +50,18 @@ class ConsultasController extends Controller
             // Guarda la consulta 
             $consulta->save();
             // Redirige 
-            return redirect()->route('consultas.show', ['id' => $consulta, 'paciente'])->with('success', 'Consulta creada exitosamente');
+            $fechaActual = Carbon::now()->format('Y-m-d');
+            if($consulta->fecha == $fechaActual){
+                return redirect()->route('consultas.show', ['id' => $consulta, 'paciente'])->with('success', 'Consulta creada exitosamente');
+            }else{
+                return redirect()->route('pacientes.show', ['id' => $paciente->id])->with('success', 'Consulta creada exitosamente');
+            }
+           
         } else {
             // Retornar con un mensaje de error si ya hay 15 consultas para esa fecha
-            return redirect()->back()->with('error', 'No se pueden crear más de 15 consultas para esta fecha');
-        }
+            $fecha = Carbon::parse($fecha)->format('d-m-Y');
+            return redirect()->back()->with('error', "No se pueden crear más de 15 consultas para esta fecha: {$fecha}");
+               }
     }
 
     public function show($id, $lugar)
@@ -122,7 +129,8 @@ class ConsultasController extends Controller
                 return redirect()->route('pacientes.show', $p_id)->with('success', 'Consulta reprogramada exitosamente');
             } else {
                 // Retornar con un mensaje de error si ya hay 15 consultas para esa fecha
-                return redirect()->back()->with('error', 'No se pueden crear más de 15 consultas para esta fecha');
+                $fecha = Carbon::parse($fecha)->format('d-m-Y');
+                return redirect()->back()->with('error', "No se pueden crear más de 15 consultas para esta fecha: {$fecha}");
             }
         }
         return redirect()->route('pacientes.show', $p_id)->with('success', 'Consulta cancelada exitosamente');
@@ -176,8 +184,9 @@ class ConsultasController extends Controller
                 return redirect()->route('consultas_dia')->with('success', 'Consulta actualizada exitosamente');
             } else {
                 // Retornar con un mensaje de error si ya hay 15 consultas para esa fecha
-                return redirect()->back()->with('error', 'No se pueden crear más de 15 consultas para esta fecha');
-            }
+                $fecha = Carbon::parse($fecha)->format('d-m-Y');
+                return redirect()->back()->with('error', "No se pueden crear más de 15 consultas para esta fecha: {$fecha}");
+                       }
         }
         return redirect()->route('consultas_dia')->with('success', 'Consulta cancelada exitosamente');
     }

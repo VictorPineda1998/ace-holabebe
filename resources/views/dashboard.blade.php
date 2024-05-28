@@ -11,12 +11,4 @@
             </div>
         </div>
     </x-div-fondo>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (session('error'))
-                var error = @json(session('error'));
-                alert(error);
-            @endif
-        });
-    </script>
 </x-app-layout>

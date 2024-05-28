@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArchivosController;
+use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ColposcopiasController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\DiagnosticosController;
 use App\Http\Controllers\NotasController;
 use App\Http\Controllers\TriajesController;
+use App\Models\Consulta;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 ])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -43,6 +46,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     if (Features::enabled(Features::registration())) {
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
     }
+
+    Route::group(['prefix' => 'calendario'], function () {
+        Route::get('/', [CalendarioController::class, 'index'])->name('calendario');
+        Route::post('{id}', [CalendarioController::class, 'store'])->name('calendario.store');
+        // Route::delete(' ', [CalendarioController::class, 'destroy'])->name('caleario.eliminar');
+    });
 
     Route::group(['prefix' => 'gestion-usuarios', 'middleware' => ['role:Administrador']], function () {
         Route::get('/', [UserController::class, 'show'])->name('gestion-usuarios');

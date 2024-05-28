@@ -48,12 +48,14 @@
                                 <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
                                 <span class="w-2/5 text-sm lg:text-base">
                                     {{-- @if ($consulta->estado == 'Confirmada') --}}
-                                    <a
-                                        href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
-                                        <x-boton-editar>
-                                            Ver
-                                        </x-boton-editar>
-                                    </a>
+                                    @if ($consulta->fecha == now()->toDateString())
+                                        <a
+                                            href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
+                                            <x-boton-editar>
+                                                Ver
+                                            </x-boton-editar>
+                                        </a>
+                                    @endif
                                     {{-- @endif --}}
                                     @if ($consulta->estado != 'Confirmada')
                                         <x-boton-editar id="mostrarFormulario">
@@ -75,13 +77,13 @@
                                         (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
                                             $consulta->fecha != now()->toDateString()) ||
                                             $consulta->estado == 'Confirmada')
-                                        <form style="display:inline;" id="cancelarConsulta"
-                                            {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
+                                        <form style="display:inline;" id="cancelarConsulta" {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
                                             method="POST"
                                             action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'cancelar', 'p_id' => $paciente->id]) }}">
                                             @csrf
                                             @method('PUT')
-                                            <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsulta').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ $paciente->nombre }} {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}');">
+                                            <x-boton-eliminar
+                                                onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsulta').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ $paciente->nombre }} {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}');">
                                                 Cancelar
                                             </x-boton-eliminar>
                                         </form>

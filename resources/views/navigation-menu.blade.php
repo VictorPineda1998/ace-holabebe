@@ -40,6 +40,9 @@
                             {{ __('Sala de espera') }}
                         </x-nav-link>
                     @endif
+                    <x-nav-link href="{{ route('calendario') }}" :active="request()->routeIs('calendario')">
+                        {{ __('Calendario') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -201,7 +204,9 @@
                     {{ __('Sala de espera') }}
                 </x-responsive-nav-link>
             @endif
-
+            <x-responsive-nav-link href="{{ route('calendario') }}" :active="request()->routeIs('calendario')">
+                {{ __('Calendario') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
