@@ -15,7 +15,6 @@ use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\DiagnosticosController;
 use App\Http\Controllers\NotasController;
 use App\Http\Controllers\TriajesController;
-use App\Models\Consulta;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +31,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
+Route::middleware([
+    'auth:sanctum', config('jetstream.auth_session'), 'verified',
 ])->group(function () {
 
     Route::get('/dashboard', function () {
@@ -44,13 +44,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     })->name('register');
 
     if (Features::enabled(Features::registration())) {
-        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
+        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
+            ->middleware(['role:Administrador']);
     }
 
     Route::group(['prefix' => 'calendario'], function () {
         Route::get('/', [CalendarioController::class, 'index'])->name('calendario');
         Route::post('{id}', [CalendarioController::class, 'store'])->name('calendario.store');
-        // Route::delete(' ', [CalendarioController::class, 'destroy'])->name('caleario.eliminar');
     });
 
     Route::group(['prefix' => 'gestion-usuarios', 'middleware' => ['role:Administrador']], function () {
@@ -59,7 +59,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::delete('{id}', [UserController::class, 'destroy'])->name('usuarios.eliminar');
     });
 
-    Route::group(['prefix' => 'pacientes', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
+    Route::group(['prefix' => 'pacientes', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion']], function () {
         Route::get('/', [PacientesController::class, 'index'])->name('pacientes');
         Route::get('{id}', [PacientesController::class, 'show'])->name('pacientes.show');
         Route::post('{id}', [PacientesController::class, 'store'])->name('pacientes.store');
@@ -67,53 +67,63 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::delete('{id}', [PacientesController::class, 'destroy'])->name('pacientes.eliminar');
     });
 
-    Route::group(['prefix' => 'consultas', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
-        Route::get('{id} {lugar}', [ConsultasController::class, 'show'])->name('consultas.show');
-        Route::post('{id}', [ConsultasController::class, 'store'])->name('consultas.store');
-        Route::put('{id} {estado} {p_id}', [ConsultasController::class, 'update'])->name('consultas.update');
-        Route::put('{id} {estado}', [ConsultasController::class, 'updateHoy'])->name('consultas.updateHoy');
-        Route::delete('{id}', [ConsultasController::class, 'destroy'])->name('cosultas.eliminar');
-        
-        Route::get('consultas_dia', [ConsultasController::class, 'consultas_dia'])->name('consultas_dia');
-        Route::get('consultas_espera', [ConsultasController::class, 'consultas_espera'])->name('consultas_espera');
+    Route::group(['prefix' => 'consultas'], function () {
+        Route::get('{id} {lugar}', [ConsultasController::class, 'show'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion'])->name('consultas.show');
+
+        Route::post('{id}', [ConsultasController::class, 'store'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas.store');
+
+        Route::put('{id} {estado} {p_id}', [ConsultasController::class, 'update'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas.update');
+
+        Route::put('{id} {estado}', [ConsultasController::class, 'updateHoy'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas.updateHoy');
+
+        Route::delete('{id}', [ConsultasController::class, 'destroy'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas.eliminar');
+
+        Route::get('consultas_dia', [ConsultasController::class, 'consultas_dia'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas_dia');
+
+        Route::get('consultas_espera', [ConsultasController::class, 'consultas_espera'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('consultas_espera');
     });
 
-    Route::group(['prefix' => '/', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
+    Route::group(['prefix' => '/', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion']], function () {
         Route::get('archivos {id}', [ArchivosController::class, 'index'])->name('archivos');
         Route::post('{id}', [ArchivosController::class, 'store'])->name('archivos.store');
         Route::put('{id} {paciente_id}', [ArchivosController::class, 'update'])->name('archivos.update');
         Route::delete('{id} {paciente_id}', [ArchivosController::class, 'destroy'])->name('archivos.eliminar');
     });
 
-    Route::group(['prefix' => 'triajes', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
-        // Route::get('/', [TriajesController::class, 'index'])->name('triajes');
-        Route::get('{id} {lugar}', [TriajesController::class, 'show'])->name('triajes.show');
-        Route::post('{id}', [TriajesController::class, 'store'])->name('triajes.store');
-        Route::put('{id}', [TriajesController::class, 'update'])->name('triajes.update');
-        // Route::delete('{id}', [TriajesController::class, 'destroy'])->name('triajes.eliminar');
+    Route::group(['prefix' => 'triajes'], function () {
+        Route::get('{id} {lugar}', [TriajesController::class, 'show'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion'])
+            ->name('triajes.show');
+        Route::post('{id}', [TriajesController::class, 'store'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('triajes.store');
+        Route::put('{id}', [TriajesController::class, 'update'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista'])->name('triajes.update');
     });
 
-    Route::group(['prefix' => 'colposcopia', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
-        // Route::get('/', [ColposcopiasController::class, 'index'])->name('colposcopia');
-        Route::get('{id} {lugar} {triaje_id}', [ColposcopiasController::class, 'show'])->name('colposcopia.show');
-        Route::post('{id}', [ColposcopiasController::class, 'store'])->name('colposcopia.store');
-        Route::put('{id}', [ColposcopiasController::class, 'update'])->name('colposcopia.update');
-        // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
+    Route::group(['prefix' => 'colposcopia'], function () {
+        Route::get('{id} {lugar} {triaje_id}', [ColposcopiasController::class, 'show'])
+            ->middleware(['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion'])->name('colposcopia.show');
+        Route::post('{id}', [ColposcopiasController::class, 'store'])
+            ->middleware(['role:Administrador,Medico especialista'])->name('colposcopia.store');
+        Route::put('{id}', [ColposcopiasController::class, 'update'])
+            ->middleware(['role:Administrador,Medico especialista'])->name('colposcopia.update');
     });
 
-    Route::group(['prefix' => 'diagnostico', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
-        // Route::get('/', [ColposcopiasController::class, 'index'])->name('colposcopia');
-        // Route::get('{id} {lugar} {triaje_id}', [DiagnosticosController::class, 'show'])->name('diagnostico.show');
+    Route::group(['prefix' => 'diagnostico', 'middleware' => ['role:Administrador,Medico especialista,Medico general']], function () {
         Route::post('{id}', [DiagnosticosController::class, 'store'])->name('diagnostico.store');
         Route::put('{id}', [DiagnosticosController::class, 'update'])->name('diagnostico.update');
-        // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
     });
-    Route::group(['prefix' => 'nota', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista']], function () {
-        // Route::get('/', [ColposcopiasController::class, 'index'])->name('colposcopia');
-        // Route::get('{id} {lugar} {triaje_id}', [DiagnosticosController::class, 'show'])->name('diagnostico.show');
+
+    Route::group(['prefix' => 'nota', 'middleware' => ['role:Administrador,Enfermeria consultorios,Medico especialista,Medico general,Enfermeria hospitalizacion']], function () {
         Route::post('{id}', [NotasController::class, 'store'])->name('nota.store');
         Route::put('{id}', [NotasController::class, 'update'])->name('nota.update');
-        // Route::delete('{id}', [ColposcopiasController::class, 'destroy'])->name('colposcopia.eliminar');
     });
 });
 
@@ -123,6 +133,6 @@ if (DB::table('users')->count() === 0) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])->name('register');
         }
-        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);        
+        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store']);
     }
 }

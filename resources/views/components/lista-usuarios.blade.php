@@ -13,13 +13,13 @@
                 @php
                     $i = 1;
                 @endphp
-                <div style="width: 950px">
+                <div style="width: 1000px">
                     <li class="flex items-center bg-indigo-400 p-3 rounded-t-lg">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                        <span class="w-1/4 text-sm lg:text-base">Nombre</span>
-                        <span class="w-1/4 text-sm lg:text-base">Email</span>
-                        <span class="w-1/4 text-sm lg:text-base">Tipo de Usuario</span>
-                        <span class="w-1/4 text-sm lg:text-base">Opciones</span>
+                        <span class="w-4/12 text-sm lg:text-base">Nombre</span>
+                        <span class="w-4/12 text-sm lg:text-base">Email</span>
+                        <span class="w-2/12 text-sm lg:text-base">Tipo de Usuario</span>
+                        <span class="w-3/12 text-sm lg:text-base">Opciones</span>
                     </li>
                     @foreach ($users as $user)
                         @if ($i % 2 == 0)
@@ -28,10 +28,10 @@
                             <li class="flex items-center border-b py-2 bg-indigo-200" style="padding: 1%">
                         @endif
                         <span class="text-sm lg:text-base" style="margin-right: 1%">{{ $user->id }}</span>
-                        <span class="w-1/4 text-sm lg:text-base">{{ $user->name }}</span>
-                        <span class="w-1/4 text-sm lg:text-base">{{ $user->email }}</span>
-                        <span class="w-1/4 text-sm lg:text-base">{{ $user->tipo_usuario }}</span>
-                        <span class="w-1/4 text-sm lg:text-base">
+                        <span class="w-4/12 text-sm lg:text-base">{{ $user->name }}</span>
+                        <span class="w-4/12 text-sm lg:text-base">{{ $user->email }}</span>
+                        <span class="w-2/12 text-sm lg:text-base">{{ $user->tipo_usuario }}</span>
+                        <span class="w-3/12 text-sm lg:text-base">
                             <div id="div{{ $i }}" style="margin: 0; display: inline;">
                                 <x-boton-editar class="boton-editar" data-boton="{{ $i }}"
                                     style="margin: 0; display: inline;">Editar</x-boton-editar>

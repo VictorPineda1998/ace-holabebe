@@ -12,7 +12,7 @@
                     </svg>
                     Home
                 </a>
-            </li>           
+            </li>
             <li>
                 <div class="flex items-center">
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
@@ -25,7 +25,7 @@
                         Pacientes
                     </span>
                 </div>
-            </li>           
+            </li>
         </ol>
     </x-slot>
     <div class="py-12">
@@ -37,7 +37,7 @@
                 </x-boton-mas>
 
                 <div id="formRegistrar" style="display: none">
-                    <x-registrar-paciente :user="$user"/>
+                    <x-registrar-paciente :user="$user" />
                 </div>
                 @if (isset($pacientes))
                     <x-lista-pacientes :pacientes="$pacientes" />
@@ -47,12 +47,20 @@
     </div>
 
     <script src="{{ asset('js/funciones-propias.js') }}"></script>
+    
+    @if (!$errors->isEmpty())
+        <script>
+            window.onload = function() {
+                document.getElementById("mostrarRegistro").click();
+            };
+        </script>
+    @endif
 
     <script>
         let creando = false;
         document.getElementById('mostrarRegistro').addEventListener('click', function() {
             if (!creando) {
-                
+
                 document.getElementById('formRegistrar').style.display = 'inline';
                 deslizar('mostrarRegistro');
                 creando = true;
@@ -84,7 +92,7 @@
                     // Obtener la fecha de nacimiento del input
                     const fechaNacimiento = new Date(fechaNacimientoInput.value);
 
-                    
+
 
                     // Validar que la fecha de nacimiento no sea en el futuro
                     const hoy = new Date();

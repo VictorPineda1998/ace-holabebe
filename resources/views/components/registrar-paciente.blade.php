@@ -4,7 +4,7 @@
     </x-slot>
 
     {{-- <x-validation-errors class="mb-4" /> --}}
-
+    <x-validation-errors />
     <form method="POST" action="{{ route('pacientes.store', $user->id) }}" id="formRegistrar">
         @csrf
 
@@ -26,13 +26,13 @@
 
         <div class="mt-4">
             <x-label for="telefono" value="{{ __('Telefono') }}"/>
-            <x-input id="telefono" class="block mt-1 w-full" type="number" name="telefono" required autocomplete="telefono"/>
+            <x-input id="telefono" class="block mt-1 w-full" type="number" name="telefono" :value="old('telefono')" required autocomplete="telefono"/>
         </div>
 
         <div class="mt-4">
             <x-label for="fecha_nacimiento" value="{{ __('Fecha de nacimiento') }}" />
             <x-input id="fecha_nacimiento" class="block mt-1 w-full" type="date" name="fecha_nacimiento"
-                required autocomplete="fecha_nacimiento" />
+                required autocomplete="fecha_nacimiento" :value="old('fecha_nacimiento')"/>
         </div>
         
         {{-- <div class="mt-4"> --}}
@@ -45,7 +45,7 @@
         <div class="mt-4">
             <x-label for="lugar_procedencia" value="{{ __('Lugar de procedencia') }}" />
             <x-input id="lugar_procedencia" class="block mt-1 w-full" type="text" name="lugar_procedencia"
-                required autocomplete="new-lugar_procedencia" />
+                required autocomplete="new-lugar_procedencia" :value="old('lugar_procedencia')"/>
         </div>
 
 

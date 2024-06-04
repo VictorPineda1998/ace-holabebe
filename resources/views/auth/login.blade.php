@@ -8,13 +8,11 @@
             <div class="titulo-listado flex flex-col items-center">
                 <h1 class='text-1xl font-bold mb-6 text-black-800'>BIENVENIDO AL SISTEMA:</h1>
                 <h1 class='text-1xl font-bold mb-6 text-black-800'> ARCHIVO CLINICO ELECTRONICO</h1>
-            
-            <a href="{{ route('register') }}"
-                class="ml-4 font-semibold text-gray-900 hover:text-blue-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                <x-boton-mas> Registrece como primer usuario administrador</x-boton-mas>
-            </a>
-            
-        </div>
+                <a href="{{ route('register') }}"
+                    class="ml-4 font-semibold text-gray-900 hover:text-blue-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                    <x-boton-mas> Registrece como primer usuario administrador</x-boton-mas>
+                </a>
+            </div>
         @else
             <x-validation-errors class="mb-4" />
 
@@ -48,10 +46,10 @@
 
                 <div class="flex items-center justify-end mt-4">
                     {{-- @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif --}}
+                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                    @endif --}}
 
                     <x-button class="ms-4">
                         {{ __('Log in') }}

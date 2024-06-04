@@ -15,7 +15,7 @@ class CalendarioController extends Controller
         if ($search) {
             $pacientes = Paciente::when($search, function ($query, $search) {
                 return $query->where('nombre', 'like', '%' . $search . '%');
-            })->orderBy('id', 'asc')->get();
+            })->orderBy('id', 'asc')->paginate(5);
         } else {
             $pacientes = false;
         }
@@ -36,7 +36,7 @@ class CalendarioController extends Controller
 
         $consultas = [];
         $i = 0;
-        // $primera = true;
+
         foreach ($consultas_por_dia as $fecha => $consultas_del_dia) {
 
             $cantidad_consultas = 0;
@@ -46,16 +46,16 @@ class CalendarioController extends Controller
                 $cantidad_consultas++;
 
                 $consultas[] = [
-                    'title' => $consulta->paciente->nombre . ' ' . $consulta->paciente->apellido_P . ' ' . $consulta->paciente->apellido_M,
-                    'start' => $consulta->fecha,
-                    'end'   => $consulta->fecha,
-                    // 'id'    => $consulta->paciente_id,
-                    'url'   => route('pacientes.show', $consulta->paciente_id)  // Añadir la URL de redirección
+                    'paciente_id' => $consulta->paciente_id,
+                    'title'       => $consulta->paciente->nombre . ' ' . $consulta->paciente->apellido_P . ' ' . $consulta->paciente->apellido_M,
+                    'start'       => $consulta->fecha,
+                    'end'         => $consulta->fecha,                    
+                    'url'         => route('pacientes.show', $consulta->paciente_id)  // Añadir la URL de redirección
                 ];
-
 
                 if ($cantidad_consultas === 15) {
                     $consultas[] = [
+                        'paciente_id' => ' ',
                         'start' => $consulta->fecha,
                         'color' => 'red'
                     ];
@@ -63,18 +63,23 @@ class CalendarioController extends Controller
             }
             if ($cantidad_consultas != 15) {
                 $consultas[] = [
+                    'paciente_id' => ' ',
                     'start' => $consulta->fecha,
                     'color' => 'transparent'
                 ];
             }
         }
         // echo '<pre>';
-        // echo json_encode($consultas_por_dia, JSON_PRETTY_PRINT);
+        // echo json_encode($all_Consultas, JSON_PRETTY_PRINT);
         // echo '</pre>';
+        // echo '<pre>'; 
+        // echo json_encode($consultas, JSON_PRETTY_PRINT);
+        // echo '</pre>';
+        // dd($consultas);
         return view('calendario-show', compact('consultas', 'pacientes'));
     }
 
-    public function store(Request $request, $id /* CreatesNewUsers $creator*/)
+    public function store(Request $request, $id )
     {
         // Validación de datos
         $request->validate([
@@ -114,8 +119,7 @@ class CalendarioController extends Controller
             $consulta->paciente_id = $id;
             if ($request->fecha) {
                 $consulta->fecha = $request->fecha;
-            }
-            // Puedes agregar otros campos según tu modelo
+            }           
 
             // Guarda la consulta 
             $consulta->save();

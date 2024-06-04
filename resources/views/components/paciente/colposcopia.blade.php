@@ -5,7 +5,7 @@
     @if ($colposcopia)
         @method('PUT')
         <div class="flex items-center justify-start mt-3 mb-3">
-            <x-boton-mas id="imprimir">Convertir a pdf</x-boton-mas>
+            <x-boton-verde id="imprimir">Convertir a pdf</x-boton-verde>
         </div>
     @endif
     <div class="div_colposcopia">

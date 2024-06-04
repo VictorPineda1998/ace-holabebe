@@ -5,7 +5,7 @@
     @if ($consulta->diagnostico)
         @method('PUT')
         <div class="flex items-center justify-start mt-3 mb-3">
-            <x-boton-mas id="imprimirDiagnostico">Convertir a pdf</x-boton-mas>
+            <x-boton-verde id="imprimirDiagnostico">Convertir a pdf</x-boton-verde>
         </div>
     @endif
     <div class="grid lg:grid-cols-2">

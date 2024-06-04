@@ -1,9 +1,12 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <a href="/">
+            <img class="h-48 w-48 rounded-full object-cover"
+                src="{{ asset('img-empresa/logo-hola-bebe.jpg') }}"alt="logo">
+            </a>
         </x-slot>
-
+        
         <div class="mb-4 text-sm text-gray-600">
             {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
         </div>

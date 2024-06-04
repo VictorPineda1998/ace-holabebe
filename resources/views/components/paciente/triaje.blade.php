@@ -224,7 +224,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Consciente</span>
-                                <input type="radio" name="estado_conciencia" value="verde" />
+                                <input type="radio" name="estado_conciencia" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -247,7 +247,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausente</span>
-                                <input type="radio" name="hemorragia" value="verde" />
+                                <input type="radio" name="hemorragia" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -265,7 +265,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausentes</span>
-                                <input type="radio" name="crisis_convulsivas" value="verde" />
+                                <input type="radio" name="crisis_convulsivas" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -283,7 +283,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Normal</span>
-                                <input type="radio" name="respiración" value="verde" />
+                                <input type="radio" name="respiración" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -306,7 +306,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Normal</span>
-                                <input type="radio" name="color_de_piel" value="verde" />
+                                <input type="radio" name="color_de_piel" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -334,7 +334,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausente</span>
-                                <input type="radio" name="sangrado_transvaginal" value="verde" />
+                                <input type="radio" name="sangrado_transvaginal" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -352,7 +352,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Negadas</span>
-                                <input type="radio" name="crisis_convulsiva" value="verde" />
+                                <input type="radio" name="crisis_convulsiva" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -375,7 +375,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausente</span>
-                                <input type="radio" name="cefalea" value="verde" />
+                                <input type="radio" name="cefalea" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -393,7 +393,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausentes</span>
-                                <input type="radio" name="acufenos_fosfenos" value="verde" />
+                                <input type="radio" name="acufenos_fosfenos" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -411,7 +411,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausentes</span>
-                                <input type="radio" name="epigastralgia_amaurosis" value="verde" />
+                                <input type="radio" name="epigastralgia_amaurosis" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -429,7 +429,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausentes</span>
-                                <input type="radio" name="sindrome_febril" value="verde" />
+                                <input type="radio" name="sindrome_febril" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -452,7 +452,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Negado</span>
-                                <input type="radio" name="salida_de_liquido_amniotico" value="verde" />
+                                <input type="radio" name="salida_de_liquido_amniotico" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -475,7 +475,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Presentes normales</span>
-                                <input type="radio" name="motilidad_fetal" value="verde" />
+                                <input type="radio" name="motilidad_fetal" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -493,7 +493,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Ausentes</span>
-                                <input type="radio" name="emfermedades_cronicas" value="verde" />
+                                <input type="radio" name="emfermedades_cronicas" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -525,7 +525,7 @@
                                 <span>
                                     < 120/80 Y> 100/60
                                 </span>
-                                <input type="radio" name="hipertension" value="verde" />
+                                <input type="radio" name="hipertension" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -589,7 +589,7 @@
                             <div class="flex items-center justify-between">
                                 <span>
                                     < 0.7</span>
-                                        <input type="radio" name="indice_de_choque" value="verde" />
+                                        <input type="radio" name="indice_de_choque" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -614,7 +614,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>16 a 20</span>
-                                <input type="radio" name="frecuencia_respiratoria" value="verde" />
+                                <input type="radio" name="frecuencia_respiratoria" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -639,7 +639,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>> 35 < 37.5°C</span>
-                                        <input type="radio" name="temperatura" value="verde" />
+                                        <input type="radio" name="temperatura" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -669,7 +669,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>De 120 a 160</span>
-                                <input type="radio" name="frecuencia_cardiaca_fetal" value="verde" />
+                                <input type="radio" name="frecuencia_cardiaca_fetal" value="verde" checked />
                             </div>
                         </td>
                     </tr>
@@ -692,7 +692,7 @@
                         <td class="border-indigo-600 border-2 bg-green-300 px-4 py-2">
                             <div class="flex items-center justify-between">
                                 <span>Sin contracciones o menos de 2</span>
-                                <input type="radio" name="contracciones_uterinas" value="verde" />
+                                <input type="radio" name="contracciones_uterinas" value="verde" checked />
                             </div>
                         </td>
                     </tr>

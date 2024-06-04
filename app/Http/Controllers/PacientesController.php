@@ -25,17 +25,19 @@ class PacientesController extends Controller
         return view('gestion-pacientes', compact('user'), compact('pacientes'));
     }
 
-    public function store(Request $request, $id /* CreatesNewUsers $creator*/)
+    public function store(Request $request, $id)
     {
         // Validación de datos
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellidoP' => 'required|string|max:255',
             'apellidoM' => 'required|string|max:255',
-            'telefono' => 'required|string',
+            'telefono' => 'required|string|min:10|max:10',
             'fecha_nacimiento' => 'required|date',
             // 'edad' => 'required|integer',
             'lugar_procedencia' => 'required|string|max:255',
+        ], [
+            'telefono' => 'El numero de telefono debe contener 10 digitos'
         ]);
 
         // Procesar el número de teléfono para eliminar caracteres no numéricos
@@ -85,10 +87,12 @@ class PacientesController extends Controller
             'nombre' => 'required|string|max:255',
             'apellidoP' => 'required|string|max:255',
             'apellidoM' => 'required|string|max:255',
-            'telefono' => 'required|string',
+            'telefono' => 'required|string|min:10|max:10',
             'fecha_nacimiento' => 'required|date',
             // 'edad' => 'required|integer',
             'lugar_procedencia' => 'required|string|max:255',
+        ], [
+            'telefono' => 'El numero de telefono debe contener 10 digitos'
         ]);
 
         // Procesar el número de teléfono para eliminar caracteres no numéricos

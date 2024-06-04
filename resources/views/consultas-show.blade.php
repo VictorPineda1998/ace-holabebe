@@ -92,7 +92,7 @@
                 <div class="mb-3">
                     @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
                         <li class="flex items-center mt-3 bg-yellow-400 p-3 rounded-t-lg">
-                    @else
+                        @else
                         <li class="flex items-center mt-3 bg-green-400 p-3 rounded-t-lg">
                     @endif
                     <span class="w-1/3 text-sm lg:text-base">Tipo de consulta</span>
@@ -103,7 +103,7 @@
                     </li>
                     @if ($consulta->estado == 'Finalizada' || $consulta->estado == 'Cancelada')
                         <li class="flex items-center bg-yellow-200 p-3 rounded-b-lg">
-                    @else
+                        @else
                         <li class="flex items-center bg-green-200 p-3 rounded-b-lg">
                     @endif
 
@@ -238,12 +238,20 @@
     <script src="{{ asset('js/funciones-propias.js') }}"></script>
 
     <script>
+        
+
         let mostrandoHistorial = false;
         let creandoTriaje = false;
         let creandoColposcopia = false;
         let creandoDiagnostico = false;
         let creandoNota = false;
+        let colposcopia = @json($colposcopia ?? null);
 
+        window.onload = function() {
+            if (colposcopia) {
+                document.getElementById("mostrarDiagnostico").click();
+            }
+        }
 
         let mostrarHistorial = document.getElementById('mostrarHistorial');
         if (mostrarHistorial) {

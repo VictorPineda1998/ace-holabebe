@@ -1,7 +1,7 @@
 @php
-// Calcular la edad a partir de la fecha de nacimiento
-$fechaNacimiento = \Carbon\Carbon::parse($paciente->fecha_nacimiento);
-$edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
+    // Calcular la edad a partir de la fecha de nacimiento
+    $fechaNacimiento = \Carbon\Carbon::parse($paciente->fecha_nacimiento);
+    $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
 @endphp
 <form id="paciente-form" method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
     @csrf
@@ -37,8 +37,8 @@ $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
 
         <div>
             <x-label for="edad" value="{{ __('Edad') }}" />
-            <x-input id="edad" class="block mt-1 w-full" type="number" name="edad"
-                value="{{ $edad }}" required autocomplete="edad" readonly />
+            <x-input id="edad" class="block mt-1 w-full" type="number" name="edad" value="{{ $edad }}"
+                required autocomplete="edad" readonly />
         </div>
 
         <div>
@@ -63,14 +63,31 @@ $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
                 {{ __('Cancelar') }}
             </x-boton-cancelar>
 
-            <x-boton-actualizar class="ms-4" style="display: none;">
+            <x-boton-mas id="botonActualizar" class="ms-4" style="display: none;">
                 {{ __('Guardar') }}
-            </x-boton-actualizar>
+            </x-boton-mas>
         </div>
     @endif
 
 </form>
 <script>
+    const telefonoInput = document.getElementById('telefono');
+    let telefono = telefonoInput.value;
+
+    let botonActualizar = document.getElementById('botonActualizar');
+    if (botonActualizar) {
+        botonActualizar.addEventListener('click', function() {
+            if (telefono.length !== 10) {
+                
+                openModal('Por favor, coloque un número de teléfono de 10 dígitos', 'error');
+                return;
+            } else {
+                event.preventDefault();
+                document.getElementById('paciente-form').submit();
+            }
+        });
+    }
+
     let editar_btn = document.getElementById('editar-btn');
     if (editar_btn) {
         editar_btn.addEventListener('click', function() {
@@ -94,59 +111,56 @@ $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
         });
     }
     // Obtener la referencia a los elementos del formulario
-   // Verificar si los elementos existen antes de agregar el event listener
-const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
-const edadInput = document.getElementById('edad');
+    // Verificar si los elementos existen antes de agregar el event listener
+    const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+    const edadInput = document.getElementById('edad');
 
-if (fechaNacimientoInput && edadInput) {
-    // Agregar un event listener al campo de fecha de nacimiento
-    fechaNacimientoInput.addEventListener('change', function() {
-        // Obtener la fecha de nacimiento del input y convertirla a objeto Date
-        const fechaNacimiento = new Date(fechaNacimientoInput.value);
+    if (fechaNacimientoInput && edadInput) {
+        // Agregar un event listener al campo de fecha de nacimiento
+        fechaNacimientoInput.addEventListener('change', function() {
+            // Obtener la fecha de nacimiento del input y convertirla a objeto Date
+            const fechaNacimiento = new Date(fechaNacimientoInput.value);
 
-        // Validar si la fecha de nacimiento es válida
-        if (isNaN(fechaNacimiento.getTime())) {
-            alert("Por favor, seleccione una fecha de nacimiento válida.");
-            fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
-            return;
-        }
+            // Validar si la fecha de nacimiento es válida
+            if (isNaN(fechaNacimiento.getTime())) {
+                alert("Por favor, seleccione una fecha de nacimiento válida.");
+                fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
+                return;
+            }
 
-        // Obtener la fecha actual
-        const hoy = new Date();
+            // Obtener la fecha actual
+            const hoy = new Date();
 
-        // Validar que la fecha de nacimiento no sea en el futuro
-        if (fechaNacimiento > hoy) {
-            alert("Por favor, seleccione una fecha de nacimiento válida.");
-            fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
-            return;
-        }
+            // Validar que la fecha de nacimiento no sea en el futuro
+            if (fechaNacimiento > hoy) {
+                alert("Por favor, seleccione una fecha de nacimiento válida.");
+                fechaNacimientoInput.value = ''; // Restablecer el valor del input si es inválido
+                return;
+            }
 
-        // Calcular la edad
-        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            // Calcular la edad
+            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
-        // Ajustar la edad si todavía no ha pasado el cumpleaños este año
-        if (hoy.getMonth() < fechaNacimiento.getMonth() ||
-            (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-            edad--;
-        }
+            // Ajustar la edad si todavía no ha pasado el cumpleaños este año
+            if (hoy.getMonth() < fechaNacimiento.getMonth() ||
+                (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
 
-        // Actualizar el valor del campo de edad
-        edadInput.value = edad;
-    });
-
-
-        const telefonoInput = document.getElementById('telefono');
+            // Actualizar el valor del campo de edad
+            edadInput.value = edad;
+        });
 
         // Verificar si el elemento existe antes de agregar el event listener
         if (telefonoInput) {
             // Agregar un event listener al campo de teléfono
             telefonoInput.addEventListener('change', function() {
                 // Obtener el número de teléfono del input
-                const telefono = telefonoInput.value;
+                 telefono = telefonoInput.value;
 
                 // Verificar si la longitud del número de teléfono es igual a 10
                 if (telefono.length !== 10) {
-                    alert("Por favor, coloque un número de teléfono de 10 dígitos");
+                    openModal('Por favor, coloque un número de teléfono de 10 dígitos', 'error');
                     return;
                 }
             });

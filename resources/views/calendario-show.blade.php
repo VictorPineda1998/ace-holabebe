@@ -92,7 +92,7 @@
             } else {
                 calendar.changeView('timeGridWeek');
             }
-            calendar.render();
+            calendar.render();            
 
         });
     </script>

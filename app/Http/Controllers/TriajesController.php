@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmergenciaMailable;
+use App\Mail\EmergenciaTipo2Mailable;
 use App\Models\Colposcoia;
 use App\Models\Colposcopia;
 use App\Models\Consulta;
 use App\Models\Triaje;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TriajesController extends Controller
 {
     public function index()
     {   
-        // $user = auth()->user();
-        // $triaje = Paciente::orderBy('created_at', 'desc')->get();
-        // return view('gestion-pacientes', compact('user'), compact('pacientes'));
+        
     }
 
     public function store(Request $request, $id)
@@ -84,9 +86,27 @@ class TriajesController extends Controller
         $consulta->estado = 'Confirmada';
         $consulta->save();
         $lugar = 'hoy';
+
+        /* $resultado = $triaje->resultado;
+        if($resultado == 'Emergencia! Atención Inmediata!'){
+            $specialistas = User::where('tipo_usuario', 'Medico especialista')->get();
+
+            // Enviar un correo electrónico a cada especialista
+            foreach ($specialistas as $specialista) {
+                Mail::to($specialista->email)->send(new EmergenciaMailable($resultado));
+            }
+        }
+        if($resultado == 'Urgencia Calificada! Atención de 0 a 15 minutos'){
+            $specialistas = User::where('tipo_usuario', 'Medico especialista')->get();
+
+            // Enviar un correo electrónico a cada especialista
+            foreach ($specialistas as $specialista) {
+                Mail::to($specialista->email)->send(new EmergenciaTipo2Mailable($resultado));
+            }
+        } */
+        
         return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar]);
         
-        // return view('welcome', compact('observaciones'));
     }
     public function show($id, $lugar)
     {
@@ -104,8 +124,9 @@ class TriajesController extends Controller
             $triaje->bienestarFetal = json_decode($triaje->bienestar_fetal);
         }        
         $triaje->tomaSignosVitales = json_decode($triaje->toma_signos_vitales);
-        // $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->get();
+        
         $consultas = Consulta::where('paciente_id', $consulta->paciente_id)->orderBy('created_at', 'desc')->paginate(8);
+
         return view('consultas-show', compact('consulta', 'lugar', 'triaje', 'consultas'));
     }
 
@@ -131,7 +152,6 @@ class TriajesController extends Controller
 
     public function destroy($id)
     {
-        // $paciente = Paciente::destroy($id);
-        // return redirect()->route('pacientes');
+    ;
     }
 }

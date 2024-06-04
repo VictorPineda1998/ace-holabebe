@@ -21,8 +21,7 @@
                             {{ __('Usuarios') }}
                         </x-nav-link>
                     @endif
-                    @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios' 
-                        or auth()->user()->tipo_usuario == 'Medico especialista')
+                    @if (auth()->user()->tipo_usuario !== 'Contador')
                         <x-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
                             {{ __('Pacientes') }}
                         </x-nav-link>
@@ -186,8 +185,7 @@
                     {{ __('Usuarios') }}
                 </x-responsive-nav-link>
             @endif
-            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Enfermeria consultorios'
-                or auth()->user()->tipo_usuario == 'Medico especialista')
+            @if (auth()->user()->tipo_usuario !== 'Contador')
                 <x-responsive-nav-link href="{{ route('pacientes') }}" :active="request()->routeIs('pacientes') or request()->routeIs('pacientes.show')">
                     {{ __('Pacientes') }}
                 </x-responsive-nav-link>
