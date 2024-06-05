@@ -20,7 +20,7 @@
                             d="m1 9 4-4-4-4" />
                     </svg>
                     <a href="{{ route('pacientes') }} "
-                        class="ms-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">                        
+                        class="ms-1 text-sm font-medium text-gray-700 hover:text-purple-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
                         Pacientes
                     </a>
                 </div>
@@ -56,25 +56,20 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-div-fondo>
-                {{-- <a href="{{ route('pacientes.show', $paciente->id) }} ">
-                    <x-boton-mas>
-                        {{ __('Regresar') }}
-                    </x-boton-mas>
-                </a> --}}
                 <div class="titulo-listado flex flex-col items-center">
                     <h1 class='text-4xl font-bold mb-6 text-indigo-800'>Listado de archivos</h1>
                     <h1 class='text-2xl font-bold mb-6 text-indigo-800'>del paciente: {{ $paciente->nombre }}
                         {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}</h1>
                 </div>
-                <x-validation-errors/>
+                <x-validation-errors />
                 <x-boton-editar id="agregar_archivo" class="justify-end mt-2 mb-2">
                     {{ __('Agregar archivo') }}
                 </x-boton-editar>
-                
+
                 <div id="formArchivo" class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="display: none">
                     <form action="{{ route('archivos.store', $paciente->id) }}" method="post"
                         enctype="multipart/form-data" id="formRegistrar">
-                        
+
                         <x-label for="nombre"
                             value="{{ __('Nombre:   (Si gusta no colocar el nombre, se usara el nombre original del archivo)') }}"
                             class="mt-1 " />
@@ -96,14 +91,14 @@
                 <div>
                     <input type="text" id="searchInput"
                         class="mt-4 mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                        placeholder="Buscar por nombre, tipo o fecha...">
+                        placeholder="Filtrar por nombre, tipo o fecha...">
                 </div>
                 <ul class="overflow-x-auto">
                     @php
                         $i = 1;
                     @endphp
-                    <div style="width: 900px">
-                        <li class="flex items-center bg-blue-500 p-3 rounded-t-lg">
+                    <div class="w-full lg:w-[900px]">
+                        <li class="hidden lg:flex items-center bg-blue-500 p-3 rounded-t-lg">
                             <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
                             <span class="w-2/6 text-sm lg:text-base">Nombre</span>
                             <span class="w-1/6 text-sm lg:text-base">Tipo</span>
@@ -111,32 +106,48 @@
                             <span class="w-2/6 text-sm lg:text-base">Opciones</span>
                         </li>
                         @foreach ($archivos as $archivo)
-                            <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-blue-100' : 'bg-white' }}"
-                                style="padding: 1%">
-                                <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $archivo->id }}</span>
-                                <span class="w-2/6 text-sm lg:text-base">{{ $archivo->nombre }}</span>
-                                <span class="w-1/6 text-sm lg:text-base">{{ $archivo->tipo }}</span>
-                                <span
-                                    class="w-1/6 text-sm lg:text-base">{{ $archivo->created_at->toDateString() }}</span>
-                                <span class="flex w-2/6 text-sm lg:text-base">
-                                    <a href="{{ $archivo->ruta }}" target="_blank">
-                                        <x-boton-editar class="me-2">
-                                            ver
+                            <li
+                                class="rounded-lg flex flex-col lg:flex-row items-start lg:items-center border-b py-2 {{ $loop->odd ? 'bg-blue-100' : 'bg-white' }} p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
+                                <div class="flex w-full lg:w-auto mb-2 lg:mb-0" style="margin-right: 2%">
+                                    <span class="font-bold lg:hidden">ID: </span>
+                                    <span class="text-center ms-1 lg:text-base">{{ $archivo->id }}</span>
+                                </div>
+                                <div class="flex w-full lg:w-2/6 mb-2 lg:mb-0">
+                                    <span class="font-bold lg:hidden">Nombre: </span>
+                                    <span class="text-center ms-1 lg:text-base">{{ $archivo->nombre }}</span>
+                                </div>
+                                <div class="flex w-full lg:w-1/6 mb-2 lg:mb-0">
+                                    <span class="font-bold lg:hidden">Tipo: </span>
+                                    <span class="text-center ms-1 lg:text-base">{{ $archivo->tipo }}</span>
+                                </div>
+                                <div class="flex w-full lg:w-1/6 mb-2 lg:mb-0">
+                                    <span class="font-bold lg:hidden">Fecha: </span>
+                                    <span
+                                        class="text-center ms-1 lg:text-base">{{ $archivo->created_at->toDateString() }}</span>
+                                </div>
+                                <div class="flex w-full lg:w-2/6 mb-2 lg:mb-0">
+                                    <span class="font-bold lg:hidden">Opciones: </span>
+                                    <span class="flex text-center ms-1 lg:text-base">
+                                        <a href="{{ $archivo->ruta }}" target="_blank">
+                                            <x-boton-editar class="me-2">
+                                                ver
+                                            </x-boton-editar>
+                                        </a>
+                                        <x-boton-editar class="mostrarFormulario" data-boton="{{ $i }}">
+                                            editar
                                         </x-boton-editar>
-                                    </a>
-                                    <x-boton-editar class="mostrarFormulario" data-boton="{{ $i }}">
-                                        editar
-                                    </x-boton-editar>
-                                    <form
-                                        action="{{ route('archivos.eliminar', ['id' => $archivo->id, 'paciente_id' => $archivo->paciente_id]) }}"
-                                        method="POST" id="deleteArchivo">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-boton-eliminar class="ms-2" onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('deleteArchivo').submit(), '¿Estás seguro que deseas eliminar este archivo?', '{{ $archivo->nombre }}');">
-                                            Eliminar
-                                        </x-boton-eliminar>
-                                    </form>
-                                </span>
+                                        <form
+                                            action="{{ route('archivos.eliminar', ['id' => $archivo->id, 'paciente_id' => $archivo->paciente_id]) }}"
+                                            method="POST" id="deleteArchivo">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-boton-eliminar class="ms-2"
+                                                onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('deleteArchivo').submit(), '¿Estás seguro que deseas eliminar este archivo?', '{{ $archivo->nombre }}');">
+                                                Eliminar
+                                            </x-boton-eliminar>
+                                        </form>
+                                    </span>
+                                </div>
                             </li>
                             <div id="myModal{{ $i }}" class="modal">
                                 <div class="modal-content w-full md:w-1/2">
@@ -256,17 +267,19 @@
             });
         });
 
-        document.getElementById('searchInput').addEventListener('input', function() {
-            let searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
-                if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                    let nombre = li.querySelector('span:nth-child(2)').textContent.toLowerCase();
-                    let tipo = li.querySelector('span:nth-child(3)').textContent.toLowerCase();
-                    let fecha = li.querySelector('span:nth-child(4)').textContent
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('input', function() {
+                let searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
+                    let fecha = li.querySelector('div:nth-child(2) > span:last-child').textContent
                         .toLowerCase();
-                    li.style.display = (nombre.includes(searchTerm) || tipo.includes(
-                        searchTerm) || fecha.includes(searchTerm)) ? '' : 'none';
-                }
+                    let tipo = li.querySelector('div:nth-child(3) > span:last-child').textContent
+                        .toLowerCase();
+                    let estado = li.querySelector('div:nth-child(4) > span:last-child').textContent
+                        .toLowerCase();
+                    li.style.display = (fecha.includes(searchTerm) || tipo.includes(searchTerm) ||
+                        estado.includes(searchTerm)) ? '' : 'none';
+                });
             });
         });
     </script>

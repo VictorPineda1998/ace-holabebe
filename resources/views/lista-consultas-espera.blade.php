@@ -11,7 +11,7 @@
                     </svg>
                     Home
                 </a>
-            </li>            
+            </li>
             <li>
                 <div class="flex items-center">
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
@@ -24,7 +24,7 @@
                         Sala de espera
                     </span>
                 </div>
-            </li>           
+            </li>
         </ol>
     </x-slot>
     <div class="py-12">
@@ -37,66 +37,70 @@
                     <div>
                         <input type="text" id="searchInput"
                             class="mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                            placeholder="Buscar por nombre o tipo...">
+                            placeholder="Filtrar por nombre o tipo...">
 
                     </div>
 
                     <ul class="overflow-x-auto">
-                        @php
-                            $i = 1;
-                        @endphp
-                        <div style="width: 900px">
-                            <li class="flex items-center bg-green-400 p-3 rounded-t-lg">
-                                <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
+                        <div class="w-full lg:w-[900px]">
+                            <li class="hidden lg:flex items-center bg-green-400 p-3 rounded-t-lg">
+                                <span class="text-sm lg:text-base" style="margin-right: 2%">ID</span>
                                 <span class="w-1/3 text-sm lg:text-base">Nombre</span>
                                 <span class="w-1/3 text-sm lg:text-base">Tipo de consulta</span>
                                 <span class="w-1/3 text-sm lg:text-base">Opciones</span>
                             </li>
                             @foreach ($consultas as $consulta)
                                 @if ($consulta->estado == 'Confirmada')
-                                    <li class="flex items-center border-b py-2 {{ $i % 2 != 0 ? 'bg-green-200' : 'bg-white' }}"
-                                        style="padding: 1%">
-                                        <span class="text-sm lg:text-base"
-                                            style="margin-right: 2%">{{ $consulta->id }}</span>
-                                        <span
-                                            class="w-1/3 text-sm lg:text-base">{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}</span>
-                                        @if ($consulta->tipo_consulta == 'Otro')
+                                    <li
+                                        class="rounded-lg flex flex-col lg:flex-row items-start lg:items-center border-b py-2 {{ $loop->odd ? 'bg-green-200' : 'bg-white' }} p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
+                                        <div class="flex w-full lg:w-auto mb-2 lg:mb-0" style="margin-right: 2%">
+                                            <span class="font-bold lg:hidden">ID: </span>
+                                            <span class="text-center ms-1 lg:text-base">{{ $consulta->id }}</span>
+                                        </div>
+                                        <div class="flex w-full lg:w-1/3 mb-2 lg:mb-0">
+                                            <span class="font-bold lg:hidden">Nombre: </span>
                                             <span
-                                                class="w-1/3 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
-                                        @else
-                                            <span
-                                                class="w-1/3 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
-                                        @endif
-                                        <span class="w-1/3 text-sm lg:text-base">
-                                            <a
-                                                href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'espera']) }} ">
-                                                <x-boton-editar>
-                                                    Ver
-                                                </x-boton-editar>
-                                            </a>
-                                            @if ($consulta->estado == 'Confirmada')
-                                                <form style="display:inline;"
-                                                    {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
-                                                    method="POST"
-                                                    action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'cancelar']) }}">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <x-boton-eliminar onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsultaHoy').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}');">
-                                                        Cancelar
-                                                    </x-boton-eliminar>
-                                                </form>
+                                                class="text-center ms-1 lg:text-base">{{ optional($consulta->paciente)->nombre }}
+                                                {{ optional($consulta->paciente)->apellido_P }}
+                                                {{ optional($consulta->paciente)->apellido_M }}</span>
+                                        </div>
+                                        <div class="flex w-full lg:w-1/3 mb-2 lg:mb-0">
+                                            <span class="font-bold lg:hidden">Tipo de consulta: </span>
+                                            @if ($consulta->tipo_consulta == 'Otro')
+                                                <span
+                                                    class="text-center ms-1 lg:text-base">{{ $consulta->detalles_consulta }}</span>
+                                            @else
+                                                <span
+                                                    class="text-center ms-1 lg:text-base">{{ $consulta->tipo_consulta }}</span>
                                             @endif
-                                        </span>
+                                        </div>
+                                        <div class="flex w-full lg:w-1/3 mb-2 lg:mb-0">
+                                            <span class="font-bold lg:hidden">Opciones: </span>
+                                            <span class="text-center ms-1 lg:text-base">
+                                                <a
+                                                    href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'espera']) }} ">
+                                                    <x-boton-editar>
+                                                        Ver
+                                                    </x-boton-editar>
+                                                </a>
+                                                @if ($consulta->estado == 'Confirmada')
+                                                    <form style="display:inline;" {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}} method="POST"
+                                                        action="{{ route('consultas.updateHoy', ['id' => $consulta->id, 'estado' => 'cancelar']) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <x-boton-eliminar
+                                                            onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsultaHoy').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ optional($consulta->paciente)->nombre }} {{ optional($consulta->paciente)->apellido_P }} {{ optional($consulta->paciente)->apellido_M }}');">
+                                                            Cancelar
+                                                        </x-boton-eliminar>
+                                                    </form>
+                                                @endif
+                                            </span>
+                                        </div>
                                     </li>
-                                    @php
-                                        $i++;
-                                    @endphp
                                 @endif
                             @endforeach
-
                         </div>
                     </ul>
-
                 @endif
             </x-div-fondo>
         </div>
@@ -104,16 +108,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             document.getElementById('searchInput').addEventListener('input', function() {
                 let searchTerm = this.value.toLowerCase();
                 document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
-                    if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                        let nombre = li.querySelector('span:nth-child(2)').textContent.toLowerCase();
-                        let tipo = li.querySelector('span:nth-child(3)').textContent.toLowerCase();
-                        li.style.display = (nombre.includes(searchTerm) || tipo.includes(
-                            searchTerm)) ? '' : 'none';
-                    }
+                    let fecha = li.querySelector('div:nth-child(2) > span:last-child').textContent
+                        .toLowerCase();
+                    let tipo = li.querySelector('div:nth-child(3) > span:last-child').textContent
+                        .toLowerCase();
+                    let estado = li.querySelector('div:nth-child(4) > span:last-child').textContent
+                        .toLowerCase();
+                    li.style.display = (fecha.includes(searchTerm) || tipo.includes(searchTerm) ||
+                        estado.includes(searchTerm)) ? '' : 'none';
                 });
             });
         });

@@ -2,102 +2,79 @@
     @if (
         ($consulta->estado == 'Sin confirmar' || $consulta->estado == 'Confirmada') &&
             $consulta->fecha >= now()->toDateString())
-        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta proxima:
-        </h1>
+        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta proxima:</h1>
     @elseif($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
-        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta pendiente:
-        </h1>
+        <h1 class='text-1xl font-bold mb-3 text-purple-800'>Consulta pendiente:</h1>
     @endif
     @if ($consulta->estado == 'Sin confirmar' or $consulta->estado == 'Confirmada')
         <div id="divPadre">
-            <div>
-                {{-- <div>
-                <input type="text" id="searchInput"
-                class="mb-4 p-2 w-full md:w-1/2 lg:w-1/3 border border-gray-300 rounded-md"
-                placeholder="Buscar fecha o tipo ...">
-                </div> --}}
-                <div>
-                    <ul class="overflow-x-auto">
-                        {{-- @php
-                        $i = 1;
-                        @endphp --}}
-                        <div style="width: 900px">
-                            <li class="flex items-center bg-purple-300 p-3 rounded-t-lg">
-                                <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                                <span class="w-1/5 text-sm lg:text-base">Fecha</span>
-                                <span class="w-1/5 text-sm lg:text-base">Tipo de consulta</span>
-                                <span class="w-1/5 text-sm lg:text-base">Detalle</span>
-                                <span class="w-2/5 text-sm lg:text-base">Opciones</span>
-                            </li>
-                            {{-- @php
-                            // Verificar si la consulta fue realizada hoy
-                            $esConsultaHoy = $consulta->created_at->isToday();
-                            $esConsultaHoy ? $i++ : '';
-                            @endphp --}}
-                            {{-- <li class="flex items-center border-b py-2 {{ $esConsultaHoy ? 'bg-emerald-500 mb-6 mt-6' : ($i % 2 == 0 ? '' : 'bg-amber-100') }}"
-                            style="padding: 1%"> --}}
-
-                            <li class="flex items-center border-b py-2 bg-purple-100" style="padding: 1%">
-                                <span class="text-sm lg:text-base" style="margin-right: 2%">{{ $consulta->id }}</span>
-                                <span class="w-1/5 text-sm lg:text-base">{{ $consulta->fecha }}</span>
-                                @if ($consulta->tipo_consulta == 'Otro')
-                                    <span class="w-1/5 text-sm lg:text-base">{{ $consulta->detalles_consulta }}</span>
-                                @else
-                                    <span class="w-1/5 text-sm lg:text-base">{{ $consulta->tipo_consulta }}</span>
-                                @endif
-                                <span class="w-1/5 text-sm lg:text-base">{{ $consulta->estado }}</span>
-                                <span class="w-2/5 text-sm lg:text-base">
-                                    {{-- @if ($consulta->estado == 'Confirmada') --}}
-                                    @if ($consulta->fecha == now()->toDateString())
-                                        <a
-                                            href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
-                                            <x-boton-editar>
-                                                Ver
-                                            </x-boton-editar>
-                                        </a>
-                                    @endif
-                                    {{-- @endif --}}
-                                    @if ($consulta->estado != 'Confirmada')
-                                        <x-boton-editar id="mostrarFormulario">
-                                            Reprogramar
-                                        </x-boton-editar>
-                                    @endif
-                                    {{-- @if ($consulta->estado != 'Confirmada' && $consulta->fecha == now()->toDateString())
-                                        <form style="display:inline;" method="POST"
-                                            action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'confirmar', 'p_id' => $paciente->id]) }}">
-                                            @csrf
-                                            @method('PUT')
-                                            <x-boton-actualizar>
-                                                Confirmar
-                                            </x-boton-actualizar>
-                                        </form>
-                                    @endif --}}
-
-                                    @if (
-                                        (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
-                                            $consulta->fecha != now()->toDateString()) ||
-                                            $consulta->estado == 'Confirmada')
-                                        <form style="display:inline;" id="cancelarConsulta" {{-- onsubmit="return confirm('¿Estás seguro que deseas cancelar esta consulta?');" --}}
-                                            method="POST"
-                                            action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'cancelar', 'p_id' => $paciente->id]) }}">
-                                            @csrf
-                                            @method('PUT')
-                                            <x-boton-eliminar
-                                                onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsulta').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ $paciente->nombre }} {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}');">
-                                                Cancelar
-                                            </x-boton-eliminar>
-                                        </form>
-                                    @endif
-
-                                </span>
-                            </li>
-                            {{-- @php
-                            $i++;
-                        @endphp --}}
+            <ul class="overflow-x-auto">
+                <div class="w-full lg:w-[900px]">
+                    <li class="hidden lg:flex items-center bg-purple-300 p-3 rounded-t-lg">
+                        <span class="text-sm lg:text-base" style="margin-right: 2%">ID</span>
+                        <span class="w-1/5 text-sm lg:text-base">Fecha</span>
+                        <span class="w-1/5 text-sm lg:text-base">Tipo de consulta</span>
+                        <span class="w-1/5 text-sm lg:text-base">Detalle</span>
+                        <span class="w-2/5 text-sm lg:text-base">Opciones</span>
+                    </li>
+                    <li
+                        class=" bg-purple-300 rounded-lg flex flex-col lg:flex-row items-start lg:items-center lg:bg-purple-100 border-b py-2  p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
+                        <div class="flex w-full lg:w-auto mb-2 lg:mb-0" style="margin-right: 2%">
+                            <span class="font-bold lg:hidden">ID: </span>
+                            <span class="text-center ms-1 lg:text-base"
+                                >{{ $consulta->id }}</span>
                         </div>
-                    </ul>
+                        <div class="flex w-full lg:w-1/5 mb-2 lg:mb-0">
+                            <span class="font-bold lg:hidden">Fecha: </span>
+                            <span class="text-center ms-1 lg:text-base">{{ $consulta->fecha }}</span>
+                        </div>
+                        <div class="flex w-full lg:w-1/5 mb-2 lg:mb-0">
+                            <span class="font-bold lg:hidden">Tipo de consulta: </span>
+                            @if ($consulta->tipo_consulta == 'Otro')
+                                <span class="text-center ms-1 lg:text-base">{{ $consulta->detalles_consulta }}</span>
+                            @else
+                                <span class="text-center ms-1 lg:text-base">{{ $consulta->tipo_consulta }}</span>
+                            @endif
+                        </div>
+                        <div class="flex w-full lg:w-1/5 mb-2 lg:mb-0">
+                            <span class="font-bold lg:hidden">Detalle: </span>
+                            <span class="text-center ms-1 lg:text-base">{{ $consulta->estado }}</span>
+                        </div>
+                        <div class="flex w-full lg:w-1/5 mb-2 lg:mb-0">
+                            <span class="font-bold lg:hidden">Opciones: </span>
+                            <span class="text-center ms-1 lg:text-base lg:flex">
+                                @if ($consulta->fecha == now()->toDateString())
+                                    <a
+                                        href="{{ route('consultas.show', ['id' => $consulta->id, 'lugar' => 'paciente']) }} ">
+                                        <x-boton-editar class="me-2">
+                                            Ver
+                                        </x-boton-editar>
+                                    </a>
+                                @endif
+                                @if ($consulta->estado != 'Confirmada')
+                                    <x-boton-editar id="mostrarFormulario">
+                                        Reprogramar
+                                    </x-boton-editar>
+                                @endif
+                                @if (
+                                    (($consulta->estado == 'Confirmada' || $consulta->estado == 'Sin confirmar') &&
+                                        $consulta->fecha != now()->toDateString()) ||
+                                        $consulta->estado == 'Confirmada')
+                                    <form style="display:inline;" id="cancelarConsulta" method="POST"
+                                        action="{{ route('consultas.update', ['id' => $consulta->id, 'estado' => 'cancelar', 'p_id' => $paciente->id]) }}">
+                                        @csrf
+                                        @method('PUT')
+                                        <x-boton-eliminar
+                                            onclick="event.preventDefault(); openConfirmModal(() => document.getElementById('cancelarConsulta').submit(), '¿Estás seguro que deseas cancelar esta consulta?', '{{ $paciente->nombre }} {{ $paciente->apellido_P }} {{ $paciente->apellido_M }}');">
+                                            Cancelar
+                                        </x-boton-eliminar>
+                                    </form>
+                                @endif
+                            </span>
+                        </div>
+                    </li>
                 </div>
-            </div>
+            </ul>
         </div>
         <div id="myModal" class="modal">
             <div class="modal-content w-full md:w-1/2">
@@ -144,14 +121,12 @@
     @endif
 @endforeach
 
-
 <style>
     .modal {
         display: none;
         position: fixed;
         top: 0;
         left: 0;
-        /* right: 0; */
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
@@ -163,8 +138,6 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        /* right: 50%; */
-        /* width: 85%; */
         transform: translate(-50%, -50%);
         background-color: #fff;
         padding: 20px;
@@ -197,13 +170,6 @@
         }
     });
 
-    // Cerrar el modal al enviar el formulario
-    // document.getElementById('formularioConsulta').addEventListener('submit', function(event) {
-    //     event.preventDefault();
-    //     document.getElementById('myModal').style.display = 'none';
-    //     // Aquí puedes agregar lógica adicional para procesar el formulario si es necesario
-    // });
-
     function comprobar_tipo() {
         var tipoconsulta = document.getElementsByName("tipo_consulta")[0];
         var otroTipoDiv = document.getElementById('otro_tipo');
@@ -215,22 +181,3 @@
         }
     }
 </script>
-
-
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-        document.getElementById('searchInput').addEventListener('input', function() {
-            let searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
-                if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                    let fecha = li.querySelector('span:nth-child(2)').textContent.toLowerCase();
-                    let tipo = li.querySelector('span:nth-child(3)').textContent.toLowerCase();
-                    li.style.display = (fecha.includes(searchTerm) || tipo.includes(
-                        searchTerm)) ? '' : 'none';
-                }
-            });
-        });
-
-    });
-</script> --}}
