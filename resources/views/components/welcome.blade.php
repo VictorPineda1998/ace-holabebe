@@ -1,7 +1,3 @@
-@php
-    $user = auth()->user()->name;
-@endphp
-
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
 <style>
@@ -12,7 +8,7 @@
 </style>
 
 <div class="-mt-10 text-center py-8 bg-gradient-to-r from-pink-200 via-blue-200 to-purple-200">
-    <p class="text-xl font-bold text-gray-600 mt-1">Hola, {{ $user }}.</p>
+    <p class="text-xl font-bold text-gray-600 mt-1">Hola, {{ auth()->user()->name; }}. {{ auth()->user()->tipo_usuario; }}</p>
     <h1 class="mt-2 text-5xl font-bold text-gray-800">¡Bienvenido(a) a HolaBebé!</h1>
     <p class="text-xl font-bold text-gray-600 mt-1">Archivo Clinco Electronico.</p>
     <p class="text-xl text-gray-600 mt-2">Centro de Atención Integral del Embarazo</p>
@@ -38,8 +34,8 @@
         </div>
     </div>
     <div class="swiper-pagination"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
+    {{-- <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div> --}}
 </div>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

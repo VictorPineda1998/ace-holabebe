@@ -1,12 +1,21 @@
+@php
+    $currentRouteName = Route::currentRouteName();
+@endphp
 <div>
     <div class="titulo-listado flex flex-col items-center">
-        <h1 class='text-3xl font-bold mb-6 text-pink-400'>Pacientes registrados</h1>
+        <h1 class='text-3xl font-bold mb-6 text-pink-400'>
+            @if ($currentRouteName === 'hospitalizacion')
+            Eliga al paciente
+            @else
+                Pacientes registrados
+            @endif
+        </h1>
     </div>
     <div>
         <div>
             <ul class="overflow-x-auto">
                 <div class="w-full lg:w-[950px]">
-                    <div class="flex flex-col lg:flex-row">                        
+                    <div class="flex flex-col lg:flex-row">
                         <div class="flex flex-col lg:flex-row w-full lg:w-5/9">
                             <div class="flex items-center ms-2">
                                 <h1 class='text-1xl font-bold mb-3 text-purple-800'>Buscar en todos los registros:</h1>
@@ -35,7 +44,8 @@
                             $fechaNacimiento = \Carbon\Carbon::parse($paciente->fecha_nacimiento);
                             $edad = $fechaNacimiento->diff(\Carbon\Carbon::now())->y;
                         @endphp
-                        <li class="rounded-lg flex flex-col lg:flex-row items-start lg:items-center border-b py-2 {{ $loop->odd ? 'bg-pink-300' : 'bg-pink-200' }} p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
+                        <li
+                            class="rounded-lg flex flex-col lg:flex-row items-start lg:items-center border-b py-2 {{ $loop->odd ? 'bg-pink-300' : 'bg-pink-200' }} p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
                             <div class="flex w-full lg:w-auto mb-2 lg:mb-0">
                                 <span class="font-bold lg:hidden">ID: </span>
                                 <span class="text-center ms-1 lg:text-base lg:mr-2">{{ $paciente->id }}</span>
@@ -61,15 +71,23 @@
                                 <span class="text-center ms-1 lg:text-base">{{ $edad }} años</span>
                             </div>
                             <div class="flex w-full lg:w-1/12">
-                                <a href="{{ route('pacientes.show', $paciente->id) }} ">
-                                    <x-boton-editar class="boton-editar" style="margin: 0; display: inline;">
-                                        Ver
-                                    </x-boton-editar>
-                                </a>
+                                @if ($currentRouteName === 'hospitalizacion')
+                                    <a href="{{ route('hospitalizacion.create', $paciente->id) }} ">
+                                        <x-boton-editar>
+                                            Mas
+                                        </x-boton-editar>
+                                    </a>
+                                @else
+                                    <a href="{{ route('pacientes.show', $paciente->id) }} ">
+                                        <x-boton-editar class="boton-editar" style="margin: 0; display: inline;">
+                                            Ver
+                                        </x-boton-editar>
+                                    </a>
+                                @endif
                             </div>
                         </li>
                     @endforeach
-                    <div class="mt-2">                        
+                    <div class="mt-2">
                         {{ $pacientes->appends(request()->query())->links() }}
                     </div>
                 </div>

@@ -87,7 +87,7 @@ class TriajesController extends Controller
         $consulta->save();
         $lugar = 'hoy';
 
-        /* $resultado = $triaje->resultado;
+        $resultado = $triaje->resultado;
         if($resultado == 'Emergencia! Atención Inmediata!'){
             $specialistas = User::where('tipo_usuario', 'Medico especialista')->get();
 
@@ -103,7 +103,7 @@ class TriajesController extends Controller
             foreach ($specialistas as $specialista) {
                 Mail::to($specialista->email)->send(new EmergenciaTipo2Mailable($resultado));
             }
-        } */
+        }
         
         return redirect()->route('consultas.show', ['id' => $consulta->id, 'lugar' => $lugar]);
         
@@ -152,6 +152,6 @@ class TriajesController extends Controller
 
     public function destroy($id)
     {
-    ;
+    
     }
 }

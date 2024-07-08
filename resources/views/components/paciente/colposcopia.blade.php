@@ -9,7 +9,7 @@
         </div>
     @endif
     <div class="div_colposcopia">
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <th colspan="4" class="border-indigo-600  bg-gray-300 border-2 px-4 py-2">Antecedentes heredofamiliares</th>
@@ -252,7 +252,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <td class="px-3 py-2 border-l-2 border-r-2 border-b-2 border-indigo-600">Fecha de toma:
@@ -277,7 +277,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <td class="px-3 py-2 border-l-2 border-r-2 border-b-2 border-indigo-600">Diagnostico citologico:
@@ -298,7 +298,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <td class="px-3 py-2 border-l-2 border-b-2 border-r-2 border-indigo-600">
@@ -342,7 +342,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <td class="px-3 py-2 border-l-2 border-r-2  border-b-2 border-indigo-600">Indice colposcopico REID:
@@ -440,7 +440,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-transparent table-striped relative">
+        <table class="border-collapse table-auto w-full whitespace-no-wrap bg-gray-100 table-striped relative">
             <tbody>
                 <tr>
                     <td class="px-3 py-2 border-l-2 border-r-2  border-b-2 border-indigo-600">Proxima cita:

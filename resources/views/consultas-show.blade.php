@@ -238,8 +238,6 @@
     <script src="{{ asset('js/funciones-propias.js') }}"></script>
 
     <script>
-        
-
         let mostrandoHistorial = false;
         let creandoTriaje = false;
         let creandoColposcopia = false;

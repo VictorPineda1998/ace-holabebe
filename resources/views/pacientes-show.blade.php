@@ -33,7 +33,7 @@
                             d="m1 9 4-4-4-4" />
                     </svg>
                     <span
-                        class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:hover:text-white">
+                        class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400">
                         Detalles del pacientes
                     </span>
                 </div>

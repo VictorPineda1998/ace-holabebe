@@ -13,27 +13,22 @@
                 @php
                     $i = 1;
                 @endphp
-                <div class="w-full lg:w-[1000px]">
-                    <ul class="hidden lg:flex items-center bg-indigo-400 p-3 rounded-t-lg">
+                <div class="w-full lg:w-[1150px]">
+                    <li class="hidden lg:flex items-center bg-indigo-400 p-3 rounded-t-lg">
                         <span class="text-sm lg:text-base" style="margin-right: 1%">ID</span>
-                        <span class="w-4/12 text-sm lg:text-base">Nombre</span>
+                        <span class="w-3/12 text-sm lg:text-base">Nombre</span>
                         <span class="w-4/12 text-sm lg:text-base">Email</span>
                         <span class="w-2/12 text-sm lg:text-base">Tipo de Usuario</span>
                         <span class="w-3/12 text-sm lg:text-base">Opciones</span>
-                    </ul>
+                    </li>
                     @foreach ($users as $user)
-                        {{-- @if ($i % 2 == 0)
-                            <li class="flex items-center border-b py-2 bg-gray-50" style="padding: 1%">
-                            @else
-                            <li class="flex items-center border-b py-2 bg-indigo-200" style="padding: 1%">
-                        @endif --}}
                         <li 
                             class="rounded-lg flex flex-col lg:flex-row items-start lg:items-center border-b py-2 {{ $loop->odd ? 'bg-gray-50' : 'bg-indigo-200' }} p-4 lg:p-2 mb-4 lg:mb-0 lg:rounded-none">
                             <div class="flex w-full lg:w-auto mb-2 lg:mb-0" style="margin-right: 1%">
                                 <span class="font-bold lg:hidden">ID: </span>
                                 <span class="text-center ms-1 lg:text-base lg:mr-2">{{ $user->id }}</span>
                             </div>
-                            <div class="flex w-full lg:w-4/12 mb-2 lg:mb-0">
+                            <div class="flex w-full lg:w-3/12 mb-2 lg:mb-0">
                                 <span class="font-bold lg:hidden">Nombre: </span>
                                 <span class="text-center ms-1 lg:text-base">{{ $user->name }}</span>
                             </div>
@@ -46,7 +41,6 @@
                                 <span class="text-center ms-1 lg:text-base">{{ $user->tipo_usuario }}</span>
                             </div>
                             <div class="flex w-full lg:w-3/12 mb-2 lg:mb-0">
-
                                 <span class="text-center ms-1 lg:text-base">
                                     <div id="div{{ $i }}" style="margin: 0; display: inline;">
                                         <x-boton-editar class="boton-editar" data-boton="{{ $i }}"
@@ -76,7 +70,6 @@
                                         </form>
                                         <x-boton-cancelar class="cancelar" data-boton="{{ $i }}"
                                             style="display: none;">Cancelar</x-boton-cancelar>
-
                                         <form action="{{ route('usuarios.eliminar', $user->id) }}" method="POST"
                                             id="deleteUser" style="display: inline;" class="boton-elimiar">
                                             @csrf
@@ -86,7 +79,6 @@
                                                 Eliminar
                                             </x-boton-eliminar>
                                         </form>
-
                                     </div>
                                 </span>
                             </div>
@@ -133,16 +125,11 @@
         document.getElementById('searchInput').addEventListener('input', function() {
             let searchTerm = this.value.toLowerCase();
             document.querySelectorAll('ul > div > li:not(:first-child)').forEach(function(li) {
-                if (li.querySelector('span')) { // Ignora el encabezado de la tabla
-                    let id = li.querySelector('span:nth-child(1)').textContent.toLowerCase();
-                    let name = li.querySelector('span:nth-child(2)').textContent.toLowerCase();
-                    let email = li.querySelector('span:nth-child(3)').textContent.toLowerCase();
-                    let tipo_usuario = li.querySelector('span:nth-child(4)').textContent
-                        .toLowerCase();
-                    li.style.display = (id.includes(searchTerm) || name.includes(searchTerm) ||
-                        email.includes(
-                            searchTerm) || tipo_usuario.includes(searchTerm)) ? '' : 'none';
-                }
+                let id = li.querySelector('div:nth-child(1) > span:last-child').textContent.toLowerCase();
+                let name = li.querySelector('div:nth-child(2) > span:last-child').textContent.toLowerCase();
+                let email = li.querySelector('div:nth-child(3) > span:last-child').textContent.toLowerCase();
+                let tipo_usuario = li.querySelector('div:nth-child(4) > span:last-child').textContent.toLowerCase();
+                li.style.display = (id.includes(searchTerm) || name.includes(searchTerm) || email.includes(searchTerm) || tipo_usuario.includes(searchTerm)) ? '' : 'none';
             });
         });
 

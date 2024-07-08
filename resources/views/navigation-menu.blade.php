@@ -28,22 +28,32 @@
                     @endif
                     @if (auth()->user()->tipo_usuario == 'Administrador' or
                             auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
-                            auth()->user()->tipo_usuario == 'Medico especialista')
+                            auth()->user()->tipo_usuario == 'Medico especialista' or
+                            auth()->user()->tipo_usuario == 'Medico general')
                         <x-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                             {{ __('Consultas del dia') }}
                         </x-nav-link>
                     @endif
                     @if (auth()->user()->tipo_usuario == 'Administrador' or
-                            auth()->user()->tipo_usuario == 'Medico especialista')
+                            auth()->user()->tipo_usuario == 'Medico especialista'or
+                            auth()->user()->tipo_usuario == 'Medico general') 
                         <x-nav-link href="{{ route('consultas_espera') }}" :active="request()->routeIs('consultas_espera')">
                             {{ __('Sala de espera') }}
+                        </x-nav-link>
+                    @endif
+                    @if (auth()->user()->tipo_usuario == 'Administrador' or
+                            auth()->user()->tipo_usuario == 'Medico especialista'or
+                            auth()->user()->tipo_usuario == 'Enfermeria hospitalizacion' or
+                            auth()->user()->tipo_usuario == 'Contador') 
+                        <x-nav-link href="{{ route('hospitalizacion') }}" :active="request()->routeIs('hospitalizacion')">
+                            {{ __('Hospitalizacion') }}
                         </x-nav-link>
                     @endif
                     <x-nav-link href="{{ route('calendario') }}" :active="request()->routeIs('calendario')">
                         {{ __('Calendario') }}
                     </x-nav-link>
                 </div>
-            </div>
+            </div>            
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->
@@ -100,6 +110,19 @@
                         </x-dropdown>
                     </div>
                 @endif
+                <div>
+                    @if (auth()->user()->tipo_usuario == 'Administrador') 
+                        <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-admin.jpg') }}" alt="admin">
+                    @endif
+                    @if (auth()->user()->tipo_usuario == 'Medico especialista'or
+                            auth()->user()->tipo_usuario == 'Medico general') 
+                        <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-doctor.jpg') }}" alt="admin">
+                    @endif
+                    @if ( auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
+                    auth()->user()->tipo_usuario == 'Enfermeria hospitalizacion' ) 
+                        <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-enfermeria.jpg') }}" alt="admin">
+                    @endif
+                </div>
 
                 <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
@@ -108,7 +131,7 @@
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <button
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                    <img class="h-12 w-12 rounded-full object-cover"
+                                    <img class="h-14 w-14 rounded-full object-cover"
                                         src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                                 </button>
                             @else
@@ -192,19 +215,43 @@
             @endif
             @if (auth()->user()->tipo_usuario == 'Administrador' or
                     auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
-                    auth()->user()->tipo_usuario == 'Medico especialista')
+                    auth()->user()->tipo_usuario == 'Medico especialista' or
+                    auth()->user()->tipo_usuario == 'Medico general')
                 <x-responsive-nav-link href="{{ route('consultas_dia') }}" :active="request()->routeIs('consultas_dia')">
                     {{ __('Consultas del dia') }}
                 </x-responsive-nav-link>
             @endif
-            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista')
+            @if (auth()->user()->tipo_usuario == 'Administrador' or auth()->user()->tipo_usuario == 'Medico especialista'or
+                    auth()->user()->tipo_usuario == 'Medico general')
                 <x-responsive-nav-link href="{{ route('consultas_espera') }}" :active="request()->routeIs('consultas_espera')">
                     {{ __('Sala de espera') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->tipo_usuario == 'Administrador' or 
+                    auth()->user()->tipo_usuario == 'Medico especialista' or
+                    auth()->user()->tipo_usuario == 'Enfermeria hospitalizacion' or
+                    auth()->user()->tipo_usuario == 'Contador')
+                <x-responsive-nav-link href="{{ route('hospitalizacion') }}" :active="request()->routeIs('hospitalizacion')">
+                    {{ __('Hospitalizacion') }}
                 </x-responsive-nav-link>
             @endif
             <x-responsive-nav-link href="{{ route('calendario') }}" :active="request()->routeIs('calendario')">
                 {{ __('Calendario') }}
             </x-responsive-nav-link>
+        </div>
+
+        <div class="ms-4">
+            @if (auth()->user()->tipo_usuario == 'Administrador') 
+                <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-admin.jpg') }}" alt="admin">
+            @endif
+            @if (auth()->user()->tipo_usuario == 'Medico especialista'or
+                    auth()->user()->tipo_usuario == 'Medico general') 
+                <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-doctor.jpg') }}" alt="admin">
+            @endif
+            @if ( auth()->user()->tipo_usuario == 'Enfermeria consultorios' or 
+            auth()->user()->tipo_usuario == 'Enfermeria hospitalizacion' ) 
+                <img  class="h-14 w-14 rounded-full object-cover" src="{{ asset('img-empresa/tipo-enfermeria.jpg') }}" alt="admin">
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
