@@ -425,6 +425,11 @@
                     <div class="text-center my-6">
                         <h1 class='text-2xl font-bold text-purple-800'>Consumo de hospitalización Finalizada</h1>
                     </div>
+                    @if ((auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador') && $hoja)
+                        <div class="flex items-center justify-start mt-3 mb-3">
+                            <x-boton-verde id="imprimir">Convertir a pdf</x-boton-verde>
+                        </div>
+                    @endif
                     <div class="container mx-auto p-4">
                         <form action="{{ route('guardarHojaHospital', $hospitalizacion->id) }}" method="POST">
                             @csrf
@@ -453,7 +458,7 @@
                                                                 class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                                 Turno</th>
                                                         @endif
-                                                        @if (auth()->user()->tipo_usuario == 'Contador')
+                                                        @if (auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador')
                                                             <th
                                                                 class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                                 Precio por unidad</th>
@@ -461,7 +466,7 @@
                                                         <th
                                                             class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                             Cantidad</th>
-                                                        @if (auth()->user()->tipo_usuario == 'Contador')
+                                                        @if (auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador')
                                                             <th
                                                                 class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                                 Subtotal</th>
@@ -494,7 +499,7 @@
                                                                     value="{{ $item['turno'] }}"> --}}
                                                                 </td>
                                                             @endif
-                                                            @if (auth()->user()->tipo_usuario == 'Contador')
+                                                            @if (auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador')
                                                                 <td
                                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                                     @if ($tipo === 'Materiales' || $tipo === 'Medicamentos')
@@ -531,7 +536,7 @@
                                                                     name="{{ strtolower($tipo) }}[{{$loop->iteration }}][cantidad]"
                                                                     value="{{ $item['cantidad'] ?? ($item['cantidadArticuloHospi'] ?? $item['cantidadArticuloHonorario'])}}"> --}}
                                                             </td>
-                                                            @if (auth()->user()->tipo_usuario == 'Contador')
+                                                            @if (auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador' || auth()->user()->tipo_usuario == 'Administrador')
                                                                 <td
                                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                                     $<span
@@ -551,7 +556,7 @@
                                     @endif
                                 </div>
                             @endforeach
-                            @if (auth()->user()->tipo_usuario == 'Contador')
+                            @if (auth()->user()->tipo_usuario == 'Contador' || auth()->user()->tipo_usuario == 'Administrador')
                                 <div class="mt-6 text-right">
                                     <div class="text-xl font-bold text-purple-800 bg-indigo-50 p-3 rounded-lg">Total:
                                         $<span id="total">0.00</span>
@@ -573,6 +578,10 @@
             </x-div-fondo>
         </div>
     </div>
+    <script src="{{ asset('js/generarConsumoPDF.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.18/jspdf.plugin.autotable.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const items = ['Materiales', 'Medicamentos', 'Enfermeras', 'Hospitalizacion', 'HonorariosMedicos'];
@@ -640,6 +649,22 @@
         if (cancelarHospi) {
             cancelarHospi.addEventListener('click', function() {
                 location.reload();
+            });
+        }
+
+        let imprimir = document.getElementById('imprimir');
+        if (imprimir) {
+            imprimir.addEventListener('click', function() {                    
+                    let paciente = @json($hospitalizacion->paciente ?? new stdClass());         
+                    let hospitalizacion = @json($hospitalizacion ?? new stdClass());        
+                    let materiales = @json($materiales ?? new stdClass());        
+                    let medicamentos = @json($medicamentos ?? new stdClass());        
+                    let enfermeras = @json($enfermeras ?? new stdClass());        
+                    let hospitalizacionSeccion = @json($hospitalizacionSeccion ?? new stdClass());
+                    let honorariosMedicos = @json($honorariosMedicos ?? new stdClass());
+                    let imgConsumo = "{{ asset('img-empresa/fondo-consumo-hospi.png') }}";
+                    
+                    generarConsumoPDF(paciente, hospitalizacion, materiales, medicamentos, enfermeras, hospitalizacionSeccion, honorariosMedicos, imgConsumo);            
             });
         }
     </script>
